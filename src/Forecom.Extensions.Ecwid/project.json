@@ -1,0 +1,30 @@
+﻿{
+  "version": "0.0.1-alpha",
+  "description": "Forecom extensions to Ecwid App",
+  "authors": [ "me@kroniak.net" ],
+  "tags": [ "ecwid" ],
+  "license": "GPL-3.0",
+
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kroniak/extensions-ecwid.git"
+  },
+
+  "compilationOptions": {
+    "allowUnsafe": false,
+    "warningsAsErrors": true
+  },
+
+  "dependencies": {
+    "Flurl.Http": "0.7.0"
+  },
+
+  "frameworks": {
+    "net451": { }
+  },
+
+  "publishExclude": [
+    "**.user",
+    "**.vspscc"
+  ]
+}
