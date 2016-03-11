@@ -1,10 +1,6 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using System.Collections.Generic;
 
-/// <summary>
-/// Lagacy Ecwid API domain model v1
-/// </summary>
 namespace Forecom.Extensions.Ecwid.Domain.Legacy
 {
     /// <summary>
@@ -49,10 +45,6 @@ namespace Forecom.Extensions.Ecwid.Domain.Legacy
         public IList<Order> Orders { get; set; }
     }
 
-    /// <summary>
-    /// TODO
-    /// </summary>
-    public class PaymentParameters
-    {
-    }
+    // TODO
+    public class PaymentParameters { }
 }

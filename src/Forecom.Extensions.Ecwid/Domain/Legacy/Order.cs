@@ -160,7 +160,7 @@ namespace Forecom.Extensions.Ecwid.Domain.Legacy
         /// The customer ip
         /// </value>
         [JsonProperty("customerIP")]
-        public string CustomerIP { get; set; }
+        public string CustomerIp { get; set; }
 
         /// <summary>
         /// Country code determined by customer IP address (if possible)
@@ -169,7 +169,7 @@ namespace Forecom.Extensions.Ecwid.Domain.Legacy
         /// The customer country code by ip
         /// </value>
         [JsonProperty("customerCountryCodeByIP")]
-        public string CustomerCountryCodeByIP { get; set; }
+        public string CustomerCountryCodeByIp { get; set; }
 
         /// <summary>
         /// Discount coupon code ('AX-545DF-DD' for example)
@@ -329,6 +329,7 @@ namespace Forecom.Extensions.Ecwid.Domain.Legacy
         /// <value>
         /// The value
         /// </value>
+        /// </summary>
         [JsonProperty("value")]
         public double Value { get; set; }
 
