@@ -40,10 +40,7 @@ namespace Forecom.Extensions.Ecwid.Services.Legacy
         public bool Tick()
         {
             var result = GetAgreement();
-
-            if (result)
-                result = _limits.Aggregate(true, (current, limit) => current & limit.Tick());
-            return result;
+            return result && _limits.Aggregate(true, (current, limit) => current & limit.Tick());
         }
 
         /// <summary>

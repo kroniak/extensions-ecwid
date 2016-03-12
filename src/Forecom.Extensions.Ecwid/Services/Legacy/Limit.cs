@@ -42,6 +42,7 @@ namespace Forecom.Extensions.Ecwid.Services.Legacy
         {
             _timeInterval = timeInterval;
             _limitValue = limitValue;
+            _start = TimeProvider.Now;
         }
 
         /// <summary>
@@ -79,8 +80,7 @@ namespace Forecom.Extensions.Ecwid.Services.Legacy
             var time = TimeProvider.Now;
 
             if (_start.AddSeconds(_timeInterval) > time)
-                return _value <= _limitValue;
-
+                return _value < _limitValue;
             _start = time;
             _value = 0;
             return true;

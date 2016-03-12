@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Forecom.Extensions.Ecwid.Services.Legacy;
-using Moq;
 using Xunit;
 
 namespace Forecom.Extensions.Ecwid.Test.Services.Legacy
@@ -11,58 +10,68 @@ namespace Forecom.Extensions.Ecwid.Test.Services.Legacy
     /// </summary>
     public class OneLimitTest
     {
-        [Theory]
-        [InlineData(5, 100)]
-        [InlineData(50, 400)]
-        [InlineData(500, 1400)]
-        public void TickExpectPass(int timeInterval, int limitValue)
+        private readonly List<bool> _results = new List<bool>();
+
+        [Fact]
+        public void TickExpectPass()
         {
-            // Mock current time
-            var mockTime = new Mock<ITimeProvider>();
-            // Init time
-            mockTime.SetupGet(t => t.Now).Returns(DateTime.Now);
+            var limit = new Limit(1000, 3);
 
-            var limit = new Limit(timeInterval, limitValue) { TimeProvider = mockTime.Object };
-            var results = new List<bool>();
+            3.Times(() => _results.Add(limit.Tick()));
 
-            for (var i = 1; i <= limitValue; i++)
-                results.Add(limit.Tick());
+            Assert.DoesNotContain(false, _results);
+        }
 
-            //Switch time to + [n] sec.
-            mockTime.SetupGet(t => t.Now).Returns(DateTime.Now.AddSeconds(timeInterval));
+        [Fact]
+        public void TickExpectFail()
+        {
+            var limit = new Limit(1000, 3);
 
-            // Check again
-            for (var i = 1; i <= limitValue; i++)
-                results.Add(limit.Tick());
+            4.Times(() => _results.Add(limit.Tick()));
 
-            Assert.DoesNotContain(false, results);
+            Assert.Contains(false, _results);
         }
 
         [Theory]
-        [InlineData(5, 100, 105)]
-        [InlineData(50, 400, 405)]
-        [InlineData(500, 1400, 2000)]
-        public void TickExpectFail(int timeInterval, int limitValue, int realLimit)
+        [InlineData(5, 3)]
+        [InlineData(50, 3)]
+        [InlineData(500, 3)]
+        public void TickExpectPass(int timeInterval, int limitValue)
         {
-            // Mock current time
-            var mockTime = new Mock<ITimeProvider>();
-            // Init time
-            mockTime.SetupGet(t => t.Now).Returns(DateTime.Now);
+            var mockTime = Tools.MockTime();
 
             var limit = new Limit(timeInterval, limitValue) { TimeProvider = mockTime.Object };
-            var results = new List<bool>();
 
-            for (var i = 1; i <= limitValue; i++)
-                results.Add(limit.Tick());
+            limitValue.Times(() => _results.Add(limit.Tick()));
 
             //Switch time to + [n] sec.
             mockTime.SetupGet(t => t.Now).Returns(DateTime.Now.AddSeconds(timeInterval));
 
             // Check again
-            for (var i = 1; i <= realLimit; i++)
-                results.Add(limit.Tick());
+            limitValue.Times(() => _results.Add(limit.Tick()));
 
-            Assert.Contains(false, results);
+            Assert.DoesNotContain(false, _results);
+        }
+
+        [Theory]
+        [InlineData(5, 3, 4)]
+        [InlineData(50, 3, 4)]
+        [InlineData(500, 3, 4)]
+        public void TickExpectFail(int timeInterval, int limitValue, int realLimit)
+        {
+            var mockTime = Tools.MockTime();
+
+            var limit = new Limit(timeInterval, limitValue) { TimeProvider = mockTime.Object };
+
+            limitValue.Times(() => _results.Add(limit.Tick()));
+
+            //Switch time to + [n] sec.
+            mockTime.SetupGet(t => t.Now).Returns(DateTime.Now.AddSeconds(timeInterval));
+
+            // Check again - it will be fail
+            realLimit.Times(() => _results.Add(limit.Tick()));
+
+            Assert.Contains(false, _results);
         }
     }
 }

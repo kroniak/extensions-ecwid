@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Forecom.Extensions.Ecwid.Services.Legacy;
-using Moq;
 using Xunit;
 
 namespace Forecom.Extensions.Ecwid.Test.Services.Legacy
@@ -11,6 +10,7 @@ namespace Forecom.Extensions.Ecwid.Test.Services.Legacy
     /// </summary>
     public class LimitsServiceTest
     {
+        private readonly List<bool> _results = new List<bool>();
         private LimitsService _limitsService;
 
         [Fact]
@@ -19,47 +19,88 @@ namespace Forecom.Extensions.Ecwid.Test.Services.Legacy
             _limitsService = new LimitsService();
 
             var result = _limitsService.Tick();
+
             Assert.True(result);
         }
 
         [Fact]
-        // Bug. Test Failed
         public void TickExpectPass()
         {
-            // Mock current time
-            var mockTime = new Mock<ITimeProvider>();
-            // Init time
-            mockTime.SetupGet(t => t.Now).Returns(DateTime.Now);
-
+            var mockTime = Tools.MockTime();
             // Init service
             _limitsService = new LimitsService(timeProvider: mockTime.Object);
 
-            var result = new List<bool>();
+            var currentTime = DateTime.Now;
 
-            // max 1400 in 500 sec
-            for (var a = 1; a <= 3; a++)
+            // max 1400 in 500 sec - real 3
+            3.Times(() =>
             {
-                // max 400 in 50 sec
-                for (var b = 1; b < 5; b++)
+                // max 400 in 50 sec - real 8
+                8.Times(() =>
                 {
-                    // max 100 in 5 sec
-                    for (var c = 1; c <= 80; c++)
-                        result.Add(_limitsService.Tick());
-                    //Switch time to + [n] sec.
-                    mockTime.SetupGet(t => t.Now).Returns(DateTime.Now.AddSeconds(6));
-                }
-                //Switch time to + [n] sec.
-                mockTime.SetupGet(t => t.Now).Returns(DateTime.Now.AddSeconds(50));
-            }
-            //Switch time to + [n] sec.
-            mockTime.SetupGet(t => t.Now).Returns(DateTime.Now.AddSeconds(500));
+                    // max 100 in 5 sec - real 50
+                    50.Times(() => _results.Add(_limitsService.Tick()));
+
+                    //Switch time to + [5] sec.
+                    // ReSharper disable once AccessToModifiedClosure
+                    currentTime = currentTime.AddSeconds(5);
+                    mockTime.SetupGet(t => t.Now).Returns(currentTime);
+                });
+
+                //Switch time to + [50] sec.
+                currentTime = currentTime.AddSeconds(50);
+                mockTime.SetupGet(t => t.Now).Returns(currentTime);
+            });
+
+            //Switch time to + [500] sec.
+            currentTime = currentTime.AddSeconds(500);
+            mockTime.SetupGet(t => t.Now).Returns(currentTime);
 
             // Test again
             // max 100 in 5 sec
-            for (var c = 1; c <= 80; c++)
-                result.Add(_limitsService.Tick());
+            80.Times(() => _results.Add(_limitsService.Tick()));
 
-            Assert.DoesNotContain(false, result);
+            Assert.DoesNotContain(false, _results);
+        }
+
+        [Fact]
+        public void TickExpectFail()
+        {
+            var mockTime = Tools.MockTime();
+            // Init service
+            _limitsService = new LimitsService(timeProvider: mockTime.Object);
+
+            var currentTime = DateTime.Now;
+
+            // max 1400 in 500 sec - real 3
+            4.Times(() =>
+            {
+                // max 400 in 50 sec - real 8
+                8.Times(() =>
+                {
+                    // max 100 in 5 sec - real 50
+                    50.Times(() => _results.Add(_limitsService.Tick()));
+
+                    //Switch time to + [5] sec.
+                    // ReSharper disable once AccessToModifiedClosure
+                    currentTime = currentTime.AddSeconds(5);
+                    mockTime.SetupGet(t => t.Now).Returns(currentTime);
+                });
+
+                //Switch time to + [50] sec.
+                currentTime = currentTime.AddSeconds(50);
+                mockTime.SetupGet(t => t.Now).Returns(currentTime);
+            });
+
+            //Switch time to + [500] sec.
+            currentTime = currentTime.AddSeconds(500);
+            mockTime.SetupGet(t => t.Now).Returns(currentTime);
+
+            // Test again
+            // max 100 in 5 sec
+            80.Times(() => _results.Add(_limitsService.Tick()));
+
+            Assert.Contains(false, _results);
         }
     }
 }
