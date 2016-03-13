@@ -1,6 +1,6 @@
 using System;
 
-namespace Forecom.Extensions.Ecwid.Services.Legacy
+namespace Ecwid.Services.Legacy
 {
     /// <summary>
     /// Interface to shim DateTime.Now
@@ -13,7 +13,7 @@ namespace Forecom.Extensions.Ecwid.Services.Legacy
     /// <summary>
     /// Real provider for non test env.
     /// </summary>
-    /// <seealso cref="Forecom.Extensions.Ecwid.Services.Legacy.ITimeProvider" />
+    /// <seealso cref="ITimeProvider" />
     internal class RealTimeProvider : ITimeProvider
     {
         public DateTime Now => DateTime.Now;

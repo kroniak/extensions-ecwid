@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Forecom.Extensions.Ecwid.Services.Legacy
+namespace Ecwid.Services.Legacy
 {
     /// <summary>
     /// Represent limitation functionality of Ecwid API

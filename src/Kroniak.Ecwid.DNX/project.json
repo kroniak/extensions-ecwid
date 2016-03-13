@@ -1,6 +1,6 @@
 ﻿{
   "version": "0.2.0-beta",
-  "description": "Forecom extensions to Ecwid",
+  "description": "DNX C# services to Ecwid API v1 and v3",
   "authors": [ "me@kroniak.net" ],
   "tags": [ "ecwid" ],
   "license": "GPL-3.0",
@@ -15,10 +15,12 @@
   },
 
   "dependencies": {
-    "Flurl.Http": "0.7.0"
+    "Newtonsoft.Json": "8.0.2"
   },
 
+  "compile": [ "../Kroniak.Ecwid/**/*.cs" ],
+
   "frameworks": {
-    "net451": { }
+    "net45": { }
   }
 }

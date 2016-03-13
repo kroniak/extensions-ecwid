@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace Forecom.Extensions.Ecwid.Domain.Legacy
+namespace Ecwid.Models.Legacy
 {
     /// <summary>
     /// The root object that is returned by the Order API
