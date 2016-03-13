@@ -1,8 +1,8 @@
 using System;
-using Forecom.Extensions.Ecwid.Services.Legacy;
+using Ecwid.Services.Legacy;
 using Moq;
 
-namespace Forecom.Extensions.Ecwid.Test.Services.Legacy
+namespace Kroniak.Ecwid.Test.Services.Legacy
 {
     internal static class Tools
     {

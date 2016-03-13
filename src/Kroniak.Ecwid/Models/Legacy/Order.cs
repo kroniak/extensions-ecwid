@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Forecom.Extensions.Ecwid.Domain.Legacy
+namespace Ecwid.Models.Legacy
 {
     /// <summary>
     /// This object represents information on a whole order

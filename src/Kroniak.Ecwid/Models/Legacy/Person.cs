@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Forecom.Extensions.Ecwid.Domain.Legacy
+namespace Ecwid.Models.Legacy
 {
     public class Person
     {

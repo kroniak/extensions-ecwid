@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>f3d2c2d1-422a-43bb-8400-e570b6cf29f5</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Kroniak.Ecwid</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Legacy\Order.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Legacy\OrderItem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Legacy\OrderResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Legacy\Person.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Legacy\Limit.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Legacy\LimitService.cs" />
+  </ItemGroup>
+</Project>

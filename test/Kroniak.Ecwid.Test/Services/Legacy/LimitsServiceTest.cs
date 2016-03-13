@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using Forecom.Extensions.Ecwid.Services.Legacy;
+using Ecwid.Services.Legacy;
 using Xunit;
 
-namespace Forecom.Extensions.Ecwid.Test.Services.Legacy
+namespace Kroniak.Ecwid.Test.Services.Legacy
 {
     /// <summary>
-    /// Test for Limits functionality of Ecwid Lagacy
+    /// Test for Limits functionality of Ecwid Legacy
     /// </summary>
     public class LimitsServiceTest
     {
