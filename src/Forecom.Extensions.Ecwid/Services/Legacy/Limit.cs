@@ -53,7 +53,7 @@ namespace Forecom.Extensions.Ecwid.Services.Legacy
         /// </value>
         public ITimeProvider TimeProvider
         {
-            internal get
+            private get
             {
                 return _timeProvider ?? (_timeProvider = new RealTimeProvider());
             }

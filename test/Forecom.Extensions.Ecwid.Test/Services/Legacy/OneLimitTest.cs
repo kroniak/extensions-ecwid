@@ -6,7 +6,7 @@ using Xunit;
 namespace Forecom.Extensions.Ecwid.Test.Services.Legacy
 {
     /// <summary>
-    /// Test for one limit functionality of Ecwid Lagacy
+    /// Test for one limit functionality of Ecwid Legacy
     /// </summary>
     public class OneLimitTest
     {

@@ -46,7 +46,7 @@ namespace Forecom.Extensions.Ecwid.Domain.Legacy
         public DateTime Created { get; set; }
 
         /// <summary>
-        /// Payment status. Сontains one of these values: ACCEPTED*, DECLINED, CANCELLED, QUEUED, CHARGEABLE, REFUNDED
+        /// Payment status. Contains one of these values: ACCEPTED*, DECLINED, CANCELLED, QUEUED, CHARGEABLE, REFUNDED
         /// </summary>
         /// <value>
         /// The payment status
