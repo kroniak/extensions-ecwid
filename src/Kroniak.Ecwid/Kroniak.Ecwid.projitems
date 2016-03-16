@@ -9,10 +9,15 @@
     <Import_RootNamespace>Kroniak.Ecwid</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Models\BaseEntity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Legacy\Category.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Legacy\CategoryEntry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Legacy\Order.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Legacy\OrderItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Legacy\OrderResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Legacy\Person.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Legacy\Product.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Legacy\ProductEntry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Legacy\Limit.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Legacy\LimitService.cs" />
   </ItemGroup>

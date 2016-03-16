@@ -106,7 +106,7 @@ namespace Ecwid.Models.Legacy
         /// The payment parameters
         /// </value>
         [JsonProperty("paymentParameters")]
-        public PaymentParameters PaymentParameters { get; set; }
+        public Dictionary<string, string> PaymentParameters { get; set; }
 
         /// <summary>
         /// Address verification status returned by some payment systems
