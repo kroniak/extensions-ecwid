@@ -44,7 +44,4 @@ namespace Ecwid.Models.Legacy
         [JsonProperty("orders")]
         public IList<Order> Orders { get; set; }
     }
-
-    // TODO
-    public class PaymentParameters { }
 }

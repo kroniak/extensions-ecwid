@@ -5,7 +5,7 @@ using System.Linq;
 namespace Ecwid.Services.Legacy
 {
     /// <summary>
-    /// Represent limitation functionality of Ecwid API
+    /// Represent limitation functionality of Ecwid Legacy API
     /// </summary>
     internal class LimitsService
     {
