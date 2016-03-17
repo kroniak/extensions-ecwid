@@ -2,7 +2,7 @@
 
 namespace Ecwid.Models.Legacy
 {
-    public class Person
+    public class LegacyPerson
     {
         /// <summary>
         /// Gets or sets the name

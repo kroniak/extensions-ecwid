@@ -7,7 +7,7 @@ namespace Ecwid.Models.Legacy
     /// <summary>
     /// This object represents information on a whole order
     /// </summary>
-    public class Order
+    public class LegacyOrder
     {
         /// <summary>
         /// A unique order number
@@ -79,7 +79,7 @@ namespace Ecwid.Models.Legacy
         /// The shipping person
         /// </value>
         [JsonProperty("shippingPerson")]
-        public Person ShippingPerson { get; set; }
+        public LegacyPerson ShippingLegacyPerson { get; set; }
 
         /// <summary>
         /// Gets or sets the payment method name
@@ -97,7 +97,7 @@ namespace Ecwid.Models.Legacy
         /// The billing person
         /// </value>
         [JsonProperty("billingPerson")]
-        public Person BillingPerson { get; set; }
+        public LegacyPerson BillingLegacyPerson { get; set; }
 
         /// <summary>
         /// Additional payment parameters entered by customer on checkout
@@ -241,7 +241,7 @@ namespace Ecwid.Models.Legacy
         /// The items
         /// </value>
         [JsonProperty("items")]
-        public IList<OrderItem> Items { get; set; }
+        public IList<LegacyOrderItem> Items { get; set; }
 
         /// <summary>
         /// Gets or sets the last change date
@@ -286,13 +286,13 @@ namespace Ecwid.Models.Legacy
         /// The discounts
         /// </value>
         [JsonProperty("discounts")]
-        public List<OrderDiscount> Discounts { get; set; }
+        public List<LegacyOrderDiscount> Discounts { get; set; }
     }
 
     /// <summary>
-    /// Order discounts
+    /// LegacyOrder discounts
     /// </summary>
-    public class OrderDiscount
+    public class LegacyOrderDiscount
     {
         /// <summary>
         /// Specifies the type of discount
@@ -319,10 +319,10 @@ namespace Ecwid.Models.Legacy
         /// The settings
         /// </value>
         [JsonProperty("settings")]
-        public Settings Settings { get; set; }
+        public LegacySettings LegacySettings { get; set; }
     }
 
-    public class Settings
+    public class LegacySettings
     {
         /// <summary>
         /// Discount granted to the customer based on the volume ordered either in percents or in currency, based on the <seealso cref="DiscountType"/>

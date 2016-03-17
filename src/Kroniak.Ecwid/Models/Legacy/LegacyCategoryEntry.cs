@@ -5,7 +5,7 @@ namespace Ecwid.Models.Legacy
     /// <summary>
     /// This object represents full information on a category
     /// </summary>
-    public class CategoryEntry : BaseEntity
+    public class LegacyCategoryEntry : BaseEntity
     {
         /// <summary>
         /// If present, an URL of a category thumbnail (usually 160x160).

@@ -4,9 +4,9 @@ using System.Collections.Generic;
 namespace Ecwid.Models.Legacy
 {
     /// <summary>
-    /// The root object that is returned by the Order API
+    /// The root object that is returned by the LegacyOrder API
     /// </summary>
-    internal class OrderResponse
+    internal class LegacyOrderResponse
     {
         /// <summary>
         /// The number of orders returned in the 'orders' field
@@ -36,12 +36,12 @@ namespace Ecwid.Models.Legacy
         public string NextUrl { get; set; }
 
         /// <summary>
-        /// No more then limit orders starting from the given offset ordered by time descending. See <see cref="Order"/>
+        /// No more then limit orders starting from the given offset ordered by time descending. See <see cref="LegacyOrder"/>
         /// </summary>
         /// <value>
         /// The orders
         /// </value>
         [JsonProperty("orders")]
-        public IList<Order> Orders { get; set; }
+        public IList<LegacyOrder> Orders { get; set; }
     }
 }

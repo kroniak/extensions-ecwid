@@ -7,7 +7,7 @@ namespace Ecwid.Models.Legacy
     /// <summary>
     /// This object represents order item
     /// </summary>
-    public class OrderItem
+    public class LegacyOrderItem
     {
         /// <summary>
         /// Gets or sets the sku
@@ -55,7 +55,7 @@ namespace Ecwid.Models.Legacy
         public double Weight { get; set; }
 
         /// <summary>
-        /// Product internal ID. You can use it with our Product API
+        /// LegacyProduct internal ID. You can use it with our LegacyProduct API
         /// </summary>
         /// <value>
         /// The product identifier
@@ -70,7 +70,7 @@ namespace Ecwid.Models.Legacy
         /// The options
         /// </value>
         [JsonProperty("options")]
-        public IList<OrderItemOption> Options { get; set; }
+        public IList<LegacyOrderItemOption> Options { get; set; }
 
         /// <summary>
         /// Default category ID for this product (0, if no default category has been set for the product)
@@ -88,7 +88,7 @@ namespace Ecwid.Models.Legacy
         /// The taxes
         /// </value>
         [JsonProperty("taxes")]
-        public IList<OrderItemTax> Taxes { get; set; }
+        public IList<LegacyOrderItemTax> Taxes { get; set; }
 
         /// <summary>
         /// Egoods
@@ -97,13 +97,13 @@ namespace Ecwid.Models.Legacy
         /// The files
         /// </value>
         [JsonProperty("files")]
-        public IList<OrderItemProductFile> Files { get; set; }
+        public IList<LegacyOrderItemProductFile> Files { get; set; }
     }
 
     /// <summary>
     /// This object represents options of purchased product
     /// </summary>
-    public class OrderItemOption
+    public class LegacyOrderItemOption
     {
         /// <summary>
         /// Option name
@@ -124,7 +124,7 @@ namespace Ecwid.Models.Legacy
         public string Type { get; set; }
 
         /// <summary>
-        /// Contain text value for SELECT, DATE and TEXT option types. Contain List of <seealso cref="OrderItemOrderFile"/> in case option type is FILE
+        /// Contain text value for SELECT, DATE and TEXT option types. Contain List of <seealso cref="LegacyOrderItemOrderFile"/> in case option type is FILE
         /// </summary>
         /// <value>
         /// The value
@@ -136,7 +136,7 @@ namespace Ecwid.Models.Legacy
     /// <summary>
     /// This object represents tax of purchased product
     /// </summary>
-    public class OrderItemTax
+    public class LegacyOrderItemTax
     {
         /// <summary>
         /// Gets or sets the name
@@ -169,7 +169,7 @@ namespace Ecwid.Models.Legacy
     /// <summary>
     /// This object represents file attached by customer to purchased product on checkout
     /// </summary>
-    public class OrderItemOrderFile
+    public class LegacyOrderItemOrderFile
     {
         /// <summary>
         /// Gets or sets the name
@@ -202,8 +202,8 @@ namespace Ecwid.Models.Legacy
     /// <summary>
     /// This object represents purchased egood
     /// </summary>
-    /// <seealso cref="Legacy.OrderItemOrderFile" />
-    public class OrderItemProductFile : OrderItemOrderFile
+    /// <seealso cref="LegacyOrderItemOrderFile" />
+    public class LegacyOrderItemProductFile : LegacyOrderItemOrderFile
     {
         /// <summary>
         /// Gets or sets the description

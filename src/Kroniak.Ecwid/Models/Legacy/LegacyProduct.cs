@@ -4,9 +4,9 @@ using System.Collections.Generic;
 namespace Ecwid.Models.Legacy
 {
     /// <summary>
-    /// This object represents full information on a product: all fields of the ProductEntry plus some additional fields
+    /// This object represents full information on a product: all fields of the LegacyProductEntry plus some additional fields
     /// </summary>
-    public class Product : ProductEntry
+    public class LegacyProduct : LegacyProductEntry
     {
         /// <summary>
         /// If present, product wholesale prices in the form of Quantity, Price
@@ -24,7 +24,7 @@ namespace Ecwid.Models.Legacy
         /// The options
         /// </value>
         [JsonProperty("options")]
-        public IList<ProductOption> Options { get; set; }
+        public IList<LegacyProductOption> Options { get; set; }
 
         /// <summary>
         /// A list of included taxes
@@ -33,7 +33,7 @@ namespace Ecwid.Models.Legacy
         /// The taxes
         /// </value>
         [JsonProperty("taxes")]
-        public IList<ProductTax> Taxes { get; set; }
+        public IList<LegacyProductTax> Taxes { get; set; }
 
         /// <summary>
         /// A list of gallery images
@@ -42,7 +42,7 @@ namespace Ecwid.Models.Legacy
         /// The gallery images
         /// </value>
         [JsonProperty("galleryImages")]
-        public IList<GalleryImage> GalleryImages { get; set; }
+        public IList<LegacyGalleryImage> GalleryImages { get; set; }
 
         /// <summary>
         /// A list of categories which this product belongs to. 
@@ -53,7 +53,7 @@ namespace Ecwid.Models.Legacy
         /// The categories
         /// </value>
         [JsonProperty("categories")]
-        public IList<CategoryEntry> Categories { get; set; }
+        public IList<LegacyCategoryEntry> Categories { get; set; }
 
         /// <summary>
         /// If present, unique ID for default product combination
@@ -71,10 +71,10 @@ namespace Ecwid.Models.Legacy
         /// The combinations
         /// </value>
         [JsonProperty("combinations")]
-        public IList<ProductCombination> Combinations { get; set; }
+        public IList<LegacyProductCombination> Combinations { get; set; }
 
         /// <summary>
-        /// Product creation date (UNIX timestamp). 
+        /// LegacyProduct creation date (UNIX timestamp). 
         /// Note: this field is obsolete and will be removed in a future version of API.Use "created" field instead.
         /// </summary>
         /// <value>
@@ -102,7 +102,7 @@ namespace Ecwid.Models.Legacy
         public string ProductType { get; set; }
 
         /// <summary>
-        /// If present, contains product's attributes values (see the description of object Attribute below). 
+        /// If present, contains product's attributes values (see the description of object LegacyAttribute below). 
         /// For non-authorized calls, hidden attributes are not returned. 
         /// Since Ecwid version 13.2, you can use Authentication as described at the start of this document to show hidden attributes.
         /// You can edit the attribute values on the 'Attributes' tab in the product editor.
@@ -111,7 +111,7 @@ namespace Ecwid.Models.Legacy
         /// The attributes
         /// </value>
         [JsonProperty("attributes")]
-        public IList<Attribute> Attributes { get; set; }
+        public IList<LegacyAttribute> Attributes { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [in stock].
@@ -123,7 +123,7 @@ namespace Ecwid.Models.Legacy
         public bool InStock { get; set; }
     }
 
-    public class ProductOption
+    public class LegacyProductOption
     {
         /// <summary>
         /// Option name, like 'Color'
@@ -150,10 +150,10 @@ namespace Ecwid.Models.Legacy
         /// The choices
         /// </value>
         [JsonProperty("choices")]
-        public IList<ProductOptionChoice> Choices { get; set; }
+        public IList<LegacyProductOptionChoice> Choices { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="ProductOption"/> is required.
+        /// Gets or sets a value indicating whether this <see cref="LegacyProductOption"/> is required.
         /// </summary>
         /// <value>
         ///   <c>true</c> if required; otherwise, <c>false</c>.
@@ -171,7 +171,7 @@ namespace Ecwid.Models.Legacy
         public int? DefaultChoice { get; set; }
     }
 
-    public class ProductOptionChoice
+    public class LegacyProductOptionChoice
     {
         /// <summary>
         /// A text displayed as a choice in a drop-down or a radio box, e.g. 'Green'
@@ -212,7 +212,7 @@ namespace Ecwid.Models.Legacy
         public string Sku { get; set; }
     }
 
-    public class ProductTax
+    public class LegacyProductTax
     {
         /// <summary>
         /// The tax display name, e.g. 'VAT'
@@ -233,7 +233,7 @@ namespace Ecwid.Models.Legacy
         public double Value { get; set; }
     }
 
-    public class GalleryImage
+    public class LegacyGalleryImage
     {
         /// <summary>
         /// The image description, displayed in 'alt' image attribute
@@ -281,7 +281,7 @@ namespace Ecwid.Models.Legacy
         public string ThumbnailUrl { get; set; }
     }
 
-    public class Attribute : BaseEntity
+    public class LegacyAttribute : BaseEntity
     {
         /// <summary>
         /// Gets or sets the value

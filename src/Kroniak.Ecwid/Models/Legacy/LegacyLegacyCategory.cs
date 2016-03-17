@@ -6,7 +6,7 @@ namespace Ecwid.Models.Legacy
     /// <summary>
     /// This object represents full information about the category and its products and subcategories
     /// </summary>
-    public class Category : CategoryEntry
+    public class LegacyLegacyCategory : LegacyCategoryEntry
     {
         /// <summary>
         /// A list of child subcategories, without nested products and subcategories
@@ -15,7 +15,7 @@ namespace Ecwid.Models.Legacy
         /// The subcategories
         /// </value>
         [JsonProperty("subcategories")]
-        public IList<CategoryEntry> Subcategories { get; set; }
+        public IList<LegacyCategoryEntry> Subcategories { get; set; }
 
         /// <summary>
         /// Gets or sets the products
@@ -24,6 +24,6 @@ namespace Ecwid.Models.Legacy
         /// The products
         /// </value>
         [JsonProperty("products")]
-        public IList<ProductEntry> Products { get; set; }
+        public IList<LegacyProductEntry> Products { get; set; }
     }
 }

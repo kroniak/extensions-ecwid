@@ -6,10 +6,10 @@ namespace Ecwid.Models.Legacy
     /// <summary>
     /// This object represents information on a product
     /// </summary>
-    public class ProductEntry : BaseEntity
+    public class LegacyProductEntry : BaseEntity
     {
         /// <summary>
-        /// Product SKU, that is, a unique code
+        /// LegacyProduct SKU, that is, a unique code
         /// </summary>
         /// <value>
         /// The sku
@@ -105,10 +105,10 @@ namespace Ecwid.Models.Legacy
         /// The default combination
         /// </value>
         [JsonProperty("defaultCombination")]
-        public ProductCombination DefaultCombination { get; set; }
+        public LegacyProductCombination DefaultCombination { get; set; }
 
         /// <summary>
-        /// Product creation date
+        /// LegacyProduct creation date
         /// </summary>
         /// <value>
         /// The created
@@ -119,8 +119,8 @@ namespace Ecwid.Models.Legacy
         /// <summary>
         /// Id of a product class this product belongs to (like 'Books').
         /// Zero '0' value means 'General' class, which is the default for products. 
-        /// Product classes default additional attributes you can edit on the 'Attributes' tab in the product editor. 
-        /// See <see cref="Product"/> class API below on how to manipulate product classes
+        /// LegacyProduct classes default additional attributes you can edit on the 'Attributes' tab in the product editor. 
+        /// See <see cref="LegacyProduct"/> class API below on how to manipulate product classes
         /// </summary>
         /// <value>
         /// The product class identifier
@@ -129,7 +129,7 @@ namespace Ecwid.Models.Legacy
         public int ProductClassId { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="ProductEntry"/> is enabled.
+        /// Gets or sets a value indicating whether this <see cref="LegacyProductEntry"/> is enabled.
         /// </summary>
         /// <value>
         ///   <c>true</c> if enabled; otherwise, <c>false</c>.
@@ -162,7 +162,7 @@ namespace Ecwid.Models.Legacy
         /// The favorites
         /// </value>
         [JsonProperty("favorites")]
-        public Favorites Favorites { get; set; }
+        public LegacyFavorites LegacyFavorites { get; set; }
 
         /// <summary>
         /// Gets or sets the quantity
@@ -174,7 +174,7 @@ namespace Ecwid.Models.Legacy
         public int? Quantity { get; set; }
     }
 
-    public class ProductCombination : BaseEntity
+    public class LegacyProductCombination : BaseEntity
     {
         /// <summary>
         /// If present, combination SKU, unique code
@@ -219,7 +219,7 @@ namespace Ecwid.Models.Legacy
         /// The options
         /// </value>
         [JsonProperty("options")]
-        public Dictionary<string, ProductOptionChoice> Options { get; set; }
+        public Dictionary<string, LegacyProductOptionChoice> Options { get; set; }
 
         /// <summary>
         /// If present, URL of a small combination thumbnail (usually 80x80)
@@ -258,7 +258,7 @@ namespace Ecwid.Models.Legacy
         public string OriginalImageUrl { get; set; }
     }
 
-    public class Favorites
+    public class LegacyFavorites
     {
         [JsonProperty("count")]
         public int Count { get; set; }
