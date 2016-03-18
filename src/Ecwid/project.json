@@ -1,0 +1,34 @@
+﻿{
+  "version": "1.0.0-alpha",
+  "description": "C# services and models classes to Ecwid API v1 and v3",
+  "authors": [ "me@kroniak.net" ],
+  "copyright": "©2016 by me@kroniak.net",
+  "tags": [ "ecwid" ],
+  "license": "GPL-3.0",
+  "licenseUrl": "https://raw.githubusercontent.com/kroniak/extensions-ecwid/master/LICENSE",
+  "projectUrl": "https://github.com/kroniak/extensions-ecwid",
+  "releaseNotes": "",
+
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kroniak/extensions-ecwid.git"
+  },
+
+  "compilationOptions": {
+    "warningsAsErrors": true
+  },
+
+  "dependencies": {
+    "Flurl.Http": "0.7.0"
+  },
+
+  "compile": [ "../Kroniak.Ecwid/**/*.cs" ],
+
+  "frameworks": {
+    "net45": {
+      "frameworkAssemblies": {
+        "System.Net.Http": "4.0.0.0"
+      }
+    }
+  }
+}

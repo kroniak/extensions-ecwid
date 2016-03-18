@@ -14,17 +14,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{475D
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Kroniak.Ecwid", "src\Kroniak.Ecwid\Kroniak.Ecwid.shproj", "{F3D2C2D1-422A-43BB-8400-E570B6CF29F5}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Kroniak.Ecwid.DNX", "src\Kroniak.Ecwid.DNX\Kroniak.Ecwid.DNX.xproj", "{924D346B-90FA-4251-AAB2-0CF860540D2D}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ecwid", "src\Ecwid\Ecwid.xproj", "{924D346B-90FA-4251-AAB2-0CF860540D2D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{B392B7CF-2234-4280-AAE5-BD90CA59169C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kroniak.Ecwid.Test", "test\Kroniak.Ecwid.Test\Kroniak.Ecwid.Test.csproj", "{6DF473B9-E40A-464C-ADE6-D8555356460E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kroniak.Ecwid.NET45", "src\Kroniak.Ecwid.NET45\Kroniak.Ecwid.NET45.csproj", "{2900E569-C0BD-417A-899B-512F6DC55DE6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApplication", "samples\ConsoleApplication\ConsoleApplication.csproj", "{0E94F94C-44FA-41CD-87F1-FC387B07D42F}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		src\Kroniak.Ecwid\Kroniak.Ecwid.projitems*{2900e569-c0bd-417a-899b-512f6dc55de6}*SharedItemsImports = 4
+		src\Kroniak.Ecwid\Kroniak.Ecwid.projitems*{0e94f94c-44fa-41cd-87f1-fc387b07d42f}*SharedItemsImports = 4
 		src\Kroniak.Ecwid\Kroniak.Ecwid.projitems*{6df473b9-e40a-464c-ade6-d8555356460e}*SharedItemsImports = 4
 		src\Kroniak.Ecwid\Kroniak.Ecwid.projitems*{f3d2c2d1-422a-43bb-8400-e570b6cf29f5}*SharedItemsImports = 13
 	EndGlobalSection
@@ -41,10 +41,10 @@ Global
 		{6DF473B9-E40A-464C-ADE6-D8555356460E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6DF473B9-E40A-464C-ADE6-D8555356460E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6DF473B9-E40A-464C-ADE6-D8555356460E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2900E569-C0BD-417A-899B-512F6DC55DE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2900E569-C0BD-417A-899B-512F6DC55DE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2900E569-C0BD-417A-899B-512F6DC55DE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2900E569-C0BD-417A-899B-512F6DC55DE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E94F94C-44FA-41CD-87F1-FC387B07D42F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E94F94C-44FA-41CD-87F1-FC387B07D42F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E94F94C-44FA-41CD-87F1-FC387B07D42F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E94F94C-44FA-41CD-87F1-FC387B07D42F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -53,6 +53,6 @@ Global
 		{F3D2C2D1-422A-43BB-8400-E570B6CF29F5} = {960DCBBF-AEC7-4640-9D13-CA91A0F8A5DD}
 		{924D346B-90FA-4251-AAB2-0CF860540D2D} = {960DCBBF-AEC7-4640-9D13-CA91A0F8A5DD}
 		{6DF473B9-E40A-464C-ADE6-D8555356460E} = {B392B7CF-2234-4280-AAE5-BD90CA59169C}
-		{2900E569-C0BD-417A-899B-512F6DC55DE6} = {960DCBBF-AEC7-4640-9D13-CA91A0F8A5DD}
+		{0E94F94C-44FA-41CD-87F1-FC387B07D42F} = {475D5594-685E-415C-B134-B55035C80208}
 	EndGlobalSection
 EndGlobal

@@ -6,19 +6,27 @@
     <SharedGUID>f3d2c2d1-422a-43bb-8400-e570b6cf29f5</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>Kroniak.Ecwid</Import_RootNamespace>
+    <Import_RootNamespace>Ecwid</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Misc\Exceptions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Misc\Validators.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\BaseEntity.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Legacy\Category.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Legacy\CategoryEntry.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Legacy\Order.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Legacy\OrderItem.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Legacy\OrderResponse.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Legacy\Person.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Legacy\Product.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Legacy\ProductEntry.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Legacy\LegacyLegacyCategory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Legacy\LegacyCategoryEntry.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Legacy\LegacyOrder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Legacy\LegacyOrderItem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Legacy\LegacyOrderResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Legacy\LegacyPerson.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Legacy\LegacyProduct.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Legacy\LegacyProductEntry.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\EcwidOptions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Legacy\EcwidLegacyClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Legacy\EcwidLegacyClientOrders.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Legacy\ITimeProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Legacy\Limit.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Legacy\LimitService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Legacy\EcwidLegacyOptions.cs" />
   </ItemGroup>
 </Project>
