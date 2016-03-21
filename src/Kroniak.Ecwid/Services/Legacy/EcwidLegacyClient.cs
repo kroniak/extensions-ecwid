@@ -2,7 +2,6 @@
 using Flurl;
 using Flurl.Http;
 using System;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Ecwid.Services.Legacy
@@ -119,7 +118,7 @@ namespace Ecwid.Services.Legacy
                 // If time limit is over
                 if (start.AddSeconds(Options.MaxSecondsToWait) < DateTime.Now)
                     return false;
-                Thread.Sleep(Options.RetryInterval * 1000);
+                Task.Delay(Options.RetryInterval * 1000).Wait();
                 agreement = LimitsService.Tick();
             }
 
