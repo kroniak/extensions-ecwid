@@ -1,11 +1,11 @@
 ﻿{
-  "version": "1.0.0-alpha",
+  "version": "1.0.0-alpha-2235",
   "title": "Ecwid",
   "description": "C# services and models classes to Ecwid API v1 and v3",
   "summary": "C# services and models classes to Ecwid API v1 and v3",
   "authors": [ "me@kroniak.net" ],
   "copyright": "Copyright ©2016 by me@kroniak.net",
-  "tags": [ "ecwid" ],
+  "tags": [ "ecwid api client rest async" ],
   "license": "GPL-3.0",
   "licenseUrl": "https://raw.githubusercontent.com/kroniak/extensions-ecwid/master/LICENSE",
   "requireLicenseAcceptance": false,
