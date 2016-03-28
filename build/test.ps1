@@ -5,4 +5,4 @@ Get-ChildItem -Path $PSScriptRoot\..\test -Filter project.json -Recurse | ForEac
 Get-ChildItem -Path $PSScriptRoot\..\test -Filter project.json -Recurse | ForEach-Object { & dnu build $_.FullName 2>1 }
 
 # run DNU build Frontend
-& dnx -p $PSScriptRoot\..\test\Ecwid.Test.Dnx\ test
+& dnx -p $PSScriptRoot\..\test\Ecwid.Test.Dnx\ test 2>1
