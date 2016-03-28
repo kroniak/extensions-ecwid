@@ -1,5 +1,7 @@
 ## Extensions for Ecwid
 
+[![Build status](https://ci.appveyor.com/api/projects/status/4mgx59ese69wjx7d?svg=true)](https://ci.appveyor.com/project/kroniak/extensions-ecwid)
+
 ### What is it?
 This repo contains models and services C# classes for Ecwid API v1 and v3.
 
@@ -12,8 +14,10 @@ You can learn abount v3 (general) API https://developers.ecwid.com/api-documenta
 
 ### What in the box?
 2 nuget packages:
-- Ecwid - services and models
-- Ecwid.Owin - pipeline O2Auth  wrapper for ASP.NET Core (aka ASP.NET5) and ASP.NET 4
+
+`PM> Install-Package Ecwid -Pre` - services and models
+
+`PM> Install-Package Ecwid.OAuth2 -Pre` - pipeline O2Auth  wrapper for ASP.NET Core (aka ASP.NET5) and ASP.NET 4
 
 ### Namespaces
 - Ecwid.Models - shared classes and v3 classes
@@ -22,4 +26,4 @@ You can learn abount v3 (general) API https://developers.ecwid.com/api-documenta
 - Ecwid.Services.Legacy - service classes for Legacy (v1) API
 
 ### How to use
-Soon
+[Look wiki pages](https://github.com/kroniak/extensions-ecwid/wiki)
