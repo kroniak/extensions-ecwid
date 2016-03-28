@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>0cdf00d8-4242-4375-b9ce-ce0af65f6ebd</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Ecwid.Services.Test</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Legacy\EcwidLegacyClientOrdersTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Legacy\EcwidLegacyClientTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Legacy\LimitsServiceTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Legacy\Moqs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Legacy\OneLimitTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Legacy\Tools.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\QueryBuilderExtensionsTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tools\ExtensionsTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tools\ValidatorsTest.cs" />
+  </ItemGroup>
+</Project>
