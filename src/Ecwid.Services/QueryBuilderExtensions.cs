@@ -108,9 +108,8 @@ namespace Ecwid.Services
         /// <param name="fulfillmentStatuses">Fulfillment statuses: AWAITING_PROCESSING==NEW, PROCESSING, SHIPPED, DELIVERED, WILL_NOT_DELIVER, RETURNED</param>
         public static OrdersQueryBuilder Statuses(this OrdersQueryBuilder query, string paymentStatuses, string fulfillmentStatuses)
         {
-            if (!Validators.PaymentStatusesValidate(paymentStatuses) ||
-                !Validators.FulfillmentStatusesValidate(fulfillmentStatuses))
-                return query;
+            Validators.PaymentStatusesValidate(paymentStatuses);
+            Validators.FulfillmentStatusesValidate(fulfillmentStatuses);
 
             var resultList = paymentStatuses.TrimUpperReplaceSplit();
             resultList.AddRange(fulfillmentStatuses.TrimUpperReplaceSplit());

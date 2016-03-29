@@ -43,15 +43,15 @@ namespace Ecwid.Services.Legacy
             try
             {
                 await GetApiResponceAsync<LegacyOrderResponse>(OrdersUrl, new { limit = 0 });
+                return true;
             }
             catch (FlurlHttpException exception)
             {
                 var status = exception.Call.Response.StatusCode;
                 if (status == HttpStatusCode.Forbidden)
                     return false;
+                throw;
             }
-
-            return true;
         }
 
         /// <summary>
@@ -63,15 +63,15 @@ namespace Ecwid.Services.Legacy
             try
             {
                 await GetApiResponceAsync<LegacyOrderResponse>(OrdersUrl, new { limit = 0 }, cancellationToken);
+                return true;
             }
             catch (FlurlHttpException exception)
             {
                 var status = exception.Call.Response.StatusCode;
                 if (status == HttpStatusCode.Forbidden)
                     return false;
+                throw;
             }
-
-            return true;
         }
 
         /// <summary>
