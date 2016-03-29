@@ -47,7 +47,7 @@ namespace Ecwid.Services.Legacy
             catch (FlurlHttpException exception)
             {
                 var status = exception.Call.Response.StatusCode;
-                if (status == HttpStatusCode.Unauthorized || status == HttpStatusCode.Forbidden)
+                if (status == HttpStatusCode.Forbidden)
                     return false;
             }
 
@@ -67,7 +67,7 @@ namespace Ecwid.Services.Legacy
             catch (FlurlHttpException exception)
             {
                 var status = exception.Call.Response.StatusCode;
-                if (status == HttpStatusCode.Unauthorized || status == HttpStatusCode.Forbidden)
+                if (status == HttpStatusCode.Forbidden)
                     return false;
             }
 
