@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>66067e25-20a2-4028-bd2c-318ceebd4e6f</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Ecwid.Services</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)EcwidOptions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Legacy\EcwidLegacyClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Legacy\EcwidLegacyClientOrders.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Legacy\EcwidLegacyOptions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Legacy\ITimeProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Legacy\Limit.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Legacy\LimitService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)QueryBuilder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)QueryBuilderExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tools\Exceptions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tools\Extensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tools\Validators.cs" />
+  </ItemGroup>
+</Project>

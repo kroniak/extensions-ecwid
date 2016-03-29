@@ -1,0 +1,39 @@
+﻿{
+  "version": "1.0.0-alpha",
+  "title": "Ecwid",
+  "description": "C# services and models classes to Ecwid API v1 and v3",
+  "summary": "C# services and models classes to Ecwid API v1 and v3",
+  "authors": [ "me@kroniak.net" ],
+  "copyright": "Copyright ©2016 by me@kroniak.net",
+  "tags": [ "ecwid api client rest async" ],
+  "license": "GPL-3.0",
+  "licenseUrl": "https://raw.githubusercontent.com/kroniak/extensions-ecwid/master/LICENSE",
+  "requireLicenseAcceptance": false,
+  "iconUrl": "https://dj925myfyz5v.cloudfront.net/favicon_v2.ico",
+  "projectUrl": "https://github.com/kroniak/extensions-ecwid",
+  "releaseNotes": "",
+
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kroniak/extensions-ecwid.git"
+  },
+
+  "compilationOptions": {
+    "warningsAsErrors": true
+  },
+
+  "dependencies": {
+    "Flurl.Http.NETCore": "0.8.1"
+  },
+
+  "compile": [ "../**/*.cs" ],
+
+  "frameworks": {
+    "net45": { },
+    "dotnet50": {
+      "dependencies": {
+        "System.Collections.Concurrent": "4.0.10"
+      }
+    }
+  }
+}
