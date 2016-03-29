@@ -11,6 +11,7 @@
   },
 
   "compile": [ "../**/*.cs", "../../src/**/*.cs" ],
+  "compileExclude": [ "../**/*RealTest.cs" ],
 
   "commands": {
     "test": "xunit.runner.dnx"
