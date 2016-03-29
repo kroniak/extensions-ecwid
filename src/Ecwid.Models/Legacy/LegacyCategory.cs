@@ -6,7 +6,7 @@ namespace Ecwid.Models.Legacy
     /// <summary>
     /// This object represents full information about the category and its products and subcategories
     /// </summary>
-    public class LegacyLegacyCategory : LegacyCategoryEntry
+    public class LegacyCategory : LegacyCategoryEntry
     {
         /// <summary>
         /// A list of child subcategories, without nested products and subcategories
