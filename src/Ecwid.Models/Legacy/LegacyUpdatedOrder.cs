@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace Ecwid.Models
 {

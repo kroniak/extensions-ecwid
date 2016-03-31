@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+// ReSharper disable UnusedMember.Global
 
 namespace Ecwid.Models
 {
