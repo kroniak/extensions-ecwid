@@ -88,10 +88,8 @@ namespace Ecwid.Services
         /// </summary>
         /// <param name="query">The query.</param>
         /// <param name="customerId">The customer identifier.</param>
-        public static OrdersQueryBuilder CustomerId(this OrdersQueryBuilder query, int? customerId)
-        {
-            return customerId == null ? query.AddOrUpdate("customer_id", "null") : query.AddOrUpdate("customer_id", customerId);
-        }
+        public static OrdersQueryBuilder CustomerId(this OrdersQueryBuilder query, int? customerId) =>
+            customerId == null ? query.AddOrUpdate("customer_id", "null") : query.AddOrUpdate("customer_id", customerId);
 
         /// <summary>
         /// Customer email or null for orders with empty or absent emails.
@@ -159,19 +157,68 @@ namespace Ecwid.Services
         /// Gets orders the asynchronous.
         /// </summary>
         /// <param name="query">The query.</param>
-        public static async Task<List<LegacyOrder>> GetAsync(this OrdersQueryBuilder query)
-        {
-            return await query.Client.GetOrdersAsync(query);
-        }
+        public static async Task<List<LegacyOrder>> GetAsync(this OrdersQueryBuilder query) => await query.Client.GetOrdersAsync(query);
 
         /// <summary>
         /// Gets orders the asynchronous.
         /// </summary>
         /// <param name="query">The query.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        public static async Task<List<LegacyOrder>> GetAsync(this OrdersQueryBuilder query, CancellationToken cancellationToken)
+        public static async Task<List<LegacyOrder>> GetAsync(this OrdersQueryBuilder query, CancellationToken cancellationToken) =>
+            await query.Client.GetOrdersAsync(query, cancellationToken);
+
+        /// <summary>
+        /// Update the orders asynchronous.
+        /// </summary>
+        /// <param name="query">The orders query builder</param>
+        /// <param name="newPaymentStatus">New payment status: PAID == ACCEPTED, DECLINED, CANCELLED, AWAITING_PAYMENT == QUEUED, CHARGEABLE, REFUNDED, INCOMPLETE</param>
+        /// <param name="newFulfillmentStatus">New fulfillment status: AWAITING_PROCESSING == NEW, PROCESSING, SHIPPED, DELIVERED, WILL_NOT_DELIVER, RETURNED</param>
+        /// <param name="newShippingTrackingCode">New shipping tracking code. Change of shipping tracking number will also change the order's fulfillment status to SHIPPED.</param>
+        public static async Task<List<LegacyBaseOrder>> UpdateAsync(this OrdersQueryBuilder query, string newPaymentStatus,
+            string newFulfillmentStatus, string newShippingTrackingCode)
         {
-            return await query.Client.GetOrdersAsync(query, cancellationToken);
+            ValidateAddNewParams(query, newPaymentStatus, newFulfillmentStatus, newShippingTrackingCode);
+            return await query.Client.UpdateOrdersAsync(query);
+        }
+
+        /// <summary>
+        /// Update the orders asynchronous.
+        /// </summary>
+        /// <param name="query">The orders query builder</param>
+        /// <param name="newPaymentStatus">New payment status: PAID == ACCEPTED, DECLINED, CANCELLED, AWAITING_PAYMENT == QUEUED, CHARGEABLE, REFUNDED, INCOMPLETE</param>
+        /// <param name="newFulfillmentStatus">New fulfillment status: AWAITING_PROCESSING == NEW, PROCESSING, SHIPPED, DELIVERED, WILL_NOT_DELIVER, RETURNED</param>
+        /// <param name="newShippingTrackingCode">New shipping tracking code. Change of shipping tracking number will also change the order's fulfillment status to SHIPPED.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        public static async Task<List<LegacyBaseOrder>> UpdateAsync(this OrdersQueryBuilder query, string newPaymentStatus,
+            string newFulfillmentStatus, string newShippingTrackingCode, CancellationToken cancellationToken)
+        {
+            ValidateAddNewParams(query, newPaymentStatus, newFulfillmentStatus, newShippingTrackingCode);
+            return await query.Client.UpdateOrdersAsync(query, cancellationToken);
+        }
+
+        /// <summary>
+        /// Validates and add new parameters.
+        /// </summary>
+        /// <param name="query">The query.</param>
+        /// <param name="newPaymentStatus">The new payment status.</param>
+        /// <param name="newFulfillmentStatus">The new fulfillment status.</param>
+        /// <param name="newShippingTrackingCode">The new shipping tracking code.</param>
+        /// <exception cref="System.Exception">Query is empty. Prevent change all orders.</exception>
+        private static void ValidateAddNewParams(OrdersQueryBuilder query, string newPaymentStatus, string newFulfillmentStatus,
+            string newShippingTrackingCode)
+        {
+            //check query builder query params
+            if (query.Count == 0)
+                throw new Exception("Query is empty. Prevent change all orders.");
+
+            Validators.StringsValidate(newPaymentStatus, newFulfillmentStatus, newShippingTrackingCode);
+
+            if (!string.IsNullOrEmpty(newPaymentStatus))
+                query.AddOrUpdate("new_payment_status", Validators.PaymentStatusValidate(newPaymentStatus));
+            if (!string.IsNullOrEmpty(newFulfillmentStatus))
+                query.AddOrUpdate("new_fulfillment_status", Validators.FulfillmentStatusValidate(newFulfillmentStatus));
+            if (!string.IsNullOrEmpty(newShippingTrackingCode))
+                query.AddOrUpdate("new_shipping_tracking_code", newShippingTrackingCode);
         }
     }
 }

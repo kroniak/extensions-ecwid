@@ -30,6 +30,14 @@ namespace Ecwid.Services
 
             QueryParams[name] = value;
         }
+
+        /// <summary>
+        /// Gets the count.
+        /// </summary>
+        /// <value>
+        /// The count.
+        /// </value>
+        public int Count => QueryParams.Count;
     }
 
     /// <summary>
@@ -72,6 +80,7 @@ namespace Ecwid.Services
         internal OrdersQueryBuilder AddOrUpdateStatuses(ICollection<string> values)
         {
             if (values == null)
+                // TODO tests
                 throw new ArgumentNullException(nameof(values));
 
             string result;

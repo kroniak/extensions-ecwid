@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Ecwid.Tools
@@ -39,7 +40,21 @@ namespace Ecwid.Tools
         }
 
         /// <summary>
-        /// Payments statuses validate.
+        /// Strings validate.
+        /// </summary>
+        /// <param name="strings">The strings.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">All strings params is empty</exception>
+        public static bool StringsValidate(params string[] strings)
+        {
+            if (strings.All(string.IsNullOrEmpty))
+                throw new ArgumentNullException(nameof(strings), "All strings params is empty");
+
+            return true;
+        }
+
+        /// <summary>
+        /// Payment statuses validate.
         /// </summary>
         /// <param name="statuses">The statuses.</param>
         /// <returns></returns>
@@ -56,6 +71,32 @@ namespace Ecwid.Tools
                 throw new InvalidArgumentException("Payment statuses string is invalid.");
 
             return true;
+        }
+
+        /// <summary>
+        /// Payment status validate and return.
+        /// </summary>
+        /// <param name="status">The status.</param>
+        /// <returns></returns>
+        /// <exception cref="InvalidArgumentException">
+        /// Payment statuses string is invalid.
+        /// or
+        /// Payment statuses string is invalid. Support only one status.
+        /// </exception>
+        public static string PaymentStatusValidate(string status)
+        {
+            var paymentStatusesAvailable = new List<string>()
+                { "PAID", "ACCEPTED", "DECLINED", "CANCELLED", "AWAITING_PAYMENT", "QUEUED", "CHARGEABLE, REFUNDED", "INCOMPLETE" };
+
+            if (!CheckContainsString(status, paymentStatusesAvailable))
+                throw new InvalidArgumentException("Payment statuses string is invalid.");
+
+            var result = status.TrimUpperReplaceSplit();
+
+            if (result.Count > 1)
+                throw new InvalidArgumentException("Payment statuses string is invalid. Support only one status.");
+
+            return result.First();
         }
 
         /// <summary>
@@ -76,6 +117,32 @@ namespace Ecwid.Tools
                 throw new InvalidArgumentException("Fulfillment statuses string is invalid.");
 
             return true;
+        }
+
+        /// <summary>
+        /// Fulfillment status validate and return.
+        /// </summary>
+        /// <param name="status">The status.</param>
+        /// <returns></returns>
+        /// <exception cref="InvalidArgumentException">
+        /// Fulfillment statuses string is invalid.
+        /// or
+        /// Fulfillment statuses string is invalid. Support only one status.
+        /// </exception>
+        public static string FulfillmentStatusValidate(string status)
+        {
+            var fulfillmentStatusesAvailable = new List<string>()
+                {"AWAITING_PROCESSING", "NEW", "PROCESSING", "SHIPPED", "DELIVERED", "WILL_NOT_DELIVER", "RETURNED"};
+
+            if (!CheckContainsString(status, fulfillmentStatusesAvailable))
+                throw new InvalidArgumentException("Fulfillment statuses string is invalid.");
+
+            var result = status.TrimUpperReplaceSplit();
+
+            if (result.Count > 1)
+                throw new InvalidArgumentException("Fulfillment statuses string is invalid. Support only one status.");
+
+            return result.First();
         }
 
         /// <summary>

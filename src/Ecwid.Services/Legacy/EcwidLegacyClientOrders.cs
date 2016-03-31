@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -42,7 +43,7 @@ namespace Ecwid.Services
         {
             try
             {
-                await GetApiResponceAsync<LegacyOrderResponse>(OrdersUrl, new { limit = 0 });
+                await GetApiResponceAsync<LegacyOrderResponse<LegacyOrder>>(OrdersUrl, new { limit = 0 });
                 return true;
             }
             catch (FlurlHttpException exception)
@@ -50,6 +51,7 @@ namespace Ecwid.Services
                 var status = exception.Call.Response.StatusCode;
                 if (status == HttpStatusCode.Forbidden)
                     return false;
+                // TODO tests
                 throw;
             }
         }
@@ -62,7 +64,7 @@ namespace Ecwid.Services
         {
             try
             {
-                await GetApiResponceAsync<LegacyOrderResponse>(OrdersUrl, new { limit = 0 }, cancellationToken);
+                await GetApiResponceAsync<LegacyOrderResponse<LegacyOrder>>(OrdersUrl, new { limit = 0 }, cancellationToken);
                 return true;
             }
             catch (FlurlHttpException exception)
@@ -70,6 +72,7 @@ namespace Ecwid.Services
                 var status = exception.Call.Response.StatusCode;
                 if (status == HttpStatusCode.Forbidden)
                     return false;
+                // TODO tests
                 throw;
             }
         }
@@ -78,14 +81,14 @@ namespace Ecwid.Services
         /// Gets the orders count asynchronous.
         /// </summary>
         public async Task<int> GetOrdersCountAsync()
-            => (await GetApiResponceAsync<LegacyOrderResponse>(OrdersUrl, new { limit = 0 })).Total;
+            => (await GetApiResponceAsync<LegacyOrderResponse<LegacyOrder>>(OrdersUrl, new { limit = 0 })).Total;
 
         /// <summary>
         /// Gets the orders count asynchronous.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
         public async Task<int> GetOrdersCountAsync(CancellationToken cancellationToken)
-            => (await GetApiResponceAsync<LegacyOrderResponse>(OrdersUrl, new { limit = 0 }, cancellationToken)).Total;
+            => (await GetApiResponceAsync<LegacyOrderResponse<LegacyOrder>>(OrdersUrl, new { limit = 0 }, cancellationToken)).Total;
 
         /// <summary>
         /// Gets the orders asynchronous.
@@ -166,6 +169,27 @@ namespace Ecwid.Services
             => await GetOrdersAsync(new { statuses = "SHIPPED" }, cancellationToken);
 
         /// <summary>
+        /// Updates the orders asynchronous.
+        /// </summary>
+        /// <param name="query">The query.</param>
+        public async Task<List<LegacyBaseOrder>> UpdateOrdersAsync(OrdersQueryBuilder query)
+        {
+            var responce = await UpdateApiAsync<LegacyOrderResponse<LegacyBaseOrder>>(OrdersUrl, query.QueryParams);
+            return responce.Orders?.ToList() ?? new List<LegacyBaseOrder>();
+        }
+
+        /// <summary>
+        /// Updates the orders asynchronous.
+        /// </summary>
+        /// <param name="query">The query.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        public async Task<List<LegacyBaseOrder>> UpdateOrdersAsync(OrdersQueryBuilder query, CancellationToken cancellationToken)
+        {
+            var responce = await UpdateApiAsync<LegacyOrderResponse<LegacyBaseOrder>>(OrdersUrl, query.QueryParams, cancellationToken);
+            return responce.Orders?.ToList() ?? new List<LegacyBaseOrder>();
+        }
+
+        /// <summary>
         /// Gets the orders asynchronous.
         /// </summary>
         /// <param name="url">The URL.</param>
@@ -173,14 +197,14 @@ namespace Ecwid.Services
         /// <returns></returns>
         private async Task<List<LegacyOrder>> GetOrdersAsync(Url url, object query)
         {
-            var response = query == null ? await GetApiResponceAsync<LegacyOrderResponse>(url)
-                : await GetApiResponceAsync<LegacyOrderResponse>(url, query);
+            var response = query == null ? await GetApiResponceAsync<LegacyOrderResponse<LegacyOrder>>(url)
+                : await GetApiResponceAsync<LegacyOrderResponse<LegacyOrder>>(url, query);
 
             var orders = new List<LegacyOrder>(response.Orders);
 
             while (response.NextUrl != null)
             {
-                response = await GetApiResponceAsync<LegacyOrderResponse>(response.NextUrl);
+                response = await GetApiResponceAsync<LegacyOrderResponse<LegacyOrder>>(response.NextUrl);
                 orders.AddRange(response.Orders);
             }
             return orders;
@@ -195,14 +219,14 @@ namespace Ecwid.Services
         /// <returns></returns>
         private async Task<List<LegacyOrder>> GetOrdersAsync(Url url, object query, CancellationToken cancellationToken)
         {
-            var response = query == null ? await GetApiResponceAsync<LegacyOrderResponse>(url, cancellationToken)
-                : await GetApiResponceAsync<LegacyOrderResponse>(url, query, cancellationToken);
+            var response = query == null ? await GetApiResponceAsync<LegacyOrderResponse<LegacyOrder>>(url, cancellationToken)
+                : await GetApiResponceAsync<LegacyOrderResponse<LegacyOrder>>(url, query, cancellationToken);
 
             var orders = new List<LegacyOrder>(response.Orders);
 
             while (response.NextUrl != null)
             {
-                response = await GetApiResponceAsync<LegacyOrderResponse>(response.NextUrl, cancellationToken);
+                response = await GetApiResponceAsync<LegacyOrderResponse<LegacyOrder>>(response.NextUrl, cancellationToken);
                 orders.AddRange(response.Orders);
             }
             return orders;

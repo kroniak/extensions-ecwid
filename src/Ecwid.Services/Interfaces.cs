@@ -32,7 +32,6 @@ namespace Ecwid.Services
         /// Gets the orders count asynchronous.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns></returns>
         Task<int> GetOrdersCountAsync(CancellationToken cancellationToken);
 
         /// <summary>
@@ -46,7 +45,6 @@ namespace Ecwid.Services
         /// </summary>
         /// <param name="query">The orders query builder</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns></returns>
         Task<List<LegacyOrder>> GetOrdersAsync(OrdersQueryBuilder query, CancellationToken cancellationToken);
 
         /// <summary>
@@ -71,7 +69,6 @@ namespace Ecwid.Services
         /// Gets the new orders asynchronous. This orders is new or is not processed.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns></returns>
         Task<List<LegacyOrder>> GetNewOrdersAsync(CancellationToken cancellationToken);
 
         /// <summary>
@@ -83,33 +80,41 @@ namespace Ecwid.Services
         /// Gets the non paid orders asynchronous.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns></returns>
         Task<List<LegacyOrder>> GetNonPaidOrdersAsync(CancellationToken cancellationToken);
 
         /// <summary>
         /// Gets the paid and not shipped orders asynchronous.
         /// </summary>
-        /// <returns></returns>
         Task<List<LegacyOrder>> GetPaidNotShippedOrdersAsync();
 
         /// <summary>
         /// Gets the paid and not shipped orders asynchronous.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns></returns>
         Task<List<LegacyOrder>> GetPaidNotShippedOrdersAsync(CancellationToken cancellationToken);
 
         /// <summary>
         /// Gets the shipped and not delivered orders asynchronous.
         /// </summary>
-        /// <returns></returns>
         Task<List<LegacyOrder>> GetShippedNotDeliveredOrdersAsync();
 
         /// <summary>
         /// Gets the shipped and not delivered orders asynchronous.
         /// </summary>
-        /// <returns></returns>
         Task<List<LegacyOrder>> GetShippedNotDeliveredOrdersAsync(CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Update the orders asynchronous.
+        /// </summary>
+        /// <param name="query">The orders query builder</param>
+        Task<List<LegacyBaseOrder>> UpdateOrdersAsync(OrdersQueryBuilder query);
+
+        /// <summary>
+        /// Update the orders asynchronous.
+        /// </summary>
+        /// <param name="query">The orders query builder</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        Task<List<LegacyBaseOrder>> UpdateOrdersAsync(OrdersQueryBuilder query, CancellationToken cancellationToken);
     }
 
     /// <summary>

@@ -12,6 +12,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)BaseEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Legacy\LegacyCategoryEntry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Legacy\LegacyCategory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Legacy\LegacyBaseOrder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Legacy\LegacyOrder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Legacy\LegacyOrderItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Legacy\LegacyOrderResponse.cs" />

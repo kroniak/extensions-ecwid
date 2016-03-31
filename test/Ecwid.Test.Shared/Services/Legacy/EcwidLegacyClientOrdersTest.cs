@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading;
 using Ecwid.Tools;
 using Flurl.Http.Testing;
@@ -285,6 +286,52 @@ namespace Ecwid.Test.Services.Legacy
 
                 httpTest.ShouldHaveCalled($"{CheckOrdersUrl}&limit=5&offset=5")
                     .WithVerb(HttpMethod.Get)
+                    .Times(1);
+
+                Assert.NotEmpty(result);
+            }
+        }
+
+        [Fact]
+        public async void UpdateAsyncNullBuilderFail() => await Assert.ThrowsAsync<Exception>(async () => await _client.Orders.UpdateAsync("", "", ""));
+
+        [Fact]
+        public async void UpdateAsyncNullStringsFail() => await Assert.ThrowsAsync<ArgumentNullException>(async ()
+            => await _client.Orders.Limit(5).UpdateAsync("", "", ""));
+
+        [Fact]
+        public async void UpdateAsyncNullResultPass()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                httpTest
+                    .RespondWithJson(new { count = 0, total = 10, order = "[]" })
+                    .RespondWithJson(new { count = 0, total = 10, order = "[]" });
+
+                var result = await _client.Orders.Order(123).UpdateAsync("PAID", "PROCESSING", "");
+                var result2 = await _client.Orders.Order(123).UpdateAsync("PAID", "PROCESSING", "", _cancellationToken);
+
+                httpTest.ShouldHaveCalled($"{CheckOrdersUrl}&order=123&new_payment_status=PAID&new_fulfillment_status=PROCESSING")
+                    .WithVerb(HttpMethod.Post)
+                    .Times(2);
+
+                Assert.Empty(result);
+                Assert.Empty(result2);
+            }
+        }
+
+        [Fact]
+        public async void UpdateAsyncResultPass()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                httpTest
+                    .RespondWithJson(Moqs.MockLegacyOrderResponseForUpdate);
+
+                var result = await _client.Orders.Order(123).UpdateAsync("PAID", "PROCESSING", "123");
+
+                httpTest.ShouldHaveCalled($"{CheckOrdersUrl}&order=123&new_payment_status=PAID&new_fulfillment_status=PROCESSING&new_shipping_tracking_code=123")
+                    .WithVerb(HttpMethod.Post)
                     .Times(1);
 
                 Assert.NotEmpty(result);
