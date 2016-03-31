@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Ecwid.Tools;
 using System.Threading.Tasks;
@@ -104,6 +105,8 @@ namespace Ecwid.Services
         /// <param name="query">The query.</param>
         /// <param name="paymentStatuses">Payment statuses: PAID==ACCEPTED, DECLINED, CANCELLED, AWAITING_PAYMENT==QUEUED, CHARGEABLE, REFUNDED, INCOMPLETE</param>
         /// <param name="fulfillmentStatuses">Fulfillment statuses: AWAITING_PROCESSING==NEW, PROCESSING, SHIPPED, DELIVERED, WILL_NOT_DELIVER, RETURNED</param>
+        /// <exception cref="ArgumentException">Payment statuses string is invalid</exception>
+        /// <exception cref="ArgumentException">Fulfillment statuses string is invalid</exception>
         public static OrdersQueryBuilder Statuses(this OrdersQueryBuilder query, string paymentStatuses, string fulfillmentStatuses)
         {
             Validators.PaymentStatusesValidate(paymentStatuses);
@@ -120,6 +123,7 @@ namespace Ecwid.Services
         /// </summary>
         /// <param name="query">The query.</param>
         /// <param name="paymentStatuses">Payment statuses: PAID==ACCEPTED, DECLINED, CANCELLED, AWAITING_PAYMENT==QUEUED, CHARGEABLE, REFUNDED, INCOMPLETE</param>
+        /// <exception cref="ArgumentException">Payment statuses string is invalid</exception>
         public static OrdersQueryBuilder AddPaymentStatuses(this OrdersQueryBuilder query, string paymentStatuses)
         {
             return Validators.PaymentStatusesValidate(paymentStatuses)
@@ -132,6 +136,7 @@ namespace Ecwid.Services
         /// </summary>
         /// <param name="query">The query.</param>
         /// <param name="fulfillmentStatuses">Fulfillment statuses: AWAITING_PROCESSING==NEW, PROCESSING, SHIPPED, DELIVERED, WILL_NOT_DELIVER, RETURNED</param>
+        /// <exception cref="ArgumentException">Fulfillment statuses string is invalid</exception>
         public static OrdersQueryBuilder AddFulfillmentStatuses(this OrdersQueryBuilder query, string fulfillmentStatuses)
         {
             return Validators.FulfillmentStatusesValidate(fulfillmentStatuses)
@@ -189,6 +194,7 @@ namespace Ecwid.Services
         /// <param name="newFulfillmentStatus">New fulfillment status: AWAITING_PROCESSING == NEW, PROCESSING, SHIPPED, DELIVERED, WILL_NOT_DELIVER, RETURNED</param>
         /// <param name="newShippingTrackingCode">New shipping tracking code. Change of shipping tracking number will also change the order's fulfillment status to SHIPPED.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
+        /// <exception cref="Exception">Query is empty. Prevent change all orders.</exception>
         public static async Task<List<LegacyUpdatedOrder>> UpdateAsync(this OrdersQueryBuilder query, string newPaymentStatus,
             string newFulfillmentStatus, string newShippingTrackingCode, CancellationToken cancellationToken)
         {
@@ -203,14 +209,28 @@ namespace Ecwid.Services
         /// <param name="newPaymentStatus">The new payment status.</param>
         /// <param name="newFulfillmentStatus">The new fulfillment status.</param>
         /// <param name="newShippingTrackingCode">The new shipping tracking code.</param>
-        /// <exception cref="System.Exception">Query is empty. Prevent change all orders.</exception>
+        /// <exception cref="ArgumentException">Query is empty. Prevent change all orders.</exception>
+        /// <exception cref="ArgumentException">All strings params is null or empty</exception>
+        /// <exception cref="ArgumentException">
+        /// Payment statuses string is invalid.
+        /// or
+        /// Payment statuses string is invalid. Support only one status.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// Fulfillment statuses string is invalid.
+        /// or
+        /// Fulfillment statuses string is invalid. Support only one status.
+        /// </exception>
         private static void ValidateAddNewParams(OrdersQueryBuilder query, string newPaymentStatus, string newFulfillmentStatus,
             string newShippingTrackingCode)
         {
-            //check query builder query params
-            if (query.Count == 0)
-                throw new Exception("Query is empty. Prevent change all orders.");
+            //check query builder query params count
+            var exceptionList = new List<string>() { "limit", "offset" };
+            var count = query.QueryParams.Keys.Count(s => !exceptionList.Contains(s));
+            if (count == 0)
+                throw new ArgumentException("Query is empty. Prevent change all orders.", nameof(query));
 
+            // Throw ex if all string is NullOrEmpty 
             Validators.StringsValidate(newPaymentStatus, newFulfillmentStatus, newShippingTrackingCode);
 
             if (!string.IsNullOrEmpty(newPaymentStatus))

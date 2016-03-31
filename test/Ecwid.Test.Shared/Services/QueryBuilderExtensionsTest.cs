@@ -1,6 +1,5 @@
 ﻿using System;
 using Ecwid.Services;
-using Ecwid.Tools;
 using Xunit;
 
 namespace Ecwid.Test.Services
@@ -78,7 +77,7 @@ namespace Ecwid.Test.Services
         [InlineData("", "")]
         public void StatusesFail(string paid, string full)
         {
-            Assert.Throws<InvalidArgumentException>(() => _defaultClient.Orders.Statuses(paid, full));
+            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Statuses(paid, full));
         }
 
         [Fact]

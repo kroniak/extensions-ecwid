@@ -1,4 +1,5 @@
-﻿namespace Ecwid.Services
+﻿// ReSharper disable UnusedMemberInSuper.Global
+namespace Ecwid.Services
 {
     /// <summary>
     /// Setting for Ecwid Client

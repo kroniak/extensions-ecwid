@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -22,6 +23,10 @@ namespace Ecwid.Services
         /// <value>
         /// The orders URL.
         /// </value>
+        /// <exception cref="ArgumentException">The shop identificator is null. Please reconfig the client.
+        /// or
+        /// The shop identificator is invalid. Please reconfig the client.</exception>
+        /// <exception cref="ArgumentException">The shop auth identificator is null or empty. Please config the client.</exception>
         private string OrdersUrl => Validators.ShopIdValidate(Options.ShopId) && Validators.ShopAuthValidate(Options.ShopOrderAuthId)
             ? Options.ApiUrl
                 .AppendPathSegments(Options.ShopId.ToString(), "orders")
@@ -194,7 +199,6 @@ namespace Ecwid.Services
         /// </summary>
         /// <param name="url">The URL.</param>
         /// <param name="query">The query.</param>
-        /// <returns></returns>
         private async Task<List<LegacyOrder>> GetOrdersAsync(Url url, object query)
         {
             var response = query == null ? await GetApiResponceAsync<LegacyOrderResponse<LegacyOrder>>(url)
@@ -216,7 +220,6 @@ namespace Ecwid.Services
         /// <param name="url">The URL.</param>
         /// <param name="query">The query.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns></returns>
         private async Task<List<LegacyOrder>> GetOrdersAsync(Url url, object query, CancellationToken cancellationToken)
         {
             var response = query == null ? await GetApiResponceAsync<LegacyOrderResponse<LegacyOrder>>(url, cancellationToken)

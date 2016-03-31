@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading;
-using Ecwid.Tools;
 using Flurl.Http.Testing;
 using Xunit;
 using Ecwid.Services;
@@ -29,7 +28,7 @@ namespace Ecwid.Test.Services.Legacy
         private readonly CancellationToken _cancellationToken = new CancellationToken();
 
         [Fact]
-        public async void OrdersUrlException() => await Assert.ThrowsAsync<ConfigException>(() => _defaultClient.CheckOrdersAuthAsync(_cancellationToken));
+        public async void OrdersUrlException() => await Assert.ThrowsAsync<ArgumentException>(() => _defaultClient.CheckOrdersAuthAsync(_cancellationToken));
 
         [Fact]
         public void OrdersGetEmptyPass()
@@ -293,11 +292,15 @@ namespace Ecwid.Test.Services.Legacy
         }
 
         [Fact]
-        public async void UpdateAsyncNullBuilderFail() => await Assert.ThrowsAsync<Exception>(async () => await _client.Orders.UpdateAsync("", "", ""));
+        public async void UpdateAsyncNullBuilderFail()
+        {
+            await Assert.ThrowsAsync<ArgumentException>(async () => await _client.Orders.UpdateAsync("", "", ""));
+            await Assert.ThrowsAsync<ArgumentException>(async () => await _client.Orders.Limit(5).Offset(5).UpdateAsync("", "", ""));
+        }
 
         [Fact]
-        public async void UpdateAsyncNullStringsFail() => await Assert.ThrowsAsync<ArgumentNullException>(async ()
-            => await _client.Orders.Limit(5).UpdateAsync("", "", ""));
+        public async void UpdateAsyncNullStringsFail() => await Assert.ThrowsAsync<ArgumentException>(async ()
+            => await _client.Orders.Order(1).UpdateAsync("", "", ""));
 
         [Fact]
         public async void UpdateAsyncNullResultPass()

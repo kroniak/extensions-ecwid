@@ -16,17 +16,17 @@ namespace Ecwid.Test.Tools
         [Theory]
         [InlineData(0)]
         [InlineData(-1)]
-        public void ShopIdValidateRangeFail(int shopId) => Assert.Throws<ConfigException>(() => Validators.ShopIdValidate(shopId));
+        public void ShopIdValidateRangeFail(int shopId) => Assert.Throws<ArgumentException>(() => Validators.ShopIdValidate(shopId));
 
         [Fact]
-        public void ShopIdValidateNullFail() => Assert.Throws<ConfigException>(() => Validators.ShopIdValidate(null));
+        public void ShopIdValidateNullFail() => Assert.Throws<ArgumentException>(() => Validators.ShopIdValidate(null));
 
         [Theory]
         [InlineData("")]
         [InlineData(null)]
         public void ShopAuthValidateNullOrEmptyFail(string str)
         {
-            Assert.Throws<ConfigException>(() => Validators.ShopAuthValidate(str));
+            Assert.Throws<ArgumentException>(() => Validators.ShopAuthValidate(str));
         }
 
         [Fact]
@@ -52,10 +52,10 @@ namespace Ecwid.Test.Tools
         [InlineData("DECLINED,CANCEL")]
         [InlineData("DECLINED ,CANCEL")]
         [InlineData("DECLINED CANCELLED FAIL")]
-        public void PaymentStatusesValidateFail(string str) => Assert.Throws<InvalidArgumentException>(() => Validators.PaymentStatusesValidate(str));
+        public void PaymentStatusesValidateFail(string str) => Assert.Throws<ArgumentException>(() => Validators.PaymentStatusesValidate(str));
 
         [Fact]
-        public void PaymentStatusesValidateNullFail() => Assert.Throws<InvalidArgumentException>(() => Validators.PaymentStatusesValidate(null));
+        public void PaymentStatusesValidateNullFail() => Assert.Throws<ArgumentException>(() => Validators.PaymentStatusesValidate(null));
 
         [Theory]
         [InlineData("DECLINED")]
@@ -68,10 +68,10 @@ namespace Ecwid.Test.Tools
         }
 
         [Fact]
-        public void PaymentStatusValidateFail() => Assert.Throws<InvalidArgumentException>(() => Validators.PaymentStatusValidate("FAIL"));
+        public void PaymentStatusValidateFail() => Assert.Throws<ArgumentException>(() => Validators.PaymentStatusValidate("FAIL"));
 
         [Fact]
-        public void PaymentStatusValidateMultiFail() => Assert.Throws<InvalidArgumentException>(() => Validators.PaymentStatusValidate("DECLINED, ACCEPTED"));
+        public void PaymentStatusValidateMultiFail() => Assert.Throws<ArgumentException>(() => Validators.PaymentStatusValidate("DECLINED, ACCEPTED"));
 
         [Theory]
         [InlineData("NEW")]
@@ -84,10 +84,10 @@ namespace Ecwid.Test.Tools
         }
 
         [Fact]
-        public void FulfillmentStatusValidateFail() => Assert.Throws<InvalidArgumentException>(() => Validators.FulfillmentStatusValidate("FAIL"));
+        public void FulfillmentStatusValidateFail() => Assert.Throws<ArgumentException>(() => Validators.FulfillmentStatusValidate("FAIL"));
 
         [Fact]
-        public void FulfillmentStatusValidateMultiFail() => Assert.Throws<InvalidArgumentException>(() => Validators.FulfillmentStatusValidate("NEW, SHIPPED"));
+        public void FulfillmentStatusValidateMultiFail() => Assert.Throws<ArgumentException>(() => Validators.FulfillmentStatusValidate("NEW, SHIPPED"));
 
         [Theory]
         [InlineData("NEW, PROCESSING")]
@@ -103,10 +103,10 @@ namespace Ecwid.Test.Tools
         [Theory]
         [InlineData("NEW, PROCESSING ; FAIL")]
         [InlineData("NEW, PROCESSINGFAIL")]
-        public void FulfillmentStatusesValidateFail(string str) => Assert.Throws<InvalidArgumentException>(() => Validators.FulfillmentStatusesValidate(str));
+        public void FulfillmentStatusesValidateFail(string str) => Assert.Throws<ArgumentException>(() => Validators.FulfillmentStatusesValidate(str));
 
         [Fact]
-        public void FulfillmentStatusesValidateNullFail() => Assert.Throws<InvalidArgumentException>(() => Validators.FulfillmentStatusesValidate(null));
+        public void FulfillmentStatusesValidateNullFail() => Assert.Throws<ArgumentException>(() => Validators.FulfillmentStatusesValidate(null));
 
         [Fact]
         public void StringsValidatePass() => Assert.True(Validators.StringsValidate("A", "B"));
@@ -115,6 +115,6 @@ namespace Ecwid.Test.Tools
         [InlineData("", "", "")]
         [InlineData("", "", null)]
         [InlineData(null, null, null)]
-        public void StringsValidateFail(string str, string str2, string str3) => Assert.Throws<ArgumentNullException>(() => Validators.StringsValidate(str, str2, str3));
+        public void StringsValidateFail(string str, string str2, string str3) => Assert.Throws<ArgumentException>(() => Validators.StringsValidate(str, str2, str3));
     }
 }

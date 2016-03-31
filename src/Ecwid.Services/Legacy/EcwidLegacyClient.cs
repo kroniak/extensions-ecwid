@@ -30,6 +30,9 @@ namespace Ecwid.Services
         /// Configures the specified options.
         /// </summary>
         /// <param name="options">The options.</param>
+        /// <exception cref="ArgumentException">The shop identificator is null. Please reconfig the client.
+        /// or
+        /// The shop identificator is invalid. Please reconfig the client.</exception>
         public EcwidLegacyClient Configure(EcwidLegacyOptions options)
         {
             Validators.ShopIdValidate(options.ShopId);
@@ -44,6 +47,9 @@ namespace Ecwid.Services
         /// <param name="shopId">The shop identifier.</param>
         /// <param name="shopOrderAuthId">The shop order authentication identifier.</param>
         /// <param name="shopProductAuthId">The shop product authentication identifier.</param>
+        /// <exception cref="ArgumentException">The shop identificator is null. Please reconfig the client.
+        /// or
+        /// The shop identificator is invalid. Please reconfig the client.</exception>
         public EcwidLegacyClient ConfigureShop(int shopId, string shopOrderAuthId = null, string shopProductAuthId = null)
         {
             Validators.ShopIdValidate(shopId);
@@ -106,7 +112,6 @@ namespace Ecwid.Services
         /// <typeparam name="T"></typeparam>
         /// <param name="baseUrl">The base URL.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns></returns>
         private async Task<T> UpdateApiAsync<T>(Url baseUrl, CancellationToken cancellationToken)
             where T : class
         {
@@ -121,7 +126,6 @@ namespace Ecwid.Services
         /// <typeparam name="T"></typeparam>
         /// <param name="baseUrl">The base URL.</param>
         /// <param name="query">The query.</param>
-        /// <returns></returns>
         private async Task<T> UpdateApiAsync<T>(Url baseUrl, object query)
             where T : class
         {
@@ -136,7 +140,6 @@ namespace Ecwid.Services
         /// <param name="baseUrl">The base URL.</param>
         /// <param name="query">The query.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns></returns>
         private async Task<T> UpdateApiAsync<T>(Url baseUrl, object query, CancellationToken cancellationToken)
             where T : class
         {
@@ -165,7 +168,6 @@ namespace Ecwid.Services
         /// <param name="baseUrl">The base URL.</param>
         /// <param name="query">The query.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns></returns>
         private async Task<T> GetApiResponceAsync<T>(Url baseUrl, object query, CancellationToken cancellationToken)
             where T : class
         {
