@@ -174,7 +174,7 @@ namespace Ecwid.Services
         /// <param name="newPaymentStatus">New payment status: PAID == ACCEPTED, DECLINED, CANCELLED, AWAITING_PAYMENT == QUEUED, CHARGEABLE, REFUNDED, INCOMPLETE</param>
         /// <param name="newFulfillmentStatus">New fulfillment status: AWAITING_PROCESSING == NEW, PROCESSING, SHIPPED, DELIVERED, WILL_NOT_DELIVER, RETURNED</param>
         /// <param name="newShippingTrackingCode">New shipping tracking code. Change of shipping tracking number will also change the order's fulfillment status to SHIPPED.</param>
-        public static async Task<List<LegacyBaseOrder>> UpdateAsync(this OrdersQueryBuilder query, string newPaymentStatus,
+        public static async Task<List<LegacyUpdatedOrder>> UpdateAsync(this OrdersQueryBuilder query, string newPaymentStatus,
             string newFulfillmentStatus, string newShippingTrackingCode)
         {
             ValidateAddNewParams(query, newPaymentStatus, newFulfillmentStatus, newShippingTrackingCode);
@@ -189,7 +189,7 @@ namespace Ecwid.Services
         /// <param name="newFulfillmentStatus">New fulfillment status: AWAITING_PROCESSING == NEW, PROCESSING, SHIPPED, DELIVERED, WILL_NOT_DELIVER, RETURNED</param>
         /// <param name="newShippingTrackingCode">New shipping tracking code. Change of shipping tracking number will also change the order's fulfillment status to SHIPPED.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        public static async Task<List<LegacyBaseOrder>> UpdateAsync(this OrdersQueryBuilder query, string newPaymentStatus,
+        public static async Task<List<LegacyUpdatedOrder>> UpdateAsync(this OrdersQueryBuilder query, string newPaymentStatus,
             string newFulfillmentStatus, string newShippingTrackingCode, CancellationToken cancellationToken)
         {
             ValidateAddNewParams(query, newPaymentStatus, newFulfillmentStatus, newShippingTrackingCode);

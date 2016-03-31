@@ -107,14 +107,14 @@ namespace Ecwid.Services
         /// Update the orders asynchronous.
         /// </summary>
         /// <param name="query">The orders query builder</param>
-        Task<List<LegacyBaseOrder>> UpdateOrdersAsync(OrdersQueryBuilder query);
+        Task<List<LegacyUpdatedOrder>> UpdateOrdersAsync(OrdersQueryBuilder query);
 
         /// <summary>
         /// Update the orders asynchronous.
         /// </summary>
         /// <param name="query">The orders query builder</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        Task<List<LegacyBaseOrder>> UpdateOrdersAsync(OrdersQueryBuilder query, CancellationToken cancellationToken);
+        Task<List<LegacyUpdatedOrder>> UpdateOrdersAsync(OrdersQueryBuilder query, CancellationToken cancellationToken);
     }
 
     /// <summary>

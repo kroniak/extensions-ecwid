@@ -19,5 +19,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Legacy\LegacyPerson.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Legacy\LegacyProduct.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Legacy\LegacyProductEntry.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Legacy\LegacyUpdatedOrder.cs" />
   </ItemGroup>
 </Project>

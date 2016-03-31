@@ -172,10 +172,10 @@ namespace Ecwid.Services
         /// Updates the orders asynchronous.
         /// </summary>
         /// <param name="query">The query.</param>
-        public async Task<List<LegacyBaseOrder>> UpdateOrdersAsync(OrdersQueryBuilder query)
+        public async Task<List<LegacyUpdatedOrder>> UpdateOrdersAsync(OrdersQueryBuilder query)
         {
-            var responce = await UpdateApiAsync<LegacyOrderResponse<LegacyBaseOrder>>(OrdersUrl, query.QueryParams);
-            return responce.Orders?.ToList() ?? new List<LegacyBaseOrder>();
+            var responce = await UpdateApiAsync<LegacyOrderResponse<LegacyUpdatedOrder>>(OrdersUrl, query.QueryParams);
+            return responce.Orders?.ToList() ?? new List<LegacyUpdatedOrder>();
         }
 
         /// <summary>
@@ -183,10 +183,10 @@ namespace Ecwid.Services
         /// </summary>
         /// <param name="query">The query.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        public async Task<List<LegacyBaseOrder>> UpdateOrdersAsync(OrdersQueryBuilder query, CancellationToken cancellationToken)
+        public async Task<List<LegacyUpdatedOrder>> UpdateOrdersAsync(OrdersQueryBuilder query, CancellationToken cancellationToken)
         {
-            var responce = await UpdateApiAsync<LegacyOrderResponse<LegacyBaseOrder>>(OrdersUrl, query.QueryParams, cancellationToken);
-            return responce.Orders?.ToList() ?? new List<LegacyBaseOrder>();
+            var responce = await UpdateApiAsync<LegacyOrderResponse<LegacyUpdatedOrder>>(OrdersUrl, query.QueryParams, cancellationToken);
+            return responce.Orders?.ToList() ?? new List<LegacyUpdatedOrder>();
         }
 
         /// <summary>

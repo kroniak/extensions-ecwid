@@ -33,8 +33,8 @@ namespace Ecwid.Test.Services.Legacy
         /// <value>
         /// The mock legacy order response for update.
         /// </value>
-        public static LegacyOrderResponse<LegacyBaseOrder> MockLegacyOrderResponseForUpdate
-           => new LegacyOrderResponse<LegacyBaseOrder>() { Count = 1, Total = 10, Orders = MockBaseOrders(1) };
+        public static LegacyOrderResponse<LegacyUpdatedOrder> MockLegacyOrderResponseForUpdate
+           => new LegacyOrderResponse<LegacyUpdatedOrder>() { Count = 1, Total = 10, Orders = MockBaseOrders(1) };
 
         /// <summary>
         /// Moqs the orders.
@@ -66,10 +66,10 @@ namespace Ecwid.Test.Services.Legacy
         /// </summary>
         /// <param name="count">The count.</param>
         /// <returns></returns>
-        private static List<LegacyBaseOrder> MockBaseOrders(int count)
+        private static List<LegacyUpdatedOrder> MockBaseOrders(int count)
         {
-            var orders = new List<LegacyBaseOrder>();
-            var order = new LegacyBaseOrder()
+            var orders = new List<LegacyUpdatedOrder>();
+            var order = new LegacyUpdatedOrder()
             {
                 Number = 123,
                 VendorNumber = "123",
