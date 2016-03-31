@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Ecwid.Models.Legacy
+namespace Ecwid.Models
 {
     /// <summary>
     /// This object represents information on a whole order

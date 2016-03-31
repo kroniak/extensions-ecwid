@@ -1,12 +1,12 @@
 ﻿using System.Net.Http;
 using System.Threading;
-using Ecwid.Services.Legacy;
 using Ecwid.Tools;
 using Flurl.Http.Testing;
 using Xunit;
+using Ecwid.Services;
 // ReSharper disable MethodSupportsCancellation
 
-namespace Ecwid.Services.Test.Services.Legacy
+namespace Ecwid.Test.Services.Legacy
 {
     /// <summary>
     /// Tests with fake http responces
@@ -23,7 +23,7 @@ namespace Ecwid.Services.Test.Services.Legacy
         // GLobal objects for testing
         private readonly IEcwidOrdersClientLegacy _defaultClient = new EcwidLegacyClient();
         private readonly IEcwidOrdersClientLegacy _client = new EcwidLegacyClient().ConfigureShop(ShopId, OrdersAuth, OrdersAuth);
-        
+
         // TODO real cancellation tests
         private readonly CancellationToken _cancellationToken = new CancellationToken();
 

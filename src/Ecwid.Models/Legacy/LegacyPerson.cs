@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Ecwid.Models.Legacy
+namespace Ecwid.Models
 {
     public class LegacyPerson
     {

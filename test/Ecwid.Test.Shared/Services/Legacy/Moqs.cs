@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Ecwid.Models.Legacy;
-using Ecwid.Services.Legacy;
-using Ecwid.Test.Services.Legacy;
+using Ecwid.Models;
+using Ecwid.Services;
 using Moq;
 
-namespace Ecwid.Services.Test.Services.Legacy
+namespace Ecwid.Test.Services.Legacy
 {
     internal static class Moqs
     {

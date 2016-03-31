@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Ecwid.Tools;
 using System.Threading.Tasks;
-using Ecwid.Models.Legacy;
+using Ecwid.Models;
 
 namespace Ecwid.Services
 {

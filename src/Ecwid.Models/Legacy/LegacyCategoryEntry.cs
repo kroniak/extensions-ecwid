@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Ecwid.Models.Legacy
+namespace Ecwid.Models
 {
     /// <summary>
     /// This object represents full information on a category

@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace Ecwid.Models.Legacy
+namespace Ecwid.Models
 {
     /// <summary>
     /// This object represents full information on a product: all fields of the LegacyProductEntry plus some additional fields

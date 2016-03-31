@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Ecwid.Services.Legacy;
-using Ecwid.Services.Test.Services.Legacy;
+using Ecwid.Services;
 using Xunit;
 
 namespace Ecwid.Test.Services.Legacy

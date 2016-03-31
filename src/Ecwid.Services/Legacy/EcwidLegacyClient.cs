@@ -5,7 +5,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Ecwid.Services.Legacy
+namespace Ecwid.Services
 {
     /// <summary>
     /// Ecwid API Client v1 (Legacy).
@@ -71,9 +71,7 @@ namespace Ecwid.Services.Legacy
             where T : class
         {
             // Wait open window for request
-            if (!WaitLimit())
-                throw new InvalidOperationException("Limit overheat exception");
-
+            WaitLimit();
             return await baseUrl.GetJsonAsync<T>();
         }
 
@@ -88,9 +86,7 @@ namespace Ecwid.Services.Legacy
             where T : class
         {
             // Wait open window for request
-            if (!WaitLimit())
-                throw new InvalidOperationException("Limit overheat exception");
-
+            WaitLimit();
             return await baseUrl.GetJsonAsync<T>(cancellationToken);
         }
 
@@ -127,7 +123,8 @@ namespace Ecwid.Services.Legacy
         /// <summary>
         /// Waits the limit.
         /// </summary>
-        private bool WaitLimit()
+        /// <exception cref="Ecwid.Tools.LimitException">Limit overheat exception</exception>
+        private void WaitLimit()
         {
             var start = DateTime.Now;
 
@@ -138,12 +135,11 @@ namespace Ecwid.Services.Legacy
             {
                 // If time limit is over
                 if (start.AddSeconds(Options.MaxSecondsToWait) < DateTime.Now)
-                    return false;
+                    throw new LimitException("Limit overheat exception");
+
                 Task.Delay(Options.RetryInterval * 1000).Wait();
                 agreement = LimitsService.Tick();
             }
-
-            return true;
         }
         #endregion
     }

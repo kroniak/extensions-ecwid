@@ -2,12 +2,12 @@
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using Ecwid.Models.Legacy;
+using Ecwid.Models;
 using Flurl.Http;
 using Ecwid.Tools;
 using Flurl;
 
-namespace Ecwid.Services.Legacy
+namespace Ecwid.Services
 {
     /// <summary>
     /// Ecwid API Client v1 (Legacy).

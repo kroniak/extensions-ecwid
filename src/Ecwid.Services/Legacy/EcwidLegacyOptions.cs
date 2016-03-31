@@ -1,4 +1,4 @@
-﻿namespace Ecwid.Services.Legacy
+﻿namespace Ecwid.Services
 {
     /// <summary>
     /// Settings for Ecwid Client <see cref="EcwidLegacyClient"/>

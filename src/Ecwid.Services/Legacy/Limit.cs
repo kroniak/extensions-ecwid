@@ -1,6 +1,6 @@
 using System;
 
-namespace Ecwid.Services.Legacy
+namespace Ecwid.Services
 {
     /// <summary>
     /// Represent one limit by time interval and value limit

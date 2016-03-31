@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace Ecwid.Models.Legacy
+namespace Ecwid.Models
 {
     /// <summary>
     /// The root object that is returned by the LegacyOrder API

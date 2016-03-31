@@ -1,9 +1,9 @@
 ﻿using System;
-using Ecwid.Services.Legacy;
+using Ecwid.Services;
 using Ecwid.Tools;
 using Xunit;
 
-namespace Ecwid.Services.Test.Services
+namespace Ecwid.Test.Services
 {
     public class QueryBuilderExtensionsTest
     {
