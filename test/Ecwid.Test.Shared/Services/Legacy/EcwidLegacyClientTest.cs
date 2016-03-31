@@ -1,5 +1,5 @@
-﻿using Ecwid.Tools;
-using Ecwid.Services.Legacy;
+﻿using System;
+using Ecwid.Services;
 using Xunit;
 
 namespace Ecwid.Test.Services.Legacy
@@ -31,7 +31,7 @@ namespace Ecwid.Test.Services.Legacy
         }
 
         [Fact]
-        public void ConfigureFail() => Assert.Throws<ConfigException>(() => _defaultClient.Configure(new EcwidLegacyOptions() { ShopId = 0 }));
+        public void ConfigureFail() => Assert.Throws<ArgumentException>(() => _defaultClient.Configure(new EcwidLegacyOptions() { ShopId = 0 }));
 
         [Fact]
         public void ConfigureShopPass()

@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Ecwid.Models.Legacy;
-using Ecwid.Services.Legacy;
+using Ecwid.Models;
+using Ecwid.Services;
 using Xunit;
 
-namespace Ecwid.Services.Test.Services.Legacy
+namespace Ecwid.Test.Services.Legacy
 {
     /// <summary>
     /// Tests with real http responces
@@ -235,10 +235,10 @@ namespace Ecwid.Services.Test.Services.Legacy
         [Fact]
         public void GetOrdersAsyncMultiThreadingPass()
         {
-            // max 100 in 5 sec - real 50
             var orders = new List<LegacyOrder>();
             var tasks = new List<Task<List<LegacyOrder>>>();
 
+            // max 100 in 5 sec - real 50
             for (var i = 0; i < 50; i++)
             {
                 var client = new EcwidLegacyClient()
@@ -257,11 +257,7 @@ namespace Ecwid.Services.Test.Services.Legacy
 
             // ReSharper disable once CoVariantArrayConversion
             Task.WaitAll(tasks.ToArray());
-            tasks.ForEach(t =>
-            {
-                orders.AddRange(t.Result);
-
-            });
+            tasks.ForEach(t => { orders.AddRange(t.Result); });
 
             Assert.NotEmpty(orders);
         }

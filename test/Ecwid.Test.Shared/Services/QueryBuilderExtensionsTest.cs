@@ -1,9 +1,8 @@
 ﻿using System;
-using Ecwid.Services.Legacy;
-using Ecwid.Tools;
+using Ecwid.Services;
 using Xunit;
 
-namespace Ecwid.Services.Test.Services
+namespace Ecwid.Test.Services
 {
     public class QueryBuilderExtensionsTest
     {
@@ -78,7 +77,7 @@ namespace Ecwid.Services.Test.Services
         [InlineData("", "")]
         public void StatusesFail(string paid, string full)
         {
-            Assert.Throws<InvalidArgumentException>(() => _defaultClient.Orders.Statuses(paid, full));
+            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Statuses(paid, full));
         }
 
         [Fact]

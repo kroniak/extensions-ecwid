@@ -1,12 +1,14 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 
-namespace Ecwid.Models.Legacy
+namespace Ecwid.Models
 {
     /// <summary>
     /// The root object that is returned by the LegacyOrder API
     /// </summary>
-    internal class LegacyOrderResponse
+    /// <typeparam name="TOrder"></typeparam>
+    internal class LegacyOrderResponse<TOrder> where TOrder : LegacyBaseOrder
     {
         /// <summary>
         /// The number of orders returned in the 'orders' field
@@ -42,6 +44,6 @@ namespace Ecwid.Models.Legacy
         /// The orders
         /// </value>
         [JsonProperty("orders")]
-        public IList<LegacyOrder> Orders { get; set; }
+        public IList<TOrder> Orders { get; set; }
     }
 }

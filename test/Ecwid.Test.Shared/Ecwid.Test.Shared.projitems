@@ -6,7 +6,7 @@
     <SharedGUID>0cdf00d8-4242-4375-b9ce-ce0af65f6ebd</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>Ecwid.Services.Test</Import_RootNamespace>
+    <Import_RootNamespace>Ecwid.Test</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Services\Legacy\EcwidLegacyClientOrdersRealTest.cs" />

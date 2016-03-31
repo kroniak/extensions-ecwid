@@ -2,21 +2,12 @@
 
 namespace Ecwid.Tools
 {
-    public class ConfigException : Exception
+    public class LimitException : InvalidOperationException
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ConfigException"/> class.
+        /// Initializes a new instance of the <see cref="LimitException" /> class.
         /// </summary>
         /// <param name="message">The message.</param>
-        public ConfigException(string message) : base(message) { }
-    }
-
-    public class InvalidArgumentException : Exception
-    {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="InvalidArgumentException"/> class.
-        /// </summary>
-        /// <param name="message">The message.</param>
-        public InvalidArgumentException(string message) : base(message) { }
+        public LimitException(string message) : base(message) { }
     }
 }

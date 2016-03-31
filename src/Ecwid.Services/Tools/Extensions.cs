@@ -13,7 +13,6 @@ namespace Ecwid.Tools
         /// Trim and replace and split to words.
         /// </summary>
         /// <param name="str">The string.</param>
-        /// <returns></returns>
         public static List<string> TrimUpperReplaceSplit(this string str)
         {
             var result = new Regex("[^A-Za-z]").Replace(str, " ");//delete all non character symbols

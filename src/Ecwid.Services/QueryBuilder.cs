@@ -56,7 +56,6 @@ namespace Ecwid.Services
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="value">The value.</param>
-        /// <returns></returns>
         internal OrdersQueryBuilder AddOrUpdate(string name, object value)
         {
             Add(name, value);
@@ -72,6 +71,7 @@ namespace Ecwid.Services
         internal OrdersQueryBuilder AddOrUpdateStatuses(ICollection<string> values)
         {
             if (values == null)
+                // TODO tests
                 throw new ArgumentNullException(nameof(values));
 
             string result;

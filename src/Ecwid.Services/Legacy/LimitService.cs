@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Ecwid.Services.Legacy
+namespace Ecwid.Services
 {
     /// <summary>
     /// Represent limitation functionality of Ecwid Legacy API

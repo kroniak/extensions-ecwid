@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
+// ReSharper disable ClassNeverInstantiated.Global
+// ReSharper disable UnusedMember.Global
 
-namespace Ecwid.Models.Legacy
+namespace Ecwid.Models
 {
     public class LegacyPerson
     {

@@ -1,7 +1,7 @@
 ﻿using Ecwid.Tools;
 using Xunit;
 
-namespace Ecwid.Services.Test.Tools
+namespace Ecwid.Test.Tools
 {
     public class ExtensionsTest
     {

@@ -5,7 +5,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Ecwid.Services.Legacy
+namespace Ecwid.Services
 {
     /// <summary>
     /// Ecwid API Client v1 (Legacy).
@@ -24,13 +24,15 @@ namespace Ecwid.Services.Legacy
         /// <value>
         /// The options.
         /// </value>
-        // TODO may be bug!
         public EcwidLegacyOptions Options { get; private set; } = new EcwidLegacyOptions();
 
         /// <summary>
         /// Configures the specified options.
         /// </summary>
         /// <param name="options">The options.</param>
+        /// <exception cref="ArgumentException">The shop identificator is null. Please reconfig the client.
+        /// or
+        /// The shop identificator is invalid. Please reconfig the client.</exception>
         public EcwidLegacyClient Configure(EcwidLegacyOptions options)
         {
             Validators.ShopIdValidate(options.ShopId);
@@ -45,6 +47,9 @@ namespace Ecwid.Services.Legacy
         /// <param name="shopId">The shop identifier.</param>
         /// <param name="shopOrderAuthId">The shop order authentication identifier.</param>
         /// <param name="shopProductAuthId">The shop product authentication identifier.</param>
+        /// <exception cref="ArgumentException">The shop identificator is null. Please reconfig the client.
+        /// or
+        /// The shop identificator is invalid. Please reconfig the client.</exception>
         public EcwidLegacyClient ConfigureShop(int shopId, string shopOrderAuthId = null, string shopProductAuthId = null)
         {
             Validators.ShopIdValidate(shopId);
@@ -66,14 +71,11 @@ namespace Ecwid.Services.Legacy
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="baseUrl">The base URL.</param>
-        /// <exception cref="System.InvalidOperationException">Limit overheat exception</exception>
         private async Task<T> GetApiResponceAsync<T>(Url baseUrl)
             where T : class
         {
             // Wait open window for request
-            if (!WaitLimit())
-                throw new InvalidOperationException("Limit overheat exception");
-
+            WaitLimit();
             return await baseUrl.GetJsonAsync<T>();
         }
 
@@ -83,15 +85,66 @@ namespace Ecwid.Services.Legacy
         /// <typeparam name="T"></typeparam>
         /// <param name="baseUrl">The base URL.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <exception cref="System.InvalidOperationException">Limit overheat exception</exception>
         private async Task<T> GetApiResponceAsync<T>(Url baseUrl, CancellationToken cancellationToken)
             where T : class
         {
             // Wait open window for request
-            if (!WaitLimit())
-                throw new InvalidOperationException("Limit overheat exception");
-
+            WaitLimit();
             return await baseUrl.GetJsonAsync<T>(cancellationToken);
+        }
+
+        /// <summary>
+        /// Updates the API asynchronous.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="baseUrl">The base URL.</param>
+        private async Task<T> UpdateApiAsync<T>(Url baseUrl)
+            where T : class
+        {
+            // Wait open window for request
+            WaitLimit();
+            return await baseUrl.PostAsync().ReceiveJson<T>();
+        }
+
+        /// <summary>
+        /// Updates the API asynchronous.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="baseUrl">The base URL.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        private async Task<T> UpdateApiAsync<T>(Url baseUrl, CancellationToken cancellationToken)
+            where T : class
+        {
+            // Wait open window for request
+            WaitLimit();
+            return await baseUrl.PostAsync(cancellationToken).ReceiveJson<T>();
+        }
+
+        /// <summary>
+        /// Updates the API asynchronous.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="baseUrl">The base URL.</param>
+        /// <param name="query">The query.</param>
+        private async Task<T> UpdateApiAsync<T>(Url baseUrl, object query)
+            where T : class
+        {
+            var url = query != null ? baseUrl.SetQueryParams(query) : baseUrl;
+            return await UpdateApiAsync<T>(url);
+        }
+
+        /// <summary>
+        /// Updates the API asynchronous.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="baseUrl">The base URL.</param>
+        /// <param name="query">The query.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        private async Task<T> UpdateApiAsync<T>(Url baseUrl, object query, CancellationToken cancellationToken)
+            where T : class
+        {
+            var url = query != null ? baseUrl.SetQueryParams(query) : baseUrl;
+            return await UpdateApiAsync<T>(url, cancellationToken);
         }
 
         /// <summary>
@@ -115,7 +168,6 @@ namespace Ecwid.Services.Legacy
         /// <param name="baseUrl">The base URL.</param>
         /// <param name="query">The query.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns></returns>
         private async Task<T> GetApiResponceAsync<T>(Url baseUrl, object query, CancellationToken cancellationToken)
             where T : class
         {
@@ -127,7 +179,8 @@ namespace Ecwid.Services.Legacy
         /// <summary>
         /// Waits the limit.
         /// </summary>
-        private bool WaitLimit()
+        /// <exception cref="Ecwid.Tools.LimitException">Limit overheat exception</exception>
+        private void WaitLimit()
         {
             var start = DateTime.Now;
 
@@ -138,12 +191,12 @@ namespace Ecwid.Services.Legacy
             {
                 // If time limit is over
                 if (start.AddSeconds(Options.MaxSecondsToWait) < DateTime.Now)
-                    return false;
+                    // TODO tests
+                    throw new LimitException("Limit overheat exception");
+
                 Task.Delay(Options.RetryInterval * 1000).Wait();
                 agreement = LimitsService.Tick();
             }
-
-            return true;
         }
         #endregion
     }
