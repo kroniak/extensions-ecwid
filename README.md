@@ -30,5 +30,6 @@ You can learn abount v3 (general) API [here](https://developers.ecwid.com/api-do
 ### Namespaces
 - Ecwid.Models - shared model v1 and v3 classes
 - Ecwid.Services - client service classes
+
 ### How to use
 [Look wiki pages](https://github.com/kroniak/extensions-ecwid/wiki)
