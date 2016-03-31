@@ -77,6 +77,7 @@ namespace Ecwid.Test.Services.Legacy
                 httpTest.ShouldHaveCalled($"{CheckOrdersUrl}&limit=0")
                     .WithVerb(HttpMethod.Get)
                     .Times(2);
+
                 Assert.Equal(false, result);
                 Assert.Equal(false, result2);
             }
@@ -121,8 +122,8 @@ namespace Ecwid.Test.Services.Legacy
                     .WithVerb(HttpMethod.Get)
                     .Times(2);
 
-                Assert.NotEmpty(result);
-                Assert.NotEmpty(result2);
+                Assert.Equal(1, result.Count);
+                Assert.Equal(1, result2.Count);
             }
         }
 
@@ -144,8 +145,8 @@ namespace Ecwid.Test.Services.Legacy
                     .WithVerb(HttpMethod.Get)
                     .Times(2);
 
-                Assert.NotEmpty(result);
-                Assert.NotEmpty(result2);
+                Assert.Equal(1, result.Count);
+                Assert.Equal(1, result2.Count);
             }
         }
 
@@ -167,8 +168,8 @@ namespace Ecwid.Test.Services.Legacy
                     .WithVerb(HttpMethod.Get)
                     .Times(2);
 
-                Assert.NotEmpty(result);
-                Assert.NotEmpty(result2);
+                Assert.Equal(1, result.Count);
+                Assert.Equal(1, result2.Count);
             }
         }
 
@@ -190,8 +191,8 @@ namespace Ecwid.Test.Services.Legacy
                     .WithVerb(HttpMethod.Get)
                     .Times(2);
 
-                Assert.NotEmpty(result);
-                Assert.NotEmpty(result2);
+                Assert.Equal(1, result.Count);
+                Assert.Equal(1, result2.Count);
             }
         }
 
@@ -215,7 +216,35 @@ namespace Ecwid.Test.Services.Legacy
                     .WithVerb(HttpMethod.Get)
                     .Times(1);
 
-                Assert.NotEmpty(result);
+                Assert.Equal(20, result.Count);
+            }
+        }
+
+        [Fact]
+        public async void GetOrdersAsyncQueryMultiPagesResultOnePagePass()
+        {
+            using (var httpTest = new HttpTest())
+            {
+                httpTest
+                    .RespondWithJson(
+                        Moqs.MockLegacyOrderResponseWithManyOrderAndPages($"{CheckOrdersUrl}&limit=5&offset=5"))
+                    .RespondWithJson(Moqs.MockLegacyOrderResponseWithManyOrder).RespondWithJson(
+                        Moqs.MockLegacyOrderResponseWithManyOrderAndPages($"{CheckOrdersUrl}&limit=5&offset=5"))
+                    .RespondWithJson(Moqs.MockLegacyOrderResponseWithManyOrder);
+
+                var result = await _client.Orders.Limit(5).GetPageAsync();
+                var result2 = await _client.Orders.Limit(5).GetPageAsync(_cancellationToken);
+
+                httpTest.ShouldHaveCalled($"{CheckOrdersUrl}&limit=5")
+                    .WithVerb(HttpMethod.Get)
+                    .Times(2);
+
+                httpTest.ShouldNotHaveCalled($"{CheckOrdersUrl}&limit=5&offset=5")
+                    .WithVerb(HttpMethod.Get)
+                    .Times(2);
+
+                Assert.Equal(10, result.Count);
+                Assert.Equal(10, result2.Count);
             }
         }
 
@@ -239,7 +268,7 @@ namespace Ecwid.Test.Services.Legacy
                     .WithVerb(HttpMethod.Get)
                     .Times(1);
 
-                Assert.NotEmpty(result);
+                Assert.Equal(20, result.Count);
             }
         }
 
@@ -263,7 +292,7 @@ namespace Ecwid.Test.Services.Legacy
                     .WithVerb(HttpMethod.Get)
                     .Times(1);
 
-                Assert.NotEmpty(result);
+                Assert.Equal(20, result.Count);
             }
         }
 
@@ -287,7 +316,7 @@ namespace Ecwid.Test.Services.Legacy
                     .WithVerb(HttpMethod.Get)
                     .Times(1);
 
-                Assert.NotEmpty(result);
+                Assert.Equal(20, result.Count);
             }
         }
 
@@ -337,7 +366,7 @@ namespace Ecwid.Test.Services.Legacy
                     .WithVerb(HttpMethod.Post)
                     .Times(1);
 
-                Assert.NotEmpty(result);
+                Assert.Equal(1, result.Count);
             }
         }
     }

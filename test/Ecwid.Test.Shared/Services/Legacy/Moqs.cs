@@ -25,7 +25,7 @@ namespace Ecwid.Test.Services.Legacy
         /// </summary>
         /// <param name="nextUrl">The next URL.</param>
         public static LegacyOrderResponse<LegacyOrder> MockLegacyOrderResponseWithManyOrderAndPages(string nextUrl)
-           => new LegacyOrderResponse<LegacyOrder>() { Count = 1, Total = 10, NextUrl = nextUrl, Orders = MockLegacyOrders(10) };
+           => new LegacyOrderResponse<LegacyOrder>() { Count = 10, Total = 10, NextUrl = nextUrl, Orders = MockLegacyOrders(10) };
 
         /// <summary>
         /// Gets the mock legacy order response for update.

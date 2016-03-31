@@ -111,6 +111,21 @@ namespace Ecwid.Services
             => await GetOrdersAsync(OrdersUrl, query.QueryParams, cancellationToken);
 
         /// <summary>
+        /// Gets the one page orders asynchronous. It ignores next url.
+        /// </summary>
+        /// <param name="query">The orders query builder</param>
+        public async Task<List<LegacyOrder>> GetOrdersPageAsync(OrdersQueryBuilder query)
+            => await GetOrdersPageAsync(OrdersUrl, query.QueryParams);
+
+        /// <summary>
+        /// Gets the one page orders asynchronous. It ignores next url.
+        /// </summary>
+        /// <param name="query">The orders query builder</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        public async Task<List<LegacyOrder>> GetOrdersPageAsync(OrdersQueryBuilder query, CancellationToken cancellationToken)
+            => await GetOrdersPageAsync(OrdersUrl, query.QueryParams, cancellationToken);
+
+        /// <summary>
         /// Gets the orders asynchronous.
         /// </summary>
         /// <param name="query">The query.</param>
@@ -233,6 +248,33 @@ namespace Ecwid.Services
                 orders.AddRange(response.Orders);
             }
             return orders;
+        }
+
+        /// <summary>
+        /// Gets the one page of orders asynchronous.
+        /// </summary>
+        /// <param name="url">The URL.</param>
+        /// <param name="query">The query.</param>
+        private async Task<List<LegacyOrder>> GetOrdersPageAsync(Url url, object query)
+        {
+            var response = query == null ? await GetApiResponceAsync<LegacyOrderResponse<LegacyOrder>>(url)
+                : await GetApiResponceAsync<LegacyOrderResponse<LegacyOrder>>(url, query);
+
+            return response.Orders?.ToList() ?? new List<LegacyOrder>();
+        }
+
+        /// <summary>
+        /// Gets the one page of orders asynchronous.
+        /// </summary>
+        /// <param name="url">The URL.</param>
+        /// <param name="query">The query.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        private async Task<List<LegacyOrder>> GetOrdersPageAsync(Url url, object query, CancellationToken cancellationToken)
+        {
+            var response = query == null ? await GetApiResponceAsync<LegacyOrderResponse<LegacyOrder>>(url, cancellationToken)
+                : await GetApiResponceAsync<LegacyOrderResponse<LegacyOrder>>(url, query, cancellationToken);
+
+            return response.Orders?.ToList() ?? new List<LegacyOrder>();
         }
     }
 }

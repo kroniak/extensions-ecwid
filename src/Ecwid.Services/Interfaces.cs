@@ -48,6 +48,19 @@ namespace Ecwid.Services
         Task<List<LegacyOrder>> GetOrdersAsync(OrdersQueryBuilder query, CancellationToken cancellationToken);
 
         /// <summary>
+        /// Gets the one page orders asynchronous. It ignores next url.
+        /// </summary>
+        /// <param name="query">The orders query builder</param>
+        Task<List<LegacyOrder>> GetOrdersPageAsync(OrdersQueryBuilder query);
+
+        /// <summary>
+        /// Gets the one page orders asynchronous. It ignores next url.
+        /// </summary>
+        /// <param name="query">The orders query builder</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        Task<List<LegacyOrder>> GetOrdersPageAsync(OrdersQueryBuilder query, CancellationToken cancellationToken);
+
+        /// <summary>
         /// Gets the orders asynchronous.
         /// </summary>
         /// <param name="query">The query.</param>
