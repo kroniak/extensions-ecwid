@@ -1,7 +1,6 @@
 ## C# client for Ecwid API
 [![Build status](https://ci.appveyor.com/api/projects/status/4mgx59ese69wjx7d?svg=true)](https://ci.appveyor.com/project/kroniak/extensions-ecwid)
-[![NuGet version](https://badge.fury.io/nu/Ecwid.svg)](https://badge.fury.io/nu/Ecwid)
-
+[![NuGet Pre Release](https://img.shields.io/nuget/vpre/Ecwid.svg)](https://www.nuget.org/packages/Ecwid/)
 > This repository contains models and services C# classes for Ecwid API v1 and v3.
 
 C# Ecwid client is a modern, asynchronous, fast, testable client for [Ecwid API](https://developers.ecwid.com/api-documentation)
