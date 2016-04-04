@@ -1,5 +1,5 @@
 ﻿// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
-namespace Ecwid.Services
+namespace Ecwid.Services.Legacy
 {
     /// <summary>
     /// Settings for Ecwid Client <see cref="EcwidLegacyClient"/>

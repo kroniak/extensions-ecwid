@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using Ecwid.Models;
-using Ecwid.Services;
+using Ecwid.Models.Legacy;
+using Ecwid.Services.Legacy;
 using Moq;
 
 namespace Ecwid.Test.Services.Legacy
 {
-    internal static class Moqs
+    internal abstract class Moqs
     {
         /// <summary>
         /// Moqs the responce with one order.
@@ -40,7 +40,6 @@ namespace Ecwid.Test.Services.Legacy
         /// Moqs the orders.
         /// </summary>
         /// <param name="count">The count.</param>
-        /// <returns></returns>
         private static List<LegacyOrder> MockLegacyOrders(int count)
         {
             var orders = new List<LegacyOrder>();
@@ -65,10 +64,9 @@ namespace Ecwid.Test.Services.Legacy
         /// Mocks the base orders.
         /// </summary>
         /// <param name="count">The count.</param>
-        /// <returns></returns>
-        private static List<LegacyUpdatedOrder> MockBaseOrders(int count)
+        private static LegacyUpdatedOrders MockBaseOrders(int count)
         {
-            var orders = new List<LegacyUpdatedOrder>();
+            var orders = new LegacyUpdatedOrders();
             var order = new LegacyUpdatedOrder()
             {
                 Number = 123,

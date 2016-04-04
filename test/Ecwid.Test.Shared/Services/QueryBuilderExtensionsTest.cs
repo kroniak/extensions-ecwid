@@ -1,30 +1,31 @@
 ﻿using System;
 using Ecwid.Services;
+using Ecwid.Services.Legacy;
 using Xunit;
 
 namespace Ecwid.Test.Services
 {
     public class QueryBuilderExtensionsTest
     {
-        private readonly EcwidLegacyClient _defaultClient = new EcwidLegacyClient();
+        private readonly IEcwidLegacyClient _defaultLegacyClient = new EcwidLegacyClient();
 
         [Fact]
         public void ExtensionFail()
         {
-            Assert.Throws<ArgumentNullException>(() => _defaultClient.Orders.Order(null));
-            Assert.Throws<ArgumentNullException>(() => _defaultClient.Orders.Custom(null, new { a = 1 }));
+            Assert.Throws<ArgumentNullException>(() => _defaultLegacyClient.Orders.Order(null));
+            Assert.Throws<ArgumentNullException>(() => _defaultLegacyClient.Orders.Custom(null, new { a = 1 }));
         }
 
         [Fact]
         public void DatePass()
         {
-            var result = _defaultClient.Orders.Date(Convert.ToDateTime("2000-01-01")).QueryParams["date"];
-            var result2 = _defaultClient.Orders.FromDate(Convert.ToDateTime("2000-01-01")).QueryParams["from_date"];
-            var result3 = _defaultClient.Orders.ToDate(Convert.ToDateTime("2000-01-01")).QueryParams["to_date"];
+            var result = _defaultLegacyClient.Orders.Date(Convert.ToDateTime("2000-01-01")).Query["date"];
+            var result2 = _defaultLegacyClient.Orders.FromDate(Convert.ToDateTime("2000-01-01")).Query["from_date"];
+            var result3 = _defaultLegacyClient.Orders.ToDate(Convert.ToDateTime("2000-01-01")).Query["to_date"];
             var result4 =
-                _defaultClient.Orders.FromUpdateDate(Convert.ToDateTime("2000-01-01")).QueryParams["from_update_date"];
+                _defaultLegacyClient.Orders.FromUpdateDate(Convert.ToDateTime("2000-01-01")).Query["from_update_date"];
             var result5 =
-                _defaultClient.Orders.ToUpdateDate(Convert.ToDateTime("2000-01-01")).QueryParams["to_update_date"];
+                _defaultLegacyClient.Orders.ToUpdateDate(Convert.ToDateTime("2000-01-01")).Query["to_update_date"];
 
             Assert.Equal(result, "2000-01-01");
             Assert.Equal(result2, "2000-01-01");
@@ -36,10 +37,10 @@ namespace Ecwid.Test.Services
         [Fact]
         public void OrderPass()
         {
-            var result = _defaultClient.Orders.Order(123).QueryParams["order"];
-            var result2 = _defaultClient.Orders.FromOrder(123).QueryParams["from_order"];
-            var result3 = _defaultClient.Orders.Order("123").QueryParams["order"];
-            var result4 = _defaultClient.Orders.FromOrder("123").QueryParams["from_order"];
+            var result = _defaultLegacyClient.Orders.Order(123).Query["order"];
+            var result2 = _defaultLegacyClient.Orders.FromOrder(123).Query["from_order"];
+            var result3 = _defaultLegacyClient.Orders.Order("123").Query["order"];
+            var result4 = _defaultLegacyClient.Orders.FromOrder("123").Query["from_order"];
 
             Assert.Equal(result, 123);
             Assert.Equal(result2, 123);
@@ -51,11 +52,11 @@ namespace Ecwid.Test.Services
         [Fact]
         public void CustomerPass()
         {
-            var result = _defaultClient.Orders.CustomerId(123).QueryParams["customer_id"];
-            var result2 = _defaultClient.Orders.CustomerId(null).QueryParams["customer_id"];
-            var result3 = _defaultClient.Orders.CustomerEmail("test").QueryParams["customer_email"];
-            var result4 = _defaultClient.Orders.CustomerEmail(null).QueryParams["customer_email"];
-            var result5 = _defaultClient.Orders.CustomerEmail("").QueryParams["customer_email"];
+            var result = _defaultLegacyClient.Orders.CustomerId(123).Query["customer_id"];
+            var result2 = _defaultLegacyClient.Orders.CustomerId(null).Query["customer_id"];
+            var result3 = _defaultLegacyClient.Orders.CustomerEmail("test").Query["customer_email"];
+            var result4 = _defaultLegacyClient.Orders.CustomerEmail(null).Query["customer_email"];
+            var result5 = _defaultLegacyClient.Orders.CustomerEmail("").Query["customer_email"];
 
             Assert.Equal(result, 123);
             Assert.Equal(result2, "null");
@@ -67,7 +68,7 @@ namespace Ecwid.Test.Services
         [Fact]
         public void StatusesPass()
         {
-            var result = _defaultClient.Orders.Statuses("PAID, DECLINED", "NEW PROCESSING").QueryParams["statuses"];
+            var result = _defaultLegacyClient.Orders.Statuses("PAID, DECLINED", "NEW PROCESSING").Query["statuses"];
             Assert.Equal(result, "PAID,DECLINED,NEW,PROCESSING");
         }
 
@@ -77,13 +78,13 @@ namespace Ecwid.Test.Services
         [InlineData("", "")]
         public void StatusesFail(string paid, string full)
         {
-            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Statuses(paid, full));
+            Assert.Throws<ArgumentException>(() => _defaultLegacyClient.Orders.Statuses(paid, full));
         }
 
         [Fact]
         public void AddPaymentStatusesPass()
         {
-            var result = _defaultClient.Orders.AddPaymentStatuses("PAID, DECLINED").QueryParams["statuses"];
+            var result = _defaultLegacyClient.Orders.AddPaymentStatuses("PAID, DECLINED").Query["statuses"];
             Assert.Equal(result, "PAID,DECLINED");
         }
 
@@ -91,7 +92,7 @@ namespace Ecwid.Test.Services
         public void AddAddPaymentStatusesPass()
         {
             var result =
-                _defaultClient.Orders.AddPaymentStatuses("PAID, DECLINED").AddPaymentStatuses("Cancelled").QueryParams[
+                _defaultLegacyClient.Orders.AddPaymentStatuses("PAID, DECLINED").AddPaymentStatuses("Cancelled").Query[
                     "statuses"];
             Assert.Equal(result, "PAID,DECLINED,CANCELLED");
         }
@@ -99,7 +100,7 @@ namespace Ecwid.Test.Services
         [Fact]
         public void AddFulfillmentStatusesPass()
         {
-            var result = _defaultClient.Orders.AddFulfillmentStatuses("NEW PROCESSING").QueryParams["statuses"];
+            var result = _defaultLegacyClient.Orders.AddFulfillmentStatuses("NEW PROCESSING").Query["statuses"];
             Assert.Equal(result, "NEW,PROCESSING");
         }
 
@@ -107,7 +108,7 @@ namespace Ecwid.Test.Services
         public void AddAddFulfillmentStatusesPass()
         {
             var result =
-                _defaultClient.Orders.AddFulfillmentStatuses("NEW").AddFulfillmentStatuses("PROCESSING").QueryParams["statuses"];
+                _defaultLegacyClient.Orders.AddFulfillmentStatuses("NEW").AddFulfillmentStatuses("PROCESSING").Query["statuses"];
             Assert.Equal(result, "NEW,PROCESSING");
         }
 
@@ -115,15 +116,15 @@ namespace Ecwid.Test.Services
         public void AddBothStatusesPass()
         {
             var result =
-                _defaultClient.Orders.AddPaymentStatuses("PAID, DECLINED").AddFulfillmentStatuses("NEW PROCESSING").QueryParams["statuses"];
+                _defaultLegacyClient.Orders.AddPaymentStatuses("PAID, DECLINED").AddFulfillmentStatuses("NEW PROCESSING").Query["statuses"];
             Assert.Equal(result, "PAID,DECLINED,NEW,PROCESSING");
         }
 
         [Fact]
         public void LimitOffsetPass()
         {
-            var result = _defaultClient.Orders.Limit(123).QueryParams["limit"];
-            var result2 = _defaultClient.Orders.Offset(100).QueryParams["offset"];
+            var result = _defaultLegacyClient.Orders.Limit(123).Query["limit"];
+            var result2 = _defaultLegacyClient.Orders.Offset(100).Query["offset"];
 
             Assert.Equal(result, 123);
             Assert.Equal(result2, 100);

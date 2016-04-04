@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Ecwid.Services
+namespace Ecwid.Services.Legacy
 {
     /// <summary>
     /// Represent limitation functionality of Ecwid Legacy API
@@ -11,6 +11,16 @@ namespace Ecwid.Services
     {
         // All limits
         private readonly BlockingCollection<Limit> _limits = new BlockingCollection<Limit>();
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LimitsService"/> class.
+        /// </summary>
+        public LimitsService()
+        {
+            var rates = new SortedList<int, int>(3) { { 5, 100 }, { 50, 400 }, { 500, 1400 } };
+
+            rates.ToList().ForEach(rate => _limits.Add(new Limit(rate.Key, rate.Value)));
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LimitsService"/> class.

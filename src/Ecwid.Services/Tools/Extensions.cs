@@ -5,9 +5,9 @@ using System.Text.RegularExpressions;
 namespace Ecwid.Tools
 {
     /// <summary>
-    /// Some string extensions
+    /// Some string extensions.
     /// </summary>
-    public static class StringExtensions
+    internal static class StringExtensions
     {
         /// <summary>
         /// Trim and replace and split to words.

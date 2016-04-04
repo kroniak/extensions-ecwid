@@ -1,22 +1,20 @@
 ﻿using Ecwid.Tools;
 using Flurl;
-using Flurl.Http;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Ecwid.Services
+namespace Ecwid.Services.Legacy
 {
     /// <summary>
     /// Ecwid API Client v1 (Legacy).
     /// </summary>
-    /// <seealso cref="IEcwidOrdersClientLegacy" />
-    public partial class EcwidLegacyClient
+    public partial class EcwidLegacyClient : BaseEcwidClient, IEcwidLegacyClient
     {
         /// <summary>
         /// The shared limits service for API limits.
         /// </summary>
-        private static readonly LimitsService LimitsService = new LimitsService();
+        private static readonly Lazy<LimitsService> LimitsService = new Lazy<LimitsService>();
 
         /// <summary>
         /// Gets the options.
@@ -33,7 +31,7 @@ namespace Ecwid.Services
         /// <exception cref="ArgumentException">The shop identificator is null. Please reconfig the client.
         /// or
         /// The shop identificator is invalid. Please reconfig the client.</exception>
-        public EcwidLegacyClient Configure(EcwidLegacyOptions options)
+        public IEcwidLegacyClient Configure(EcwidLegacyOptions options)
         {
             Validators.ShopIdValidate(options.ShopId);
 
@@ -50,7 +48,7 @@ namespace Ecwid.Services
         /// <exception cref="ArgumentException">The shop identificator is null. Please reconfig the client.
         /// or
         /// The shop identificator is invalid. Please reconfig the client.</exception>
-        public EcwidLegacyClient ConfigureShop(int shopId, string shopOrderAuthId = null, string shopProductAuthId = null)
+        public IEcwidLegacyClient ConfigureShop(int shopId, string shopOrderAuthId = null, string shopProductAuthId = null)
         {
             Validators.ShopIdValidate(shopId);
 
@@ -71,12 +69,11 @@ namespace Ecwid.Services
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="baseUrl">The base URL.</param>
-        private async Task<T> GetApiResponceAsync<T>(Url baseUrl)
-            where T : class
+        protected override async Task<T> GetApiResponceAsync<T>(Url baseUrl)
         {
             // Wait open window for request
             WaitLimit();
-            return await baseUrl.GetJsonAsync<T>();
+            return await base.GetApiResponceAsync<T>(baseUrl);
         }
 
         /// <summary>
@@ -85,12 +82,11 @@ namespace Ecwid.Services
         /// <typeparam name="T"></typeparam>
         /// <param name="baseUrl">The base URL.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        private async Task<T> GetApiResponceAsync<T>(Url baseUrl, CancellationToken cancellationToken)
-            where T : class
+        protected override async Task<T> GetApiResponceAsync<T>(Url baseUrl, CancellationToken cancellationToken)
         {
             // Wait open window for request
             WaitLimit();
-            return await baseUrl.GetJsonAsync<T>(cancellationToken);
+            return await base.GetApiResponceAsync<T>(baseUrl, cancellationToken);
         }
 
         /// <summary>
@@ -98,12 +94,11 @@ namespace Ecwid.Services
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="baseUrl">The base URL.</param>
-        private async Task<T> UpdateApiAsync<T>(Url baseUrl)
-            where T : class
+        protected override async Task<T> UpdateApiAsync<T>(Url baseUrl)
         {
             // Wait open window for request
             WaitLimit();
-            return await baseUrl.PostAsync().ReceiveJson<T>();
+            return await base.UpdateApiAsync<T>(baseUrl);
         }
 
         /// <summary>
@@ -112,68 +107,11 @@ namespace Ecwid.Services
         /// <typeparam name="T"></typeparam>
         /// <param name="baseUrl">The base URL.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        private async Task<T> UpdateApiAsync<T>(Url baseUrl, CancellationToken cancellationToken)
-            where T : class
+        protected override async Task<T> UpdateApiAsync<T>(Url baseUrl, CancellationToken cancellationToken)
         {
             // Wait open window for request
             WaitLimit();
-            return await baseUrl.PostAsync(cancellationToken).ReceiveJson<T>();
-        }
-
-        /// <summary>
-        /// Updates the API asynchronous.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="baseUrl">The base URL.</param>
-        /// <param name="query">The query.</param>
-        private async Task<T> UpdateApiAsync<T>(Url baseUrl, object query)
-            where T : class
-        {
-            var url = query != null ? baseUrl.SetQueryParams(query) : baseUrl;
-            return await UpdateApiAsync<T>(url);
-        }
-
-        /// <summary>
-        /// Updates the API asynchronous.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="baseUrl">The base URL.</param>
-        /// <param name="query">The query.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        private async Task<T> UpdateApiAsync<T>(Url baseUrl, object query, CancellationToken cancellationToken)
-            where T : class
-        {
-            var url = query != null ? baseUrl.SetQueryParams(query) : baseUrl;
-            return await UpdateApiAsync<T>(url, cancellationToken);
-        }
-
-        /// <summary>
-        /// Gets the API responce asynchronous.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="baseUrl">The base URL.</param>
-        /// <param name="query">The query.</param>
-        private async Task<T> GetApiResponceAsync<T>(Url baseUrl, object query)
-            where T : class
-        {
-            var url = query != null ? baseUrl.SetQueryParams(query) : baseUrl;
-
-            return await GetApiResponceAsync<T>(url);
-        }
-
-        /// <summary>
-        /// Gets the API responce asynchronous.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="baseUrl">The base URL.</param>
-        /// <param name="query">The query.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        private async Task<T> GetApiResponceAsync<T>(Url baseUrl, object query, CancellationToken cancellationToken)
-            where T : class
-        {
-            var url = query != null ? baseUrl.SetQueryParams(query) : baseUrl;
-
-            return await GetApiResponceAsync<T>(url, cancellationToken);
+            return await base.UpdateApiAsync<T>(baseUrl, cancellationToken);
         }
 
         /// <summary>
@@ -185,7 +123,7 @@ namespace Ecwid.Services
             var start = DateTime.Now;
 
             // Get agreement from limits service
-            var agreement = LimitsService.Tick();
+            var agreement = LimitsService.Value.Tick();
 
             while (!agreement)
             {
@@ -195,7 +133,7 @@ namespace Ecwid.Services
                     throw new LimitException("Limit overheat exception");
 
                 Task.Delay(Options.RetryInterval * 1000).Wait();
-                agreement = LimitsService.Tick();
+                agreement = LimitsService.Value.Tick();
             }
         }
         #endregion

@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Ecwid.Models;
+using Ecwid.Models.Legacy;
 using Ecwid.Services;
+using Ecwid.Services.Legacy;
 using Xunit;
 
 namespace Ecwid.Test.Services.Legacy
 {
     /// <summary>
-    /// Tests with real http responces
+    /// Tests with real http responces.
     /// </summary>
     public class EcwidLegacyClientOrdersRealTest
     {
@@ -18,7 +19,7 @@ namespace Ecwid.Test.Services.Legacy
         [Fact]
         public async void CheckOrdersAuthAsyncPass()
         {
-            var client = new EcwidLegacyClient()
+            IEcwidLegacyClient client = new EcwidLegacyClient()
             {
                 Options =
                 {
@@ -39,7 +40,7 @@ namespace Ecwid.Test.Services.Legacy
         [Fact]
         public async void CheckOrdersAuthAsyncFail()
         {
-            var client = new EcwidLegacyClient()
+            IEcwidLegacyClient client = new EcwidLegacyClient()
             {
                 Options =
                 {
@@ -60,7 +61,7 @@ namespace Ecwid.Test.Services.Legacy
         [Fact]
         public async void GetOrdersCountAsyncPass()
         {
-            var client = new EcwidLegacyClient()
+            IEcwidLegacyClient client = new EcwidLegacyClient()
             {
                 Options =
                 {
@@ -81,7 +82,7 @@ namespace Ecwid.Test.Services.Legacy
         [Fact]
         public async void GetNewOrdersAsyncPass()
         {
-            var client = new EcwidLegacyClient()
+            IEcwidLegacyClient client = new EcwidLegacyClient()
             {
                 Options =
                 {
@@ -102,7 +103,7 @@ namespace Ecwid.Test.Services.Legacy
         [Fact]
         public async void GetNonPaidOrdersAsyncPass()
         {
-            var client = new EcwidLegacyClient()
+            IEcwidLegacyClient client = new EcwidLegacyClient()
             {
                 Options =
                 {
@@ -123,7 +124,7 @@ namespace Ecwid.Test.Services.Legacy
         [Fact]
         public async void GetPaidNotShippedOrdersAsyncPass()
         {
-            var client = new EcwidLegacyClient()
+            IEcwidLegacyClient client = new EcwidLegacyClient()
             {
                 Options =
                 {
@@ -144,7 +145,7 @@ namespace Ecwid.Test.Services.Legacy
         [Fact]
         public async void GetShippedNotDeliveredOrdersAsyncPass()
         {
-            var client = new EcwidLegacyClient()
+            IEcwidLegacyClient client = new EcwidLegacyClient()
             {
                 Options =
                 {
@@ -165,7 +166,7 @@ namespace Ecwid.Test.Services.Legacy
         [Fact]
         public async void GetOrdersAsyncQueryMultiPagesResultPass()
         {
-            var client = new EcwidLegacyClient()
+            IEcwidLegacyClient client = new EcwidLegacyClient()
             {
                 Options =
                 {
@@ -186,7 +187,7 @@ namespace Ecwid.Test.Services.Legacy
         [Fact]
         public void GetOrdersAsyncQueryMultiPagesResultCancellationPass()
         {
-            var client = new EcwidLegacyClient()
+            IEcwidLegacyClient client = new EcwidLegacyClient()
             {
                 Options =
                 {
@@ -214,7 +215,7 @@ namespace Ecwid.Test.Services.Legacy
         [Fact]
         public async void GetOrdersAsyncQueryBuilderMultiPagesResultPass()
         {
-            var client = new EcwidLegacyClient()
+            IEcwidLegacyClient client = new EcwidLegacyClient()
             {
                 Options =
                 {
@@ -241,7 +242,7 @@ namespace Ecwid.Test.Services.Legacy
             // max 100 in 5 sec - real 50
             for (var i = 0; i < 50; i++)
             {
-                var client = new EcwidLegacyClient()
+                IEcwidLegacyClient client = new EcwidLegacyClient()
                 {
                     Options =
                     {

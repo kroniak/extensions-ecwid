@@ -1,21 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using Ecwid.Models;
+using Ecwid.Models.Legacy;
 using Flurl.Http;
 using Ecwid.Tools;
 using Flurl;
 
-namespace Ecwid.Services
+namespace Ecwid.Services.Legacy
 {
     /// <summary>
     /// Ecwid API Client v1 (Legacy).
     /// </summary>
-    /// <seealso cref="IEcwidOrdersClientLegacy" />
-    public partial class EcwidLegacyClient : IEcwidOrdersClientLegacy
+    public partial class EcwidLegacyClient
     {
         /// <summary>
         /// Gets the orders URL.
@@ -23,10 +21,6 @@ namespace Ecwid.Services
         /// <value>
         /// The orders URL.
         /// </value>
-        /// <exception cref="ArgumentException">The shop identificator is null. Please reconfig the client.
-        /// or
-        /// The shop identificator is invalid. Please reconfig the client.</exception>
-        /// <exception cref="ArgumentException">The shop auth identificator is null or empty. Please config the client.</exception>
         private string OrdersUrl => Validators.ShopIdValidate(Options.ShopId) && Validators.ShopAuthValidate(Options.ShopOrderAuthId)
             ? Options.ApiUrl
                 .AppendPathSegments(Options.ShopId.ToString(), "orders")
@@ -39,7 +33,8 @@ namespace Ecwid.Services
         /// <value>
         /// The orders.
         /// </value>
-        public OrdersQueryBuilder Orders => new OrdersQueryBuilder(this);
+        public OrdersQueryBuilder<LegacyOrder, LegacyUpdatedOrders> Orders
+            => new OrdersQueryBuilder<LegacyOrder, LegacyUpdatedOrders>(this);
 
         /// <summary>
         /// Checks the shop authentication asynchronous.
@@ -99,31 +94,31 @@ namespace Ecwid.Services
         /// Gets the orders asynchronous.
         /// </summary>
         /// <param name="query">The orders query builder</param>
-        public async Task<List<LegacyOrder>> GetOrdersAsync(OrdersQueryBuilder query)
-            => await GetOrdersAsync(OrdersUrl, query.QueryParams);
+        public async Task<List<LegacyOrder>> GetOrdersAsync(OrdersQueryBuilder<LegacyOrder, LegacyUpdatedOrders> query)
+            => await GetOrdersAsync(OrdersUrl, query.Query);
 
         /// <summary>
         /// Gets the orders asynchronous.
         /// </summary>
         /// <param name="query">The orders query builder</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        public async Task<List<LegacyOrder>> GetOrdersAsync(OrdersQueryBuilder query, CancellationToken cancellationToken)
-            => await GetOrdersAsync(OrdersUrl, query.QueryParams, cancellationToken);
+        public async Task<List<LegacyOrder>> GetOrdersAsync(OrdersQueryBuilder<LegacyOrder, LegacyUpdatedOrders> query, CancellationToken cancellationToken)
+            => await GetOrdersAsync(OrdersUrl, query.Query, cancellationToken);
 
         /// <summary>
         /// Gets the one page orders asynchronous. It ignores next url.
         /// </summary>
         /// <param name="query">The orders query builder</param>
-        public async Task<List<LegacyOrder>> GetOrdersPageAsync(OrdersQueryBuilder query)
-            => await GetOrdersPageAsync(OrdersUrl, query.QueryParams);
+        public async Task<List<LegacyOrder>> GetOrdersPageAsync(OrdersQueryBuilder<LegacyOrder, LegacyUpdatedOrders> query)
+            => await GetOrdersPageAsync(OrdersUrl, query.Query);
 
         /// <summary>
         /// Gets the one page orders asynchronous. It ignores next url.
         /// </summary>
         /// <param name="query">The orders query builder</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        public async Task<List<LegacyOrder>> GetOrdersPageAsync(OrdersQueryBuilder query, CancellationToken cancellationToken)
-            => await GetOrdersPageAsync(OrdersUrl, query.QueryParams, cancellationToken);
+        public async Task<List<LegacyOrder>> GetOrdersPageAsync(OrdersQueryBuilder<LegacyOrder, LegacyUpdatedOrders> query, CancellationToken cancellationToken)
+            => await GetOrdersPageAsync(OrdersUrl, query.Query, cancellationToken);
 
         /// <summary>
         /// Gets the orders asynchronous.
@@ -192,10 +187,10 @@ namespace Ecwid.Services
         /// Updates the orders asynchronous.
         /// </summary>
         /// <param name="query">The query.</param>
-        public async Task<List<LegacyUpdatedOrder>> UpdateOrdersAsync(OrdersQueryBuilder query)
+        public async Task<LegacyUpdatedOrders> UpdateOrdersAsync(OrdersQueryBuilder<LegacyOrder, LegacyUpdatedOrders> query)
         {
-            var responce = await UpdateApiAsync<LegacyOrderResponse<LegacyUpdatedOrder>>(OrdersUrl, query.QueryParams);
-            return responce.Orders?.ToList() ?? new List<LegacyUpdatedOrder>();
+            var responce = await UpdateApiAsync<LegacyOrderResponse<LegacyUpdatedOrder>>(OrdersUrl, query.Query);
+            return new LegacyUpdatedOrders(responce.Orders);
         }
 
         /// <summary>
@@ -203,10 +198,10 @@ namespace Ecwid.Services
         /// </summary>
         /// <param name="query">The query.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        public async Task<List<LegacyUpdatedOrder>> UpdateOrdersAsync(OrdersQueryBuilder query, CancellationToken cancellationToken)
+        public async Task<LegacyUpdatedOrders> UpdateOrdersAsync(OrdersQueryBuilder<LegacyOrder, LegacyUpdatedOrders> query, CancellationToken cancellationToken)
         {
-            var responce = await UpdateApiAsync<LegacyOrderResponse<LegacyUpdatedOrder>>(OrdersUrl, query.QueryParams, cancellationToken);
-            return responce.Orders?.ToList() ?? new List<LegacyUpdatedOrder>();
+            var responce = await UpdateApiAsync<LegacyOrderResponse<LegacyUpdatedOrder>>(OrdersUrl, query.Query, cancellationToken);
+            return new LegacyUpdatedOrders(responce.Orders);
         }
 
         /// <summary>

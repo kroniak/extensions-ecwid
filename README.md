@@ -28,7 +28,8 @@ You can learn about v1 (Legacy) API:
 
 You can learn abount v3 (general) API [here](https://developers.ecwid.com/api-documentation)
 ### Namespaces
-- Ecwid.Models - shared model v1 and v3 classes
+- Ecwid.Models - model classes for API v3
+- Ecwid.Models.Legacy - model classes for API v1
 - Ecwid.Services - client service classes
 
 ### How to use

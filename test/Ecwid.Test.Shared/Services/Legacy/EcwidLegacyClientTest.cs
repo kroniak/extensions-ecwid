@@ -1,5 +1,5 @@
 ﻿using System;
-using Ecwid.Services;
+using Ecwid.Services.Legacy;
 using Xunit;
 
 namespace Ecwid.Test.Services.Legacy

@@ -2,7 +2,7 @@
 namespace Ecwid.Services
 {
     /// <summary>
-    /// Setting for Ecwid Client
+    /// Setting for Ecwid Client.
     /// </summary>
     public class EcwidOptions
     {
