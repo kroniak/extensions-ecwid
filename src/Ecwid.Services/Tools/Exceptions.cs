@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
+
+using System;
 
 namespace Ecwid.Tools
 {
@@ -8,6 +10,8 @@ namespace Ecwid.Tools
         /// Initializes a new instance of the <see cref="LimitException" /> class.
         /// </summary>
         /// <param name="message">The message.</param>
-        public LimitException(string message) : base(message) { }
+        public LimitException(string message) : base(message)
+        {
+        }
     }
 }

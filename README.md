@@ -15,7 +15,7 @@ var result = await client.ConfigureShop(some_shop_id, some_orders_key, some_prod
                    .GetAsync();
 ```
 ### Install
-> The package is compiled for NET45 and .NET Platform Standard 5.0. 5th version of the .NET Platform Standard include .NET Core and many other targets. [Read about it](https://github.com/dotnet/corefx/blob/master/Documentation/architecture/net-platform-standard.md#mapping-the-net-platform-standard-to-platforms). 
+> The package is compiled for NET45 and .NET Platform Standard 5.4 which include .NET Core and other targets. [Read about it](https://github.com/dotnet/corefx/blob/master/Documentation/architecture/net-platform-standard.md#mapping-the-net-platform-standard-to-platforms). 
 
 `PM> Install-Package Ecwid -Pre` - services and models
 
@@ -30,7 +30,8 @@ You can learn abount v3 (general) API [here](https://developers.ecwid.com/api-do
 ### Namespaces
 - Ecwid.Models - model classes for API v3
 - Ecwid.Models.Legacy - model classes for API v1
-- Ecwid.Services - client service classes
+- Ecwid.Services - client service classes for API v3
+- Ecwid.Services.Legacy - client service classes for API v1
 
 ### How to use
 [Look wiki pages](https://github.com/kroniak/extensions-ecwid/wiki)

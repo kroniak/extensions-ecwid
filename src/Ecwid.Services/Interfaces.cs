@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
+
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Ecwid.Models;
@@ -8,22 +10,36 @@ namespace Ecwid.Services
     /// <summary>
     /// Public client API.
     /// </summary>
-    internal interface IEcwidClient : IEcwidOrdersClient { }
+    public interface IEcwidClient : IEcwidOrdersClient
+    {
+        /// <summary>
+        /// Gets the options.
+        /// </summary>
+        /// <value>
+        /// The options.
+        /// </value>
+        EcwidOptions Options { get; }
+
+        /// <summary>
+        /// Configures the specified options.
+        /// </summary>
+        /// <param name="options">The options.</param>
+        IEcwidClient Configure(EcwidOptions options);
+
+        /// <summary>
+        /// Configures the shop.
+        /// </summary>
+        /// <param name="shopId">The shop identifier.</param>
+        /// <param name="token">The token.</param>
+        /// <returns></returns>
+        IEcwidClient Configure(int shopId, string token);
+    }
 
     /// <summary>
     /// Public orders client API.
     /// </summary>
     public interface IEcwidOrdersClient : IEcwidOrdersClient<OrderEntry, UpdateStatus>
     {
-        /// <summary>
-        /// Checks the shop authentication asynchronous.
-        /// </summary>
-        Task<bool> CheckAuthAsync();
-
-        /// <summary>
-        /// Checks the shop authentication asynchronous.
-        /// </summary>
-        Task<bool> CheckAuthAsync(CancellationToken cancellationToken);
     }
 
     /// <summary>
@@ -42,6 +58,17 @@ namespace Ecwid.Services
         /// The orders.
         /// </value>
         OrdersQueryBuilder<TOrder, TUpdateResponse> Orders { get; }
+
+        /// <summary>
+        /// Checks the shop authentication asynchronous.
+        /// </summary>
+        Task<bool> CheckOrdersTokenAsync();
+
+        /// <summary>
+        /// Checks the shop authentication asynchronous.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        Task<bool> CheckOrdersTokenAsync(CancellationToken cancellationToken);
 
         /// <summary>
         /// Gets the orders count asynchronous.
@@ -65,7 +92,8 @@ namespace Ecwid.Services
         /// </summary>
         /// <param name="query">The orders query builder</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        Task<List<TOrder>> GetOrdersAsync(OrdersQueryBuilder<TOrder, TUpdateResponse> query, CancellationToken cancellationToken);
+        Task<List<TOrder>> GetOrdersAsync(OrdersQueryBuilder<TOrder, TUpdateResponse> query,
+            CancellationToken cancellationToken);
 
         /// <summary>
         /// Gets the one page orders asynchronous. It ignores next url.
@@ -78,7 +106,8 @@ namespace Ecwid.Services
         /// </summary>
         /// <param name="query">The orders query builder</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        Task<List<TOrder>> GetOrdersPageAsync(OrdersQueryBuilder<TOrder, TUpdateResponse> query, CancellationToken cancellationToken);
+        Task<List<TOrder>> GetOrdersPageAsync(OrdersQueryBuilder<TOrder, TUpdateResponse> query,
+            CancellationToken cancellationToken);
 
         /// <summary>
         /// Gets the orders asynchronous.
@@ -147,6 +176,7 @@ namespace Ecwid.Services
         /// </summary>
         /// <param name="query">The orders query builder</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        Task<TUpdateResponse> UpdateOrdersAsync(OrdersQueryBuilder<TOrder, TUpdateResponse> query, CancellationToken cancellationToken);
+        Task<TUpdateResponse> UpdateOrdersAsync(OrdersQueryBuilder<TOrder, TUpdateResponse> query,
+            CancellationToken cancellationToken);
     }
 }

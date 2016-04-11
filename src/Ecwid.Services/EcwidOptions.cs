@@ -1,25 +1,18 @@
-﻿// ReSharper disable UnusedMemberInSuper.Global
+﻿// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
+
 namespace Ecwid.Services
 {
     /// <summary>
-    /// Setting for Ecwid Client.
+    /// Base setting for Ecwid Client v3.
     /// </summary>
-    public class EcwidOptions
+    public class EcwidOptions : BaseEcwidOptions
     {
         /// <summary>
-        /// Gets or sets the API URL. Default is https://app.ecwid.com/api/v3/
+        /// Gets or sets the token.
         /// </summary>
         /// <value>
-        /// The API URL
+        /// The token.
         /// </value>
-        public virtual string ApiUrl { get; set; } = "https://app.ecwid.com/api/v3/";
-
-        /// <summary>
-        /// Gets or sets the shop identifier
-        /// </summary>
-        /// <value>
-        /// The shop identifier
-        /// </value>
-        public int? ShopId { get; set; }
+        public string Token { get; set; }
     }
 }

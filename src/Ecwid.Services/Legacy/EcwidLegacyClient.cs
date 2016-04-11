@@ -1,8 +1,10 @@
-﻿using Ecwid.Tools;
-using Flurl;
+﻿// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
+
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Ecwid.Tools;
+using Flurl;
 
 namespace Ecwid.Services.Legacy
 {
@@ -28,9 +30,11 @@ namespace Ecwid.Services.Legacy
         /// Configures the specified options.
         /// </summary>
         /// <param name="options">The options.</param>
-        /// <exception cref="ArgumentException">The shop identificator is null. Please reconfig the client.
+        /// <exception cref="ArgumentException">
+        /// The shop identificator is null. Please reconfig the client.
         /// or
-        /// The shop identificator is invalid. Please reconfig the client.</exception>
+        /// The shop identificator is invalid. Please reconfig the client.
+        /// </exception>
         public IEcwidLegacyClient Configure(EcwidLegacyOptions options)
         {
             Validators.ShopIdValidate(options.ShopId);
@@ -45,10 +49,12 @@ namespace Ecwid.Services.Legacy
         /// <param name="shopId">The shop identifier.</param>
         /// <param name="shopOrderAuthId">The shop order authentication identifier.</param>
         /// <param name="shopProductAuthId">The shop product authentication identifier.</param>
-        /// <exception cref="ArgumentException">The shop identificator is null. Please reconfig the client.
+        /// <exception cref="ArgumentException">
+        /// The shop identificator is null. Please reconfig the client.
         /// or
-        /// The shop identificator is invalid. Please reconfig the client.</exception>
-        public IEcwidLegacyClient ConfigureShop(int shopId, string shopOrderAuthId = null, string shopProductAuthId = null)
+        /// The shop identificator is invalid. Please reconfig the client.
+        /// </exception>
+        public IEcwidLegacyClient Configure(int shopId, string shopOrderAuthId = null, string shopProductAuthId = null)
         {
             Validators.ShopIdValidate(shopId);
 
@@ -69,6 +75,7 @@ namespace Ecwid.Services.Legacy
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="baseUrl">The base URL.</param>
+        /// <exception cref="LimitException">Limit overheat exception</exception>
         protected override async Task<T> GetApiResponceAsync<T>(Url baseUrl)
         {
             // Wait open window for request
@@ -82,6 +89,7 @@ namespace Ecwid.Services.Legacy
         /// <typeparam name="T"></typeparam>
         /// <param name="baseUrl">The base URL.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
+        /// <exception cref="LimitException">Limit overheat exception</exception>
         protected override async Task<T> GetApiResponceAsync<T>(Url baseUrl, CancellationToken cancellationToken)
         {
             // Wait open window for request
@@ -94,6 +102,7 @@ namespace Ecwid.Services.Legacy
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="baseUrl">The base URL.</param>
+        /// <exception cref="LimitException">Limit overheat exception</exception>
         protected override async Task<T> UpdateApiAsync<T>(Url baseUrl)
         {
             // Wait open window for request
@@ -107,6 +116,7 @@ namespace Ecwid.Services.Legacy
         /// <typeparam name="T"></typeparam>
         /// <param name="baseUrl">The base URL.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
+        /// <exception cref="LimitException">Limit overheat exception</exception>
         protected override async Task<T> UpdateApiAsync<T>(Url baseUrl, CancellationToken cancellationToken)
         {
             // Wait open window for request
@@ -132,10 +142,11 @@ namespace Ecwid.Services.Legacy
                     // TODO tests
                     throw new LimitException("Limit overheat exception");
 
-                Task.Delay(Options.RetryInterval * 1000).Wait();
+                Task.Delay(Options.RetryInterval*1000).Wait();
                 agreement = LimitsService.Value.Tick();
             }
         }
+
         #endregion
     }
 }

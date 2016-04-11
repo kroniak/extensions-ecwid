@@ -1,5 +1,6 @@
+// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
+
 using Newtonsoft.Json;
-// ReSharper disable ClassNeverInstantiated.Global
 
 namespace Ecwid.Models.Legacy
 {
@@ -15,8 +16,8 @@ namespace Ecwid.Models.Legacy
         public string Text { get; set; }
 
         /// <summary>
-        /// Gets or sets the specifies the way the product price is modified. 
-        /// One of 'PERCENT' or 'ABSOLUTE'. If 'PERCENT', then priceModifier is a number of percents to add to the price. 
+        /// Gets or sets the specifies the way the product price is modified.
+        /// One of 'PERCENT' or 'ABSOLUTE'. If 'PERCENT', then priceModifier is a number of percents to add to the price.
         /// If 'ABSOLUTE', then priceModifier is a number of currency units to add to the price.
         /// </summary>
         /// <value>
@@ -26,7 +27,8 @@ namespace Ecwid.Models.Legacy
         public string PriceModifierType { get; set; }
 
         /// <summary>
-        /// Gets or sets the number of percents or currency units to add to the product price when this choice is selected. May be negative or zero.
+        /// Gets or sets the number of percents or currency units to add to the product price when this choice is selected. May be
+        /// negative or zero.
         /// </summary>
         /// <value>
         /// The price modifier.
@@ -35,7 +37,8 @@ namespace Ecwid.Models.Legacy
         public double PriceModifier { get; set; }
 
         /// <summary>
-        /// Gets or sets the SKU prefix to add to the product's SKU to obtain the full SKU of the option combination. This is optional.
+        /// Gets or sets the SKU prefix to add to the product's SKU to obtain the full SKU of the option combination. This is
+        /// optional.
         /// </summary>
         /// <value>
         /// The sku.

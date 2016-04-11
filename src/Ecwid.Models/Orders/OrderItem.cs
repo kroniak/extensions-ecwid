@@ -1,3 +1,5 @@
+// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
+
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
@@ -18,7 +20,8 @@ namespace Ecwid.Models
         public int ProductId { get; set; }
 
         /// <summary>
-        /// Gets or sets the ID of the category this product belongs to. If the product belongs to many categories, categoryID will return the ID 
+        /// Gets or sets the ID of the category this product belongs to. If the product belongs to many categories, categoryID will
+        /// return the ID
         /// of the default product category. If the product doesn’t belong to any category, 0 is returned.
         /// </summary>
         /// <value>
@@ -139,7 +142,7 @@ namespace Ecwid.Models
         /// Shows whether the store admin set to track the quantity of this product and get low stock notifications
         /// </summary>
         /// <value>
-        ///   <c>true</c> if [track quantity]; otherwise, <c>false</c>.
+        /// <c>true</c> if [track quantity]; otherwise, <c>false</c>.
         /// </value>
         [JsonProperty("trackQuantity")]
         public bool TrackQuantity { get; set; }
@@ -184,7 +187,7 @@ namespace Ecwid.Models
         /// Shows whether the item has downloadable files attached.
         /// </summary>
         /// <value>
-        ///   <c>true</c> if digital; otherwise, <c>false</c>.
+        /// <c>true</c> if digital; otherwise, <c>false</c>.
         /// </value>
         [JsonProperty("digital")]
         public bool Digital { get; set; }
@@ -193,7 +196,7 @@ namespace Ecwid.Models
         /// Shows whether the product is available in the store.
         /// </summary>
         /// <value>
-        ///   <c>true</c> if [product available]; otherwise, <c>false</c>.
+        /// <c>true</c> if [product available]; otherwise, <c>false</c>.
         /// </value>
         [JsonProperty("productAvailable")]
         public bool ProductAvailable { get; set; }
@@ -202,7 +205,7 @@ namespace Ecwid.Models
         /// Shows whether a discount coupon is applied for this item.
         /// </summary>
         /// <value>
-        ///   <c>true</c> if [coupon applied]; otherwise, <c>false</c>.
+        /// <c>true</c> if [coupon applied]; otherwise, <c>false</c>.
         /// </value>
         [JsonProperty("couponApplied")]
         public bool CouponApplied { get; set; }

@@ -1,10 +1,15 @@
-﻿using System;
+﻿// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
+
+using System;
+using System.Diagnostics.CodeAnalysis;
 using Ecwid.Services;
 using Ecwid.Services.Legacy;
 using Xunit;
 
 namespace Ecwid.Test.Services
 {
+    [SuppressMessage("ReSharper", "ExceptionNotDocumented")]
+    [SuppressMessage("ReSharper", "ExceptionNotDocumentedOptional")]
     public class QueryBuilderExtensionsTest
     {
         private readonly IEcwidLegacyClient _defaultLegacyClient = new EcwidLegacyClient();
@@ -13,7 +18,7 @@ namespace Ecwid.Test.Services
         public void ExtensionFail()
         {
             Assert.Throws<ArgumentNullException>(() => _defaultLegacyClient.Orders.Order(null));
-            Assert.Throws<ArgumentNullException>(() => _defaultLegacyClient.Orders.Custom(null, new { a = 1 }));
+            Assert.Throws<ArgumentNullException>(() => _defaultLegacyClient.Orders.Custom(null, new {a = 1}));
         }
 
         [Fact]
@@ -46,7 +51,6 @@ namespace Ecwid.Test.Services
             Assert.Equal(result2, 123);
             Assert.Equal(result3, "123");
             Assert.Equal(result4, "123");
-
         }
 
         [Fact]
@@ -108,7 +112,8 @@ namespace Ecwid.Test.Services
         public void AddAddFulfillmentStatusesPass()
         {
             var result =
-                _defaultLegacyClient.Orders.AddFulfillmentStatuses("NEW").AddFulfillmentStatuses("PROCESSING").Query["statuses"];
+                _defaultLegacyClient.Orders.AddFulfillmentStatuses("NEW").AddFulfillmentStatuses("PROCESSING").Query[
+                    "statuses"];
             Assert.Equal(result, "NEW,PROCESSING");
         }
 
@@ -116,7 +121,9 @@ namespace Ecwid.Test.Services
         public void AddBothStatusesPass()
         {
             var result =
-                _defaultLegacyClient.Orders.AddPaymentStatuses("PAID, DECLINED").AddFulfillmentStatuses("NEW PROCESSING").Query["statuses"];
+                _defaultLegacyClient.Orders.AddPaymentStatuses("PAID, DECLINED")
+                    .AddFulfillmentStatuses("NEW PROCESSING")
+                    .Query["statuses"];
             Assert.Equal(result, "PAID,DECLINED,NEW,PROCESSING");
         }
 

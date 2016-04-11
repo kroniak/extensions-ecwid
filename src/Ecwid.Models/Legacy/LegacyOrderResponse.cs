@@ -1,6 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
+
 using System.Collections.Generic;
-// ReSharper disable UnusedAutoPropertyAccessor.Global
+using Newtonsoft.Json;
 
 namespace Ecwid.Models.Legacy
 {
@@ -39,7 +40,8 @@ namespace Ecwid.Models.Legacy
         public string NextUrl { get; set; }
 
         /// <summary>
-        /// Gets or sets the no more then limit orders starting from the given offset ordered by time descending. See <see cref="LegacyOrder"/>.
+        /// Gets or sets the no more then limit orders starting from the given offset ordered by time descending. See
+        /// <see cref="LegacyOrder" />.
         /// </summary>
         /// <value>
         /// The orders.

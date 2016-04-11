@@ -1,5 +1,6 @@
+// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
+
 using Newtonsoft.Json;
-// ReSharper disable ClassNeverInstantiated.Global
 
 namespace Ecwid.Models.Legacy
 {
@@ -27,10 +28,11 @@ namespace Ecwid.Models.Legacy
         public string Type { get; set; }
 
         /// <summary>
-        /// Gets or sets the text value for SELECT, DATE and TEXT option types. Contain List of <seealso cref="LegacyOrderItemOrderFile"/> in case option type is FILE.
+        /// Gets or sets the text value for SELECT, DATE and TEXT option types. Contain List of
+        /// <seealso cref="LegacyOrderItemOrderFile" /> in case option type is FILE.
         /// </summary>
         /// <value>
-        /// The value. Contain List of <seealso cref="LegacyOrderItemOrderFile"/> in case option type is FILE.
+        /// The value. Contain List of <seealso cref="LegacyOrderItemOrderFile" /> in case option type is FILE.
         /// </value>
         [JsonProperty("value")]
         public object Value { get; set; }

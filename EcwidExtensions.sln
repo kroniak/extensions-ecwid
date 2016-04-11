@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{960DCBBF-AEC7-4640-9D13-CA91A0F8A5DD}"
 EndProject
@@ -24,13 +24,17 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Ecwid.Test.Shared", "test\E
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ecwid.Test.Dnx", "test\Ecwid.Test.Dnx\Ecwid.Test.Dnx.xproj", "{9FE41644-B31F-49FA-8E6B-AD827D6EAB19}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ecwid.Test.Real", "test\Ecwid.Test.Real\Ecwid.Test.Real.csproj", "{AF23C859-C9B7-4497-AB61-D978D58F81D8}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		test\Ecwid.Test.Shared\Ecwid.Test.Shared.projitems*{0cdf00d8-4242-4375-b9ce-ce0af65f6ebd}*SharedItemsImports = 13
+		src\Ecwid.Models\Ecwid.Models.projitems*{af23c859-c9b7-4497-ab61-d978d58f81d8}*SharedItemsImports = 4
+		src\Ecwid.Services\Ecwid.Services.projitems*{af23c859-c9b7-4497-ab61-d978d58f81d8}*SharedItemsImports = 4
 		src\Ecwid.Models\Ecwid.Models.projitems*{33582a65-4571-4ce7-83b0-61d58ebe1fa9}*SharedItemsImports = 13
-		src\Ecwid.Services\Ecwid.Services.projitems*{6df473b9-e40a-464c-ade6-d8555356460e}*SharedItemsImports = 4
-		test\Ecwid.Test.Shared\Ecwid.Test.Shared.projitems*{6df473b9-e40a-464c-ade6-d8555356460e}*SharedItemsImports = 4
 		src\Ecwid.Models\Ecwid.Models.projitems*{6df473b9-e40a-464c-ade6-d8555356460e}*SharedItemsImports = 4
+		test\Ecwid.Test.Shared\Ecwid.Test.Shared.projitems*{6df473b9-e40a-464c-ade6-d8555356460e}*SharedItemsImports = 4
+		src\Ecwid.Services\Ecwid.Services.projitems*{6df473b9-e40a-464c-ade6-d8555356460e}*SharedItemsImports = 4
 		src\Ecwid.Services\Ecwid.Services.projitems*{66067e25-20a2-4028-bd2c-318ceebd4e6f}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -50,6 +54,10 @@ Global
 		{9FE41644-B31F-49FA-8E6B-AD827D6EAB19}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9FE41644-B31F-49FA-8E6B-AD827D6EAB19}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9FE41644-B31F-49FA-8E6B-AD827D6EAB19}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF23C859-C9B7-4497-AB61-D978D58F81D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF23C859-C9B7-4497-AB61-D978D58F81D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF23C859-C9B7-4497-AB61-D978D58F81D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF23C859-C9B7-4497-AB61-D978D58F81D8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -61,5 +69,6 @@ Global
 		{66067E25-20A2-4028-BD2C-318CEEBD4E6F} = {960DCBBF-AEC7-4640-9D13-CA91A0F8A5DD}
 		{0CDF00D8-4242-4375-B9CE-CE0AF65F6EBD} = {B392B7CF-2234-4280-AAE5-BD90CA59169C}
 		{9FE41644-B31F-49FA-8E6B-AD827D6EAB19} = {B392B7CF-2234-4280-AAE5-BD90CA59169C}
+		{AF23C859-C9B7-4497-AB61-D978D58F81D8} = {B392B7CF-2234-4280-AAE5-BD90CA59169C}
 	EndGlobalSection
 EndGlobal

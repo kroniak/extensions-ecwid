@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
+
 using System.Collections.Generic;
-// ReSharper disable UnusedMember.Global
-// ReSharper disable ClassNeverInstantiated.Global
+using Newtonsoft.Json;
 
 namespace Ecwid.Models.Legacy
 {
@@ -47,8 +47,8 @@ namespace Ecwid.Models.Legacy
         public IList<LegacyGalleryImage> GalleryImages { get; set; }
 
         /// <summary>
-        /// Gets or sets a list of categories which this product belongs to. 
-        /// In addition to category properties described above, each object has an additional "defaultCategory" boolean property. 
+        /// Gets or sets a list of categories which this product belongs to.
+        /// In addition to category properties described above, each object has an additional "defaultCategory" boolean property.
         /// The property is true for the default category of the product.
         /// </summary>
         /// <value>
@@ -76,7 +76,7 @@ namespace Ecwid.Models.Legacy
         public IList<LegacyProductCombination> Combinations { get; set; }
 
         /// <summary>
-        /// Gets or sets the creation date (UNIX timestamp). 
+        /// Gets or sets the creation date (UNIX timestamp).
         /// Note: this field is obsolete and will be removed in a future version of API.Use "created" field instead.
         /// </summary>
         /// <value>
@@ -104,9 +104,10 @@ namespace Ecwid.Models.Legacy
         public string ProductType { get; set; }
 
         /// <summary>
-        /// If present, contains product's attributes values (see the description of object LegacyAttribute below). 
-        /// For non-authorized calls, hidden attributes are not returned. 
-        /// Since Ecwid version 13.2, you can use Authentication as described at the start of this document to show hidden attributes.
+        /// If present, contains product's attributes values (see the description of object LegacyAttribute below).
+        /// For non-authorized calls, hidden attributes are not returned.
+        /// Since Ecwid version 13.2, you can use Authentication as described at the start of this document to show hidden
+        /// attributes.
         /// You can edit the attribute values on the 'Attributes' tab in the product editor.
         /// </summary>
         /// <value>
@@ -119,7 +120,7 @@ namespace Ecwid.Models.Legacy
         /// Gets or sets a value indicating whether [in stock].
         /// </summary>
         /// <value>
-        ///   <c>true</c> if [in stock]; otherwise, <c>false</c>.
+        /// <c>true</c> if [in stock]; otherwise, <c>false</c>.
         /// </value>
         [JsonProperty("inStock")]
         public bool InStock { get; set; }

@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
-// ReSharper disable UnusedMember.Global
-// ReSharper disable ClassNeverInstantiated.Global
+﻿// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
+
+using Newtonsoft.Json;
 
 namespace Ecwid.Models.Legacy
 {
@@ -119,9 +119,9 @@ namespace Ecwid.Models.Legacy
 
         /// <summary>
         /// Gets or sets the Id of a product class this product belongs to (like 'Books').
-        /// Zero '0' value means 'General' class, which is the default for products. 
-        /// LegacyProduct classes default additional attributes you can edit on the 'Attributes' tab in the product editor. 
-        /// See <see cref="LegacyProduct"/> class API below on how to manipulate product classes.
+        /// Zero '0' value means 'General' class, which is the default for products.
+        /// LegacyProduct classes default additional attributes you can edit on the 'Attributes' tab in the product editor.
+        /// See <see cref="LegacyProduct" /> class API below on how to manipulate product classes.
         /// </summary>
         /// <value>
         /// The product class identifier.
@@ -130,10 +130,10 @@ namespace Ecwid.Models.Legacy
         public int ProductClassId { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="LegacyProductEntry"/> is enabled.
+        /// Gets or sets a value indicating whether this <see cref="LegacyProductEntry" /> is enabled.
         /// </summary>
         /// <value>
-        ///   <c>true</c> if enabled; otherwise, <c>false</c>.
+        /// <c>true</c> if enabled; otherwise, <c>false</c>.
         /// </value>
         [JsonProperty("enabled")]
         public bool Enabled { get; set; }
@@ -151,7 +151,7 @@ namespace Ecwid.Models.Legacy
         /// Gets or sets a value indicating whether [description truncated].
         /// </summary>
         /// <value>
-        ///   <c>true</c> if [description truncated]; otherwise, <c>false</c>.
+        /// <c>true</c> if [description truncated]; otherwise, <c>false</c>.
         /// </value>
         [JsonProperty("descriptionTruncated")]
         public bool DescriptionTruncated { get; set; }

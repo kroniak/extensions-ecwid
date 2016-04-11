@@ -1,5 +1,6 @@
-﻿using Newtonsoft.Json;
-// ReSharper disable UnusedAutoPropertyAccessor.Global
+﻿// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
+
+using Newtonsoft.Json;
 
 namespace Ecwid.Models.Legacy
 {
@@ -9,7 +10,8 @@ namespace Ecwid.Models.Legacy
     public class LegacyUpdatedOrder : LegacyBaseOrder
     {
         /// <summary>
-        /// Gets or sets the old payment status. Contains one of these values: ACCEPTED*, DECLINED, CANCELLED, QUEUED, CHARGEABLE, REFUNDED.
+        /// Gets or sets the old payment status. Contains one of these values: ACCEPTED*, DECLINED, CANCELLED, QUEUED, CHARGEABLE,
+        /// REFUNDED.
         /// </summary>
         /// <value>
         /// The payment status. Contains one of these values: ACCEPTED*, DECLINED, CANCELLED, QUEUED, CHARGEABLE, REFUNDED.
@@ -18,7 +20,8 @@ namespace Ecwid.Models.Legacy
         public string OldPaymentStatus { get; set; }
 
         /// <summary>
-        /// Gets or sets the old fulfillment status. Contains one of these values: NEW, PROCESSING, SHIPPED, DELIVERED, WILL_NOT_DELIVER, RETURNED.
+        /// Gets or sets the old fulfillment status. Contains one of these values: NEW, PROCESSING, SHIPPED, DELIVERED,
+        /// WILL_NOT_DELIVER, RETURNED.
         /// </summary>
         /// <value>
         /// The fulfillment status. Contains one of these values: NEW, PROCESSING, SHIPPED, DELIVERED, WILL_NOT_DELIVER, RETURNED.

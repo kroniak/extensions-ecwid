@@ -1,3 +1,5 @@
+// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
+
 using Newtonsoft.Json;
 
 namespace Ecwid.Models
@@ -71,7 +73,7 @@ namespace Ecwid.Models
         public long Size { get; set; }
 
         /// <summary>
-        /// Gets or sets the link to the file. Be careful: the link contains the API access token. 
+        /// Gets or sets the link to the file. Be careful: the link contains the API access token.
         /// Make sure you do not display the link as is in your application and not give it to a customer.
         /// </summary>
         /// <value>

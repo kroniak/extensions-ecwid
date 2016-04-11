@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
+
+using System;
 using System.Collections.Generic;
 
 namespace Ecwid.Services
@@ -18,8 +20,8 @@ namespace Ecwid.Services
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="value">The value.</param>
-        /// <exception cref="System.ArgumentNullException">
-        /// </exception>
+        /// <exception cref="System.ArgumentNullException"></exception>
+        /// <exception cref="NotSupportedException">The property is set and the <see cref="T:System.Collections.Generic.IDictionary`2" /> is read-only.</exception>
         protected void Add(string name, object value)
         {
             if (value == null)

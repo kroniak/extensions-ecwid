@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
+
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace Ecwid.Models
@@ -51,6 +53,6 @@ namespace Ecwid.Models
         /// The items.
         /// </value>
         [JsonProperty("items")]
-        public IList<OrderEntry> Items { get; set; }
+        public IList<OrderEntry> Orders { get; set; }
     }
 }

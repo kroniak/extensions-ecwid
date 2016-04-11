@@ -1,6 +1,7 @@
+// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
+
 using System.Collections.Generic;
 using Newtonsoft.Json;
-// ReSharper disable ClassNeverInstantiated.Global
 
 namespace Ecwid.Models.Legacy
 {
@@ -34,10 +35,10 @@ namespace Ecwid.Models.Legacy
         public IList<LegacyProductOptionChoice> Choices { get; set; }
 
         /// <summary>
-        /// Gets or sets the value indicating whether this <see cref="LegacyProductOption"/> is required.
+        /// Gets or sets the value indicating whether this <see cref="LegacyProductOption" /> is required.
         /// </summary>
         /// <value>
-        ///   <c>true</c> if required; otherwise, <c>false</c>.
+        /// <c>true</c> if required; otherwise, <c>false</c>.
         /// </value>
         [JsonProperty("required")]
         public bool Required { get; set; }

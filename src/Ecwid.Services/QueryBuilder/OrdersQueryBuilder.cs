@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Ecwid.Models;
@@ -14,12 +16,6 @@ namespace Ecwid.Services
         where TOrder : BaseOrder
         where TUpdateResponse : class
     {
-
-        /// <value>
-        /// The client.
-        /// </value>
-        internal IEcwidOrdersClient<TOrder, TUpdateResponse> Client { get; }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="OrdersQueryBuilder{TOrder,TUpdateResponse}" /> class.
         /// </summary>
@@ -29,11 +25,18 @@ namespace Ecwid.Services
             Client = client;
         }
 
+        /// <value>
+        /// The client.
+        /// </value>
+        internal IEcwidOrdersClient<TOrder, TUpdateResponse> Client { get; }
+
         /// <summary>
         /// Adds the or update.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="value">The value.</param>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="NotSupportedException">The property is set and the <see cref="T:System.Collections.Generic.IDictionary`2" /> is read-only.</exception>
         internal OrdersQueryBuilder<TOrder, TUpdateResponse> AddOrUpdate(string name, object value)
         {
             Add(name, value);
@@ -44,8 +47,9 @@ namespace Ecwid.Services
         /// Add or update.
         /// </summary>
         /// <param name="values">The values.</param>
-        /// <exception cref="System.ArgumentNullException">
-        /// </exception>
+        /// <exception cref="System.ArgumentNullException"></exception>
+        /// <exception cref="NotSupportedException">The property is set and the <see cref="T:System.Collections.Generic.IDictionary`2" /> is read-only.</exception>
+        /// <exception cref="KeyNotFoundException">The property is retrieved and is not found.</exception>
         internal OrdersQueryBuilder<TOrder, TUpdateResponse> AddOrUpdateStatuses(ICollection<string> values)
         {
             if (values == null)

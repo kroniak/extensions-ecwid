@@ -1,3 +1,5 @@
+// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
+
 using Newtonsoft.Json;
 
 namespace Ecwid.Models
@@ -86,10 +88,11 @@ namespace Ecwid.Models
         public int TotalLimit { get; set; }
 
         /// <summary>
-        /// Gets or sets the coupon usage limitation flag identifying whether the coupon works for all customers or only repeat customers.
+        /// Gets or sets the coupon usage limitation flag identifying whether the coupon works for all customers or only repeat
+        /// customers.
         /// </summary>
         /// <value>
-        ///   <c>true</c> if [repeat customer only]; otherwise, <c>false</c>.
+        /// <c>true</c> if [repeat customer only]; otherwise, <c>false</c>.
         /// </value>
         [JsonProperty("repeatCustomerOnly")]
         public bool RepeatCustomerOnly { get; set; }

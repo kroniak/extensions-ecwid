@@ -1,4 +1,6 @@
-﻿using System.Collections.Concurrent;
+﻿// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
+
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -13,17 +15,17 @@ namespace Ecwid.Services.Legacy
         private readonly BlockingCollection<Limit> _limits = new BlockingCollection<Limit>();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LimitsService"/> class.
+        /// Initializes a new instance of the <see cref="LimitsService" /> class.
         /// </summary>
         public LimitsService()
         {
-            var rates = new SortedList<int, int>(3) { { 5, 100 }, { 50, 400 }, { 500, 1400 } };
+            var rates = new SortedList<int, int>(3) {{5, 100}, {50, 400}, {500, 1400}};
 
             rates.ToList().ForEach(rate => _limits.Add(new Limit(rate.Key, rate.Value)));
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LimitsService"/> class.
+        /// Initializes a new instance of the <see cref="LimitsService" /> class.
         /// </summary>
         public LimitsService(Dictionary<int, int> rates = null, ITimeProvider timeProvider = null)
         {
@@ -39,13 +41,13 @@ namespace Ecwid.Services.Legacy
             foreach (var rate in rates)
             {
                 _limits.Add(timeProvider != null
-                    ? new Limit(rate.Key, rate.Value) { TimeProvider = timeProvider }
+                    ? new Limit(rate.Key, rate.Value) {TimeProvider = timeProvider}
                     : new Limit(rate.Key, rate.Value));
             }
         }
 
         /// <summary>
-        /// Gets the areement and tick. Return true if agreement was got and tick was success. 
+        /// Gets the areement and tick. Return true if agreement was got and tick was success.
         /// </summary>
         public bool Tick()
         {

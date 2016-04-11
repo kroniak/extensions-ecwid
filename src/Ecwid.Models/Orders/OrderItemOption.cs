@@ -1,3 +1,5 @@
+// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
+
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
@@ -18,8 +20,9 @@ namespace Ecwid.Models
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the selected/entered option value(s) as a string. 
-        /// For the CHOICES type, provides a string with all chosen values (comma-separated). You can use this to simply print out all selected values.
+        /// Gets or sets the selected/entered option value(s) as a string.
+        /// For the CHOICES type, provides a string with all chosen values (comma-separated). You can use this to simply print out
+        /// all selected values.
         /// </summary>
         /// <value>
         /// The value.
@@ -28,7 +31,7 @@ namespace Ecwid.Models
         public string Value { get; set; }
 
         /// <summary>
-        /// Gets or sets the selected option values as an array. 
+        /// Gets or sets the selected option values as an array.
         /// For the CHOICES type, provides an array with the chosen values so you can iterate through them in your app..
         /// </summary>
         /// <value>

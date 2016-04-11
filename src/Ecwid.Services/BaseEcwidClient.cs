@@ -1,4 +1,7 @@
-﻿using System.Threading;
+﻿// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
+
+using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using Flurl;
 using Flurl.Http;
@@ -10,6 +13,50 @@ namespace Ecwid.Services
     /// </summary>
     public abstract class BaseEcwidClient
     {
+        /// <summary>
+        /// Checks the shop authentication asynchronous.
+        /// </summary>
+        /// <exception cref="FlurlHttpException">Condition.</exception>
+        protected async Task<bool> CheckTokenAsync<T>(Url url)
+            where T : class
+        {
+            try
+            {
+                await GetApiResponceAsync<T>(url, new {limit = 1});
+                return true;
+            }
+            catch (FlurlHttpException exception)
+            {
+                var status = exception.Call.Response?.StatusCode;
+                if (status == HttpStatusCode.Forbidden)
+                    return false;
+
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Checks the shop authentication asynchronous.
+        /// </summary>
+        /// <exception cref="FlurlHttpException">Condition.</exception>
+        protected async Task<bool> CheckTokenAsync<T>(Url url, CancellationToken cancellationToken)
+            where T : class
+        {
+            try
+            {
+                await GetApiResponceAsync<T>(url, new {limit = 1}, cancellationToken);
+                return true;
+            }
+            catch (FlurlHttpException exception)
+            {
+                var status = exception.Call.Response?.StatusCode;
+                if (status == HttpStatusCode.Forbidden)
+                    return false;
+
+                throw;
+            }
+        }
+
         /// <summary>
         /// Gets the API responce asynchronous.
         /// </summary>
@@ -24,7 +71,8 @@ namespace Ecwid.Services
         /// <typeparam name="T"></typeparam>
         /// <param name="baseUrl">The base URL.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        protected virtual async Task<T> GetApiResponceAsync<T>(Url baseUrl, CancellationToken cancellationToken) where T : class
+        protected virtual async Task<T> GetApiResponceAsync<T>(Url baseUrl, CancellationToken cancellationToken)
+            where T : class
             => await baseUrl.GetJsonAsync<T>(cancellationToken);
 
         /// <summary>
@@ -41,7 +89,8 @@ namespace Ecwid.Services
         /// <typeparam name="T"></typeparam>
         /// <param name="baseUrl">The base URL.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        protected virtual async Task<T> UpdateApiAsync<T>(Url baseUrl, CancellationToken cancellationToken) where T : class
+        protected virtual async Task<T> UpdateApiAsync<T>(Url baseUrl, CancellationToken cancellationToken)
+            where T : class
             => await baseUrl.PostAsync(cancellationToken).ReceiveJson<T>();
 
         /// <summary>
@@ -63,7 +112,8 @@ namespace Ecwid.Services
         /// <param name="baseUrl">The base URL.</param>
         /// <param name="query">The query.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        protected async Task<T> UpdateApiAsync<T>(Url baseUrl, object query, CancellationToken cancellationToken) where T : class
+        protected async Task<T> UpdateApiAsync<T>(Url baseUrl, object query, CancellationToken cancellationToken)
+            where T : class
         {
             var url = query != null ? baseUrl.SetQueryParams(query) : baseUrl;
             return await UpdateApiAsync<T>(url, cancellationToken);
@@ -89,7 +139,8 @@ namespace Ecwid.Services
         /// <param name="baseUrl">The base URL.</param>
         /// <param name="query">The query.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        protected async Task<T> GetApiResponceAsync<T>(Url baseUrl, object query, CancellationToken cancellationToken) where T : class
+        protected async Task<T> GetApiResponceAsync<T>(Url baseUrl, object query, CancellationToken cancellationToken)
+            where T : class
         {
             var url = query != null ? baseUrl.SetQueryParams(query) : baseUrl;
 

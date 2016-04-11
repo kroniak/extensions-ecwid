@@ -11,6 +11,8 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)BaseEcwidClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EcwidClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BaseEcwidOptions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EcwidClientOrders.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EcwidOptions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Legacy\EcwidLegacyClient.cs" />

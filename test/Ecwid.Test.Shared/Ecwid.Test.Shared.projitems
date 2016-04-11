@@ -9,14 +9,13 @@
     <Import_RootNamespace>Ecwid.Test</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)Services\Legacy\EcwidLegacyClientOrdersRealTest.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Services\Legacy\EcwidLegacyClientOrdersTest.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Services\Legacy\EcwidLegacyClientTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\EcwidClientTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Legacy\LimitsServiceTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Legacy\Moqs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Legacy\OneLimitTest.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Services\Legacy\Tools.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Moqs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\QueryBuilderExtensionsTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Tools.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Tools\ExtensionsTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Tools\ValidatorsTest.cs" />
   </ItemGroup>

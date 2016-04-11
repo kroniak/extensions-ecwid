@@ -1,12 +1,14 @@
+// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
+
 using Newtonsoft.Json;
-// ReSharper disable ClassNeverInstantiated.Global
 
 namespace Ecwid.Models.Legacy
 {
     public class LegacySettings
     {
         /// <summary>
-        /// Gets or sets the discount granted to the customer based on the volume ordered either in percents or in currency, based on the <seealso cref="DiscountType"/>.
+        /// Gets or sets the discount granted to the customer based on the volume ordered either in percents or in currency, based
+        /// on the <seealso cref="DiscountType" />.
         /// <value>
         /// The value.
         /// </value>

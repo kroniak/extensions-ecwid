@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
+
 using System.Collections.Generic;
-// ReSharper disable ClassNeverInstantiated.Global
-// ReSharper disable UnusedMember.Global
+using Newtonsoft.Json;
 
 namespace Ecwid.Models.Legacy
 {

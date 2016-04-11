@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
+
 using System;
-// ReSharper disable ClassNeverInstantiated.Global
+using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Ecwid.Models
 {
@@ -137,10 +138,12 @@ namespace Ecwid.Models
         public string PaymentMessage { get; set; }
 
         /// <summary>
-        /// Gets or sets the fulfilment status. Supported values: AWAITING_PROCESSING, PROCESSING, SHIPPED, DELIVERED, WILL_NOT_DELIVER, RETURNED.
+        /// Gets or sets the fulfilment status. Supported values: AWAITING_PROCESSING, PROCESSING, SHIPPED, DELIVERED,
+        /// WILL_NOT_DELIVER, RETURNED.
         /// </summary>
         /// <value>
-        /// The fulfillment status. Supported values: AWAITING_PROCESSING, PROCESSING, SHIPPED, DELIVERED, WILL_NOT_DELIVER, RETURNED.
+        /// The fulfillment status. Supported values: AWAITING_PROCESSING, PROCESSING, SHIPPED, DELIVERED, WILL_NOT_DELIVER,
+        /// RETURNED.
         /// </value>
         [JsonProperty("fulfillmentStatus")]
         public string FulfillmentStatus { get; set; }
@@ -200,7 +203,7 @@ namespace Ecwid.Models
         public int TotalAndMembershipBasedDiscount { get; set; }
 
         /// <summary>
-        /// Gets or sets the sum of all applied discounts except for the coupon discount. 
+        /// Gets or sets the sum of all applied discounts except for the coupon discount.
         /// To get the total order discount, take the sum of couponDiscount and discount field values.
         /// </summary>
         /// <value>
@@ -345,7 +348,8 @@ namespace Ecwid.Models
         public PersonInfo BillingPerson { get; set; }
 
         /// <summary>
-        /// Gets or sets the additional payment parameters entered by customer on checkout, e.g. PO number in “Purchase order” payments.
+        /// Gets or sets the additional payment parameters entered by customer on checkout, e.g. PO number in “Purchase order”
+        /// payments.
         /// </summary>
         /// <value>
         /// The payment parameters.
@@ -354,10 +358,11 @@ namespace Ecwid.Models
         public Dictionary<string, string> PaymentParams { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="OrderEntry"/> is hidden (removed from the list). Applies to unfinished orders only.
+        /// Gets or sets a value indicating whether this <see cref="OrderEntry" /> is hidden (removed from the list). Applies to
+        /// unfinished orders only.
         /// </summary>
         /// <value>
-        ///   <c>true</c> if hidden; otherwise, <c>false</c>.
+        /// <c>true</c> if hidden; otherwise, <c>false</c>.
         /// </value>
         [JsonProperty("hidden")]
         public bool Hidden { get; set; }
