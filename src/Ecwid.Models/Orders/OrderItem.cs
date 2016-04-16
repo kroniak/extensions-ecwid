@@ -37,7 +37,7 @@ namespace Ecwid.Models
         /// The price.
         /// </value>
         [JsonProperty("price")]
-        public int Price { get; set; }
+        public double Price { get; set; }
 
         /// <summary>
         /// Gets or sets the basic product price without options markups, wholesale discounts etc..
@@ -46,7 +46,7 @@ namespace Ecwid.Models
         /// The product price.
         /// </value>
         [JsonProperty("productPrice")]
-        public int ProductPrice { get; set; }
+        public double ProductPrice { get; set; }
 
         /// <summary>
         /// Gets or sets the product SKU. If the chosen options match a combination, this will be a combination SKU..
@@ -82,7 +82,7 @@ namespace Ecwid.Models
         /// The tax.
         /// </value>
         [JsonProperty("tax")]
-        public int Tax { get; set; }
+        public double Tax { get; set; }
 
         /// <summary>
         /// Gets or sets the taxes applied to this order item.
@@ -136,7 +136,7 @@ namespace Ecwid.Models
         /// The weight.
         /// </value>
         [JsonProperty("weight")]
-        public int Weight { get; set; }
+        public double Weight { get; set; }
 
         /// <summary>
         /// Shows whether the store admin set to track the quantity of this product and get low stock notifications
@@ -181,7 +181,7 @@ namespace Ecwid.Models
         /// The fixed shipping rate.
         /// </value>
         [JsonProperty("fixedShippingRate")]
-        public int FixedShippingRate { get; set; }
+        public double FixedShippingRate { get; set; }
 
         /// <summary>
         /// Shows whether the item has downloadable files attached.

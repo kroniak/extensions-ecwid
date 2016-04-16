@@ -9,6 +9,15 @@ namespace Ecwid.Test.Services
     internal abstract class Moqs
     {
         /// <summary>
+        /// Gets the mock search result zero result.
+        /// </summary>
+        /// <value>
+        /// The mock search result zero result.
+        /// </value>
+        public static SearchResult MockSearchResultZeroResult
+            => new SearchResult {Count = 0, Total = 0, Limit = 100, Offset = 0, Orders = new List<OrderEntry>()};
+
+        /// <summary>
         /// Moqs the responce with one order.
         /// </summary>
         public static SearchResult MockSearchResultWithLimit1
@@ -32,7 +41,6 @@ namespace Ecwid.Test.Services
         /// <param name="limit">The limit.</param>
         /// <param name="offset">The offset.</param>
         /// <param name="count">The count.</param>
-        /// <returns></returns>
         public static SearchResult MockSearchResultWithManyOrderAndPages(int limit, int offset, int count)
             => new SearchResult {Count = limit, Total = 300, Limit = limit, Offset = offset, Orders = MockOrders(count)};
 

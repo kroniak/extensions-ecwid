@@ -33,8 +33,8 @@ Global
 		src\Ecwid.Services\Ecwid.Services.projitems*{af23c859-c9b7-4497-ab61-d978d58f81d8}*SharedItemsImports = 4
 		src\Ecwid.Models\Ecwid.Models.projitems*{33582a65-4571-4ce7-83b0-61d58ebe1fa9}*SharedItemsImports = 13
 		src\Ecwid.Models\Ecwid.Models.projitems*{6df473b9-e40a-464c-ade6-d8555356460e}*SharedItemsImports = 4
-		test\Ecwid.Test.Shared\Ecwid.Test.Shared.projitems*{6df473b9-e40a-464c-ade6-d8555356460e}*SharedItemsImports = 4
 		src\Ecwid.Services\Ecwid.Services.projitems*{6df473b9-e40a-464c-ade6-d8555356460e}*SharedItemsImports = 4
+		test\Ecwid.Test.Shared\Ecwid.Test.Shared.projitems*{6df473b9-e40a-464c-ade6-d8555356460e}*SharedItemsImports = 4
 		src\Ecwid.Services\Ecwid.Services.projitems*{66067e25-20a2-4028-bd2c-318ceebd4e6f}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

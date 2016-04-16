@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Ecwid.Models.Legacy;
 using Ecwid.Services;
 using Ecwid.Services.Legacy;
-using Flurl.Http;
 using Xunit;
 
 namespace Ecwid.Test.Real
@@ -17,23 +16,31 @@ namespace Ecwid.Test.Real
     /// </summary>
     [SuppressMessage("ReSharper", "ExceptionNotDocumented")]
     [SuppressMessage("ReSharper", "ExceptionNotDocumentedOptional")]
+    [SuppressMessage("ReSharper", "MissingXmlDoc")]
     public class EcwidLegacyClientOrdersRealTest
     {
+        private readonly EcwidLegacyCredentials _credentials;
+        private readonly int _shopId = 123;
+        private readonly string _token = "nmGjgfnmGjgfnmGjgfnmGjgfnmGjgfsd";
+
+        public EcwidLegacyClientOrdersRealTest()
+        {
+            _credentials = new EcwidLegacyCredentials(_shopId, _token, _token);
+        }
+
         /// <summary>
         /// Checks the orders authentication asynchronous pass.
         /// </summary>
         [Fact]
         public async void CheckOrdersAuthAsyncPass()
         {
-            IEcwidLegacyClient client = new EcwidLegacyClient
+            var client = new EcwidLegacyClient
             {
-                Options =
+                Settings =
                 {
-                    ApiUrl = "http://www.mocky.io/v2/56fa69ff110000c627a72174", //empty set with count and total
-                    ShopId = 123,
-                    ShopOrderAuthId = "test"
+                    ApiUrl = "http://www.mocky.io/v2/56fa69ff110000c627a72174" //empty set with count and total
                 }
-            };
+            }.Configure(_credentials);
 
             var result = await client.CheckOrdersTokenAsync();
 
@@ -46,16 +53,14 @@ namespace Ecwid.Test.Real
         [Fact]
         public async void CheckOrdersAuthAsyncFail()
         {
-            IEcwidLegacyClient client = new EcwidLegacyClient
+            var client = new EcwidLegacyClient
             {
-                Options =
+                Settings =
                 {
-                    ApiUrl = "http://www.mocky.io/v2/56fa70921100009b28a72180",
+                    ApiUrl = "http://www.mocky.io/v2/56fa70921100009b28a72180"
                     //empty set with count, total and 403 code
-                    ShopId = 123,
-                    ShopOrderAuthId = "test"
                 }
-            };
+            }.Configure(_credentials);
 
             var result = await client.CheckOrdersTokenAsync();
 
@@ -68,15 +73,13 @@ namespace Ecwid.Test.Real
         [Fact]
         public async void GetOrdersCountAsyncPass()
         {
-            IEcwidLegacyClient client = new EcwidLegacyClient
+            var client = new EcwidLegacyClient
             {
-                Options =
+                Settings =
                 {
-                    ApiUrl = "http://www.mocky.io/v2/56fa69ff110000c627a72174", //empty set with count and total
-                    ShopId = 123,
-                    ShopOrderAuthId = "test"
+                    ApiUrl = "http://www.mocky.io/v2/56fa69ff110000c627a72174" //empty set with count and total
                 }
-            };
+            }.Configure(_credentials);
 
             var result = await client.GetOrdersCountAsync();
 
@@ -89,16 +92,14 @@ namespace Ecwid.Test.Real
         [Fact]
         public async void GetNewOrdersAsyncPass()
         {
-            IEcwidLegacyClient client = new EcwidLegacyClient
+            var client = new EcwidLegacyClient
             {
-                Options =
+                Settings =
                 {
-                    ApiUrl = "http://www.mocky.io/v2/56fa73b51100000429a72183",
+                    ApiUrl = "http://www.mocky.io/v2/56fa73b51100000429a72183"
                     //one orders set with count and total and empty next url
-                    ShopId = 123,
-                    ShopOrderAuthId = "test"
                 }
-            };
+            }.Configure(_credentials);
 
             var result = await client.GetNewOrdersAsync();
 
@@ -111,16 +112,14 @@ namespace Ecwid.Test.Real
         [Fact]
         public async void GetNonPaidOrdersAsyncPass()
         {
-            IEcwidLegacyClient client = new EcwidLegacyClient
+            var client = new EcwidLegacyClient
             {
-                Options =
+                Settings =
                 {
-                    ApiUrl = "http://www.mocky.io/v2/56fa73b51100000429a72183",
+                    ApiUrl = "http://www.mocky.io/v2/56fa73b51100000429a72183"
                     //one orders set with count and total and empty next url
-                    ShopId = 123,
-                    ShopOrderAuthId = "test"
                 }
-            };
+            }.Configure(_credentials);
 
             var result = await client.GetNonPaidOrdersAsync();
 
@@ -133,16 +132,14 @@ namespace Ecwid.Test.Real
         [Fact]
         public async void GetPaidNotShippedOrdersAsyncPass()
         {
-            IEcwidLegacyClient client = new EcwidLegacyClient
+            var client = new EcwidLegacyClient
             {
-                Options =
+                Settings =
                 {
-                    ApiUrl = "http://www.mocky.io/v2/56fa73b51100000429a72183",
+                    ApiUrl = "http://www.mocky.io/v2/56fa73b51100000429a72183"
                     //one orders set with count and total and empty next url
-                    ShopId = 123,
-                    ShopOrderAuthId = "test"
                 }
-            };
+            }.Configure(_credentials);
 
             var result = await client.GetPaidNotShippedOrdersAsync();
 
@@ -155,16 +152,14 @@ namespace Ecwid.Test.Real
         [Fact]
         public async void GetShippedNotDeliveredOrdersAsyncPass()
         {
-            IEcwidLegacyClient client = new EcwidLegacyClient
+            var client = new EcwidLegacyClient
             {
-                Options =
+                Settings =
                 {
-                    ApiUrl = "http://www.mocky.io/v2/56fa73b51100000429a72183",
+                    ApiUrl = "http://www.mocky.io/v2/56fa73b51100000429a72183"
                     //one orders set with count and total and empty next url
-                    ShopId = 123,
-                    ShopOrderAuthId = "test"
                 }
-            };
+            }.Configure(_credentials);
 
             var result = await client.GetShippedNotDeliveredOrdersAsync();
 
@@ -177,18 +172,16 @@ namespace Ecwid.Test.Real
         [Fact]
         public async void GetOrdersAsyncQueryMultiPagesResultPass()
         {
-            IEcwidLegacyClient client = new EcwidLegacyClient
+            var client = new EcwidLegacyClient
             {
-                Options =
+                Settings =
                 {
-                    ApiUrl = "http://www.mocky.io/v2/56fa76b61100007629a72187",
+                    ApiUrl = "http://www.mocky.io/v2/56fa76b61100007629a72187"
                     //one orders set with count and total and NON empty next url
-                    ShopId = 123,
-                    ShopOrderAuthId = "test"
                 }
-            };
+            }.Configure(_credentials);
 
-            var result = await client.GetOrdersAsync(new { limit = 1 });
+            var result = await client.GetOrdersAsync(new {limit = 1});
 
             Assert.NotEmpty(result);
         }
@@ -199,24 +192,23 @@ namespace Ecwid.Test.Real
         [Fact]
         public void GetOrdersAsyncQueryMultiPagesResultCancellationPass()
         {
-            IEcwidLegacyClient client = new EcwidLegacyClient
+            var client = new EcwidLegacyClient
             {
-                Options =
+                Settings =
                 {
-                    ApiUrl = "http://www.mocky.io/v2/56fa76b61100007629a72187",
+                    ApiUrl = "http://www.mocky.io/v2/56fa76b61100007629a72187"
                     //one orders set with count and total and NON empty next url
-                    ShopId = 123,
-                    ShopOrderAuthId = "test"
                 }
-            };
+            }.Configure(_credentials);
+
             try
             {
                 var source = new CancellationTokenSource();
-                var task = client.GetOrdersAsync(new { limit = 1 }, source.Token);
+                var task = client.GetOrdersAsync(new {limit = 1}, source.Token);
                 source.Cancel();
                 Assert.NotNull(task);
             }
-            catch (FlurlHttpException)
+            catch (EcwidHttpException)
             {
                 Assert.True(true);
             }
@@ -228,16 +220,14 @@ namespace Ecwid.Test.Real
         [Fact]
         public async void GetOrdersAsyncQueryBuilderMultiPagesResultPass()
         {
-            IEcwidLegacyClient client = new EcwidLegacyClient
+            var client = new EcwidLegacyClient
             {
-                Options =
+                Settings =
                 {
-                    ApiUrl = "http://www.mocky.io/v2/56fa76b61100007629a72187",
+                    ApiUrl = "http://www.mocky.io/v2/56fa76b61100007629a72187"
                     //one orders set with count and total and NON empty next url
-                    ShopId = 123,
-                    ShopOrderAuthId = "test"
                 }
-            };
+            }.Configure(_credentials);
 
             var result = await client.Orders.Limit(5).GetAsync();
 
@@ -256,16 +246,14 @@ namespace Ecwid.Test.Real
             // max 100 in 5 sec - real 50
             for (var i = 0; i < 50; i++)
             {
-                IEcwidLegacyClient client = new EcwidLegacyClient
+                var client = new EcwidLegacyClient
                 {
-                    Options =
+                    Settings =
                     {
-                        ApiUrl = "http://www.mocky.io/v2/56fa76b61100007629a72187",
+                        ApiUrl = "http://www.mocky.io/v2/56fa76b61100007629a72187"
                         //one orders set with count and total and NON empty next url
-                        ShopId = 123,
-                        ShopOrderAuthId = "test"
                     }
-                };
+                }.Configure(_credentials);
 
                 var task = client.Orders.Limit(5).GetAsync();
                 tasks.Add(task);

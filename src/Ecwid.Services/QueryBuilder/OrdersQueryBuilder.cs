@@ -31,47 +31,35 @@ namespace Ecwid.Services
         internal IEcwidOrdersClient<TOrder, TUpdateResponse> Client { get; }
 
         /// <summary>
-        /// Adds the or update.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        /// <param name="value">The value.</param>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// <exception cref="NotSupportedException">The property is set and the <see cref="T:System.Collections.Generic.IDictionary`2" /> is read-only.</exception>
-        internal OrdersQueryBuilder<TOrder, TUpdateResponse> AddOrUpdate(string name, object value)
-        {
-            Add(name, value);
-            return this;
-        }
-
-        /// <summary>
         /// Add or update.
         /// </summary>
+        /// <param name="name">The name.</param>
         /// <param name="values">The values.</param>
-        /// <exception cref="System.ArgumentNullException"></exception>
-        /// <exception cref="NotSupportedException">The property is set and the <see cref="T:System.Collections.Generic.IDictionary`2" /> is read-only.</exception>
-        /// <exception cref="KeyNotFoundException">The property is retrieved and is not found.</exception>
-        internal OrdersQueryBuilder<TOrder, TUpdateResponse> AddOrUpdateStatuses(ICollection<string> values)
+        /// <exception cref="ArgumentException">Can not add or update statuses. Look inner exception.</exception>
+        internal void AddOrUpdateStatuses(string name, IEnumerable<string> values)
         {
-            if (values == null)
-                // TODO tests
-                throw new ArgumentNullException(nameof(values));
-
-            string result;
-
-            if (Query.ContainsKey("statuses"))
+            try
             {
-                var oldValue = (string)Query["statuses"];
-                var addStatuses = values.Except(oldValue.Split(','));
+                string result;
+                if (Query.ContainsKey(name))
+                {
+                    var oldValue = (string) Query[name];
+                    var addStatuses = values.Except(oldValue.Split(','));
 
-                result = string.Concat(oldValue, ",", string.Join(",", addStatuses));
+                    result = string.Concat(oldValue, ",", string.Join(",", addStatuses));
+                }
+                else
+                {
+                    result = string.Join(",", values);
+                }
+
+                AddOrUpdate(name, result);
             }
-            else
+                // ReSharper disable once CatchAllClause
+            catch (Exception exception)
             {
-                result = string.Join(",", values);
+                throw new ArgumentException("Can not add or update statuses. Look inner exception.", exception);
             }
-
-            Query["statuses"] = result;
-            return this;
         }
     }
 }

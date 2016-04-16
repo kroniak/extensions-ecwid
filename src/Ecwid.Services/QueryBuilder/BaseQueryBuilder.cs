@@ -16,20 +16,30 @@ namespace Ecwid.Services
         internal readonly Dictionary<string, object> Query = new Dictionary<string, object>();
 
         /// <summary>
-        /// Add or update.
+        /// Add or update param in dictionary.
         /// </summary>
-        /// <param name="name">The name.</param>
-        /// <param name="value">The value.</param>
-        /// <exception cref="System.ArgumentNullException"></exception>
-        /// <exception cref="NotSupportedException">The property is set and the <see cref="T:System.Collections.Generic.IDictionary`2" /> is read-only.</exception>
-        protected void Add(string name, object value)
+        /// <param name="name">The name. Must be not <see langword="null" /> or <see langword="empty" />.</param>
+        /// <param name="value">The value. Must be not <see langword="null" />.</param>
+        /// <exception cref="ArgumentException">Can not add value to query. Look inner exception.</exception>
+        /// <exception cref="ArgumentException"><paramref name="name" /> is <see langword="null" />.</exception>
+        /// <exception cref="ArgumentException"><paramref name="value" /> is <see langword="null" />.</exception>
+        internal void AddOrUpdate(string name, object value)
         {
-            if (value == null)
-                throw new ArgumentNullException(nameof(value));
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentNullException(nameof(name));
+            if (string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException("Can not add value to query.", nameof(name));
 
-            Query[name] = value;
+            if (value == null)
+                throw new ArgumentException("Can not add value to query.", nameof(value));
+
+            try
+            {
+                Query[name] = value;
+            }
+                // ReSharper disable once CatchAllClause
+            catch (Exception exception)
+            {
+                throw new ArgumentException("Can not add value to query. Look inner exception.", exception);
+            }
         }
     }
 }

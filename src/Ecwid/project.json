@@ -33,7 +33,7 @@
   "compile": [ "../**/*.cs" ],
 
   "dependencies": {
-    "Flurl.Http": "0.8.0-pre"
+    "Flurl.Http": "0.8.0"
   },
 
   "frameworks": {

@@ -49,7 +49,7 @@ namespace Ecwid.Models
         /// The discount.
         /// </value>
         [JsonProperty("discount")]
-        public int Discount { get; set; }
+        public double Discount { get; set; }
 
         /// <summary>
         /// Gets or sets the date of coupon launch, e.g. 2014-06-06 08:00:00 +0000.
@@ -85,7 +85,7 @@ namespace Ecwid.Models
         /// The uses limit.
         /// </value>
         [JsonProperty("totalLimit")]
-        public int TotalLimit { get; set; }
+        public double TotalLimit { get; set; }
 
         /// <summary>
         /// Gets or sets the coupon usage limitation flag identifying whether the coupon works for all customers or only repeat

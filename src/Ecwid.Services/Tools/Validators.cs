@@ -7,188 +7,125 @@ using System.Linq;
 namespace Ecwid.Tools
 {
     /// <summary>
-    /// Some validators for classes
+    /// Some validators for classes.
     /// </summary>
     internal abstract class Validators
     {
         /// <summary>
-        /// Shops identifier validate.
+        /// The available legacy fulfillment statuses.
         /// </summary>
-        /// <param name="shopId">The shop identifier.</param>
-        /// <returns>
-        /// True if shopId was passed validation
-        /// </returns>
-        /// <exception cref="System.ArgumentException">The shop identificator is invalid. Please reconfig the client.</exception>
-        public static bool ShopIdValidate(int? shopId)
+        public static readonly IList<string> AvailableLegacyFulfillmentStatuses = new List<string>
         {
-            if (shopId == null || shopId <= 0)
-                throw new ArgumentException("The shop identificator is invalid. Please reconfig the client.",
-                    nameof(shopId));
-
-            return true;
-        }
+            "AWAITING_PROCESSING",
+            "NEW",
+            "PROCESSING",
+            "SHIPPED",
+            "DELIVERED",
+            "WILL_NOT_DELIVER",
+            "RETURNED"
+        };
 
         /// <summary>
-        /// Shops the authentication validate.
+        /// The available fulfillment statuses.
         /// </summary>
-        /// <param name="str">The string.</param>
-        /// <returns></returns>
-        /// <exception cref="System.ArgumentException">The token is null or empty. Please reconfig the client.</exception>
-        public static bool TokenValidate(string str)
+        public static readonly IList<string> AvailableFulfillmentStatuses = new List<string>
         {
-            if (string.IsNullOrEmpty(str))
-                throw new ArgumentException("The token is null or empty. Please reconfig the client.", nameof(str));
-
-            return true;
-        }
+            "AWAITING_PROCESSING",
+            "PROCESSING",
+            "SHIPPED",
+            "DELIVERED",
+            "WILL_NOT_DELIVER",
+            "RETURNED"
+        };
 
         /// <summary>
-        /// Strings validate.
+        /// The available legacy payment statuses.
+        /// </summary>
+        public static readonly IList<string> AvailableLegacyPaymentStatuses = new List<string>
+        {
+            "PAID",
+            "ACCEPTED",
+            "DECLINED",
+            "CANCELLED",
+            "AWAITING_PAYMENT",
+            "QUEUED",
+            "CHARGEABLE, REFUNDED",
+            "INCOMPLETE"
+        };
+
+        /// <summary>
+        /// The available payment statuses.
+        /// </summary>
+        public static readonly IList<string> AvailablePaymentStatuses = new List<string>
+        {
+            "PAID",
+            "CANCELLED",
+            "AWAITING_PAYMENT",
+            "REFUNDED",
+            "INCOMPLETE"
+        };
+
+        /// <summary>
+        /// Check strings for <see langword="null" /> or <see langword="empty" />.
         /// </summary>
         /// <param name="strings">The strings.</param>
-        /// <returns></returns>
-        /// <exception cref="System.ArgumentException">All strings params is null or empty</exception>
-        public static bool StringsValidate(params string[] strings)
+        /// <returns>True if the all of the strings are <see langword="null" /> or <see langword="empty" /></returns>
+        public static bool AreNullOrEmpty(params string[] strings)
         {
-            if (strings.All(string.IsNullOrEmpty))
-                throw new ArgumentException("All strings params is null or empty", nameof(strings));
-
-            return true;
+            return strings.All(string.IsNullOrEmpty);
         }
 
         /// <summary>
-        /// Payment statuses validate.
+        /// Statuseses validate.
         /// </summary>
         /// <param name="statuses">The statuses.</param>
-        /// <returns></returns>
-        /// <exception cref="System.ArgumentException">
-        /// Payment statuses string is empty or null.
-        /// or
-        /// Payment statuses string is invalid.
-        /// </exception>
-        public static bool PaymentStatusesValidate(string statuses)
+        /// <param name="statusesAvailable">The statuses available.</param>
+        /// <exception cref="ArgumentException">Statuses string is invalid.</exception>
+        public static bool StatusesValidate(string statuses, ICollection<string> statusesAvailable)
         {
             if (string.IsNullOrEmpty(statuses))
-                throw new ArgumentException("Payment statuses string is empty or null.", nameof(statuses));
+                throw new ArgumentException("Statuses string is invalid.", nameof(statuses));
 
-            var paymentStatusesAvailable = new List<string>
+            if (statusesAvailable?.Count == 0)
+                throw new ArgumentException("Statuses collection is invalid.", nameof(statusesAvailable));
+
+            try
             {
-                "PAID",
-                "ACCEPTED",
-                "DECLINED",
-                "CANCELLED",
-                "AWAITING_PAYMENT",
-                "QUEUED",
-                "CHARGEABLE, REFUNDED",
-                "INCOMPLETE"
-            };
-
-            if (!CheckContainsString(statuses, paymentStatusesAvailable))
-                throw new ArgumentException("Payment statuses string is invalid.", nameof(statuses));
+                if (!CheckContainsString(statuses, statusesAvailable))
+                    throw new ArgumentException("Statuses string is invalid.", nameof(statuses));
+            }
+            catch (ArgumentException argumentException)
+            {
+                throw new ArgumentException("Statuses string is invalid.", argumentException);
+            }
 
             return true;
         }
 
         /// <summary>
-        /// Payment status validate and return.
+        /// Validate the status.
         /// </summary>
         /// <param name="status">The status.</param>
-        /// <returns></returns>
-        /// <exception cref="System.ArgumentException">
-        /// Payment status string is invalid.
-        /// or
-        /// Payment status string is invalid. Support only one status.
-        /// </exception>
-        /// <exception cref="ArgumentNullException">is null. </exception>
-        public static string PaymentStatusValidate(string status)
+        /// <param name="statusesAvailable">The statuses available.</param>
+        /// <exception cref="ArgumentException">Status string is invalid.</exception>
+        /// <exception cref="ArgumentException">Status string is invalid. Support only one status. </exception>
+        public static string StatusValidate(string status, ICollection<string> statusesAvailable)
         {
-            var paymentStatusesAvailable = new List<string>
+            StatusesValidate(status, statusesAvailable);
+
+            IList<string> result;
+
+            try
             {
-                "PAID",
-                "ACCEPTED",
-                "DECLINED",
-                "CANCELLED",
-                "AWAITING_PAYMENT",
-                "QUEUED",
-                "CHARGEABLE, REFUNDED",
-                "INCOMPLETE"
-            };
-
-            if (!CheckContainsString(status, paymentStatusesAvailable))
-                throw new ArgumentException("Payment status string is invalid.", nameof(status));
-
-            var result = status.TrimUpperReplaceSplit();
+                result = status.TrimUpperReplaceSplit();
+            }
+            catch (ArgumentException exception)
+            {
+                throw new ArgumentException("Status string is invalid.", nameof(status), exception);
+            }
 
             if (result.Count > 1)
-                throw new ArgumentException("Payment status string is invalid. Support only one status.", nameof(status));
-
-            return result.First();
-        }
-
-        /// <summary>
-        /// Fulfillments statuses validate.
-        /// </summary>
-        /// <param name="statuses">The statuses.</param>
-        /// <returns></returns>
-        /// <exception cref="System.ArgumentException">
-        /// Fulfillment statuses string is invalid.
-        /// or
-        /// Fulfillment statuses string is invalid.
-        /// </exception>
-        public static bool FulfillmentStatusesValidate(string statuses)
-        {
-            if (string.IsNullOrEmpty(statuses))
-                throw new ArgumentException("Fulfillment statuses string is invalid.", nameof(statuses));
-
-            var fulfillmentStatusesAvailable = new List<string>
-            {
-                "AWAITING_PROCESSING",
-                "NEW",
-                "PROCESSING",
-                "SHIPPED",
-                "DELIVERED",
-                "WILL_NOT_DELIVER",
-                "RETURNED"
-            };
-
-            if (!CheckContainsString(statuses, fulfillmentStatusesAvailable))
-                throw new ArgumentException("Fulfillment statuses string is invalid.", nameof(statuses));
-
-            return true;
-        }
-
-        /// <summary>
-        /// Fulfillment status validate and return.
-        /// </summary>
-        /// <param name="status">The status.</param>
-        /// <returns></returns>
-        /// <exception cref="System.ArgumentException">
-        /// Fulfillment status string is invalid.
-        /// or
-        /// Fulfillment status string is invalid. Support only one status.
-        /// </exception>
-        /// <exception cref="ArgumentNullException">is null. </exception>
-        public static string FulfillmentStatusValidate(string status)
-        {
-            var fulfillmentStatusesAvailable = new List<string>
-            {
-                "AWAITING_PROCESSING",
-                "NEW",
-                "PROCESSING",
-                "SHIPPED",
-                "DELIVERED",
-                "WILL_NOT_DELIVER",
-                "RETURNED"
-            };
-
-            if (!CheckContainsString(status, fulfillmentStatusesAvailable))
-                throw new ArgumentException("Fulfillment status string is invalid.", nameof(status));
-
-            var result = status.TrimUpperReplaceSplit();
-
-            if (result.Count > 1)
-                throw new ArgumentException("Fulfillment status string is invalid. Support only one status.",
-                    nameof(status));
+                throw new ArgumentException("Status string is invalid. Support only one status.", nameof(status));
 
             return result.First();
         }
@@ -198,12 +135,33 @@ namespace Ecwid.Tools
         /// </summary>
         /// <param name="str">The string.</param>
         /// <param name="list">The list.</param>
-        /// <returns></returns>
+        /// <exception cref="ArgumentException">Unable replace and split string</exception>
         private static bool CheckContainsString(string str, ICollection<string> list)
         {
             var result = str.TrimUpperReplaceSplit();
 
             return result.Aggregate(true, (current, s) => current && list.Contains(s));
+        }
+
+        /// <summary>
+        /// Validates and add new parameters.
+        /// </summary>
+        /// <param name="query">The query.</param>
+        /// <param name="strings">The strings.</param>
+        /// <exception cref="ArgumentException">Query is empty. Prevent change all orders.</exception>
+        /// <exception cref="ArgumentException">All new statuses are null or empty.</exception>
+        public static void ValidateNewLegacyStatuses(
+            Dictionary<string, object> query, params string[] strings)
+        {
+            //check query builder query params count
+            var exceptionList = new List<string> {"limit", "offset"};
+            var count = query.Keys.Count(s => !exceptionList.Contains(s));
+            if (count == 0)
+                throw new ArgumentException("Query is empty. Prevent change all orders.", nameof(query));
+
+            // Throw ex if all string is NullOrEmpty 
+            if (AreNullOrEmpty(strings))
+                throw new ArgumentException("All new statuses are null or empty", nameof(strings));
         }
     }
 }

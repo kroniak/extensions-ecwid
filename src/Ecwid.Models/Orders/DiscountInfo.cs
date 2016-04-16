@@ -13,7 +13,7 @@ namespace Ecwid.Models
         /// The value.
         /// </value>
         [JsonProperty("value")]
-        public int Value { get; set; }
+        public double Value { get; set; }
 
         /// <summary>
         /// Gets or sets discount type: ABS or PERCENT.
@@ -40,6 +40,6 @@ namespace Ecwid.Models
         /// The order total.
         /// </value>
         [JsonProperty("orderTotal")]
-        public int OrderTotal { get; set; }
+        public double OrderTotal { get; set; }
     }
 }

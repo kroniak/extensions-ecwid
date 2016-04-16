@@ -93,7 +93,7 @@ namespace Ecwid.Models.Legacy
         public string CvvMessage { get; set; }
 
         /// <summary>
-        /// Gets or sets the unique customer identificator.
+        /// Gets or sets the unique customer identifier.
         /// </summary>
         /// <value>
         /// The customer identifier.

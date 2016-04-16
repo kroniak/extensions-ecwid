@@ -1,7 +1,5 @@
 ﻿// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
 
-using Ecwid.Tools;
-
 namespace Ecwid.Services
 {
     /// <summary>
@@ -10,43 +8,67 @@ namespace Ecwid.Services
     public partial class EcwidClient : BaseEcwidClient, IEcwidClient
     {
         /// <summary>
-        /// Gets the options.
+        /// Gets and sets the settings. Created by default.
         /// </summary>
         /// <value>
-        /// The options.
+        /// The settings.
         /// </value>
-        public EcwidOptions Options { get; private set; } = new EcwidOptions();
+        public EcwidSettings Settings { get; set; } = new EcwidSettings();
 
         /// <summary>
-        /// Configures the specified options.
+        /// Gets and sets the credentials. Default value is <see langword="null" />.
         /// </summary>
-        /// <param name="options">The options.</param>
-        /// <returns></returns>
-        /// <exception cref="System.ArgumentException">The shop identificator is invalid. Please reconfig the client.</exception>
-        public IEcwidClient Configure(EcwidOptions options)
-        {
-            Validators.ShopIdValidate(options.ShopId);
+        /// <value>
+        /// The credentials.
+        /// </value>
+        public EcwidCredentials Credentials { get; set; }
 
-            Options = options;
+        /// <summary>
+        /// Configures the specified settings.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        public IEcwidClient Configure(EcwidSettings settings)
+        {
+            Settings = settings;
             return this;
         }
 
         /// <summary>
-        /// Configures the shop.
+        /// Configures the shop credentials.
         /// </summary>
         /// <param name="shopId">The shop identifier.</param>
-        /// <param name="token">The token.</param>
-        /// <returns></returns>
-        /// <exception cref="System.ArgumentException">The shop identificator is invalid. Please reconfig the client.</exception>
+        /// <param name="token">The authorization token.</param>
+        /// <exception cref="EcwidConfigException">The shop identifier is invalid.</exception>
+        /// <exception cref="EcwidConfigException">The authorization token is invalid.</exception>
         public IEcwidClient Configure(int shopId, string token)
         {
-            Validators.ShopIdValidate(shopId);
+            Credentials = new EcwidCredentials(shopId, token);
 
-            Options.ShopId = shopId;
+            return this;
+        }
 
-            if (!string.IsNullOrEmpty(token))
-                Options.Token = token;
+        /// <summary>
+        /// Configures the shop credentials.
+        /// </summary>
+        /// <param name="shopId">The shop identifier.</param>
+        /// <param name="token">The authorization token.</param>
+        /// <param name="scope">List of permissions (API access scopes) given to the app, separated by space.</param>
+        /// <exception cref="EcwidConfigException">The shop identifier is invalid.</exception>
+        /// <exception cref="EcwidConfigException">The authorization token is invalid.</exception>
+        public IEcwidClient Configure(int shopId, string token, string scope)
+        {
+            Credentials = new EcwidCredentials(shopId, token, scope);
 
+            return this;
+        }
+
+        /// <summary>
+        /// Configures with specified credentials.
+        /// </summary>
+        /// <param name="credentials">The credentials.</param>
+        public IEcwidClient Configure(EcwidCredentials credentials)
+        {
+            Credentials = credentials;
             return this;
         }
     }

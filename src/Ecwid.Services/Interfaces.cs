@@ -13,26 +13,51 @@ namespace Ecwid.Services
     public interface IEcwidClient : IEcwidOrdersClient
     {
         /// <summary>
-        /// Gets the options.
+        /// Gets and sets the settings. Created by default.
         /// </summary>
         /// <value>
-        /// The options.
+        /// The settings.
         /// </value>
-        EcwidOptions Options { get; }
+        EcwidSettings Settings { get; set; }
 
         /// <summary>
-        /// Configures the specified options.
+        /// Gets and sets the credentials. Default value is <see langword="null" />.
         /// </summary>
-        /// <param name="options">The options.</param>
-        IEcwidClient Configure(EcwidOptions options);
+        /// <value>
+        /// The credentials.
+        /// </value>
+        EcwidCredentials Credentials { get; set; }
 
         /// <summary>
-        /// Configures the shop.
+        /// Configures with specified settings.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        IEcwidClient Configure(EcwidSettings settings);
+
+        /// <summary>
+        /// Configures the shop credentials.
         /// </summary>
         /// <param name="shopId">The shop identifier.</param>
-        /// <param name="token">The token.</param>
-        /// <returns></returns>
+        /// <param name="token">The authorization token.</param>
+        /// <exception cref="EcwidConfigException">The shop identifier is invalid.</exception>
+        /// <exception cref="EcwidConfigException">The authorization token is invalid.</exception>
         IEcwidClient Configure(int shopId, string token);
+
+        /// <summary>
+        /// Configures the shop credentials.
+        /// </summary>
+        /// <param name="shopId">The shop identifier.</param>
+        /// <param name="token">The authorization token.</param>
+        /// <param name="scope">List of permissions (API access scopes) given to the app, separated by space.</param>
+        /// <exception cref="EcwidConfigException">The shop identifier is invalid.</exception>
+        /// <exception cref="EcwidConfigException">The authorization token is invalid.</exception>
+        IEcwidClient Configure(int shopId, string token, string scope);
+
+        /// <summary>
+        /// Configures with specified credentials.
+        /// </summary>
+        /// <param name="credentials">The credentials.</param>
+        IEcwidClient Configure(EcwidCredentials credentials);
     }
 
     /// <summary>
@@ -54,6 +79,12 @@ namespace Ecwid.Services
         /// <summary>
         /// Gets the orders query builder.
         /// </summary>
+        /// <example>
+        /// This sample shows how to gets last 10 orders by the <see cref="OrdersQueryBuilder{TOrder,TUpdateResponse}" />.
+        /// <code>
+        /// var orders = client.Configure(credentionals).Orders.Limit(10).GetAsync();
+        /// </code>
+        /// </example>
         /// <value>
         /// The orders.
         /// </value>
@@ -93,20 +124,6 @@ namespace Ecwid.Services
         /// <param name="query">The orders query builder</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         Task<List<TOrder>> GetOrdersAsync(OrdersQueryBuilder<TOrder, TUpdateResponse> query,
-            CancellationToken cancellationToken);
-
-        /// <summary>
-        /// Gets the one page orders asynchronous. It ignores next url.
-        /// </summary>
-        /// <param name="query">The orders query builder</param>
-        Task<List<TOrder>> GetOrdersPageAsync(OrdersQueryBuilder<TOrder, TUpdateResponse> query);
-
-        /// <summary>
-        /// Gets the one page orders asynchronous. It ignores next url.
-        /// </summary>
-        /// <param name="query">The orders query builder</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        Task<List<TOrder>> GetOrdersPageAsync(OrdersQueryBuilder<TOrder, TUpdateResponse> query,
             CancellationToken cancellationToken);
 
         /// <summary>

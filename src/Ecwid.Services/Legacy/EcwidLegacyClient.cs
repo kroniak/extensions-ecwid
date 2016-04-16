@@ -3,7 +3,6 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Ecwid.Tools;
 using Flurl;
 
 namespace Ecwid.Services.Legacy
@@ -19,52 +18,54 @@ namespace Ecwid.Services.Legacy
         private static readonly Lazy<LimitsService> LimitsService = new Lazy<LimitsService>();
 
         /// <summary>
-        /// Gets the options.
+        /// Gets and sets the settings. Created by default.
         /// </summary>
         /// <value>
-        /// The options.
+        /// The settings.
         /// </value>
-        public EcwidLegacyOptions Options { get; private set; } = new EcwidLegacyOptions();
+        public EcwidLegacySettings Settings { get; set; } = new EcwidLegacySettings();
 
         /// <summary>
-        /// Configures the specified options.
+        /// Gets and sets the credentials. Default value is <see langword="null" />.
         /// </summary>
-        /// <param name="options">The options.</param>
-        /// <exception cref="ArgumentException">
-        /// The shop identificator is null. Please reconfig the client.
-        /// or
-        /// The shop identificator is invalid. Please reconfig the client.
-        /// </exception>
-        public IEcwidLegacyClient Configure(EcwidLegacyOptions options)
-        {
-            Validators.ShopIdValidate(options.ShopId);
+        /// <value>
+        /// The credentials.
+        /// </value>
+        public EcwidLegacyCredentials Credentials { get; set; }
 
-            Options = options;
+        /// <summary>
+        /// Configures with specified settings.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        public IEcwidLegacyClient Configure(EcwidLegacySettings settings)
+        {
+            Settings = settings;
             return this;
         }
 
         /// <summary>
-        /// Configures the shop.
+        /// Configures the shop credentials.
         /// </summary>
         /// <param name="shopId">The shop identifier.</param>
-        /// <param name="shopOrderAuthId">The shop order authentication identifier.</param>
-        /// <param name="shopProductAuthId">The shop product authentication identifier.</param>
-        /// <exception cref="ArgumentException">
-        /// The shop identificator is null. Please reconfig the client.
-        /// or
-        /// The shop identificator is invalid. Please reconfig the client.
-        /// </exception>
-        public IEcwidLegacyClient Configure(int shopId, string shopOrderAuthId = null, string shopProductAuthId = null)
+        /// <param name="orderToken">The shop order authorization token.</param>
+        /// <param name="productToken">The shop product authorization token.</param>
+        /// <exception cref="EcwidConfigException">The shop identifier is invalid.</exception>
+        /// <exception cref="EcwidConfigException">The authorization tokens are null.</exception>
+        /// <exception cref="EcwidConfigException">The order authorization token is invalid.</exception>
+        /// <exception cref="EcwidConfigException">The product authorization token is invalid.</exception>
+        public IEcwidLegacyClient Configure(int shopId, string orderToken = null, string productToken = null)
         {
-            Validators.ShopIdValidate(shopId);
+            Credentials = new EcwidLegacyCredentials(shopId, orderToken, productToken);
+            return this;
+        }
 
-            Options.ShopId = shopId;
-
-            if (!string.IsNullOrEmpty(shopOrderAuthId))
-                Options.ShopOrderAuthId = shopOrderAuthId;
-            if (!string.IsNullOrEmpty(shopProductAuthId))
-                Options.ShopProductAuthId = shopProductAuthId;
-
+        /// <summary>
+        /// Configures with specified credentials.
+        /// </summary>
+        /// <param name="credentials">The credentials.</param>
+        public IEcwidLegacyClient Configure(EcwidLegacyCredentials credentials)
+        {
+            Credentials = credentials;
             return this;
         }
 
@@ -75,12 +76,13 @@ namespace Ecwid.Services.Legacy
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="baseUrl">The base URL.</param>
-        /// <exception cref="LimitException">Limit overheat exception</exception>
-        protected override async Task<T> GetApiResponceAsync<T>(Url baseUrl)
+        /// <exception cref="EcwidLimitException">Limit overheat exception</exception>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        protected override async Task<T> GetApiResponseAsync<T>(Url baseUrl)
         {
             // Wait open window for request
             WaitLimit();
-            return await base.GetApiResponceAsync<T>(baseUrl);
+            return await base.GetApiResponseAsync<T>(baseUrl);
         }
 
         /// <summary>
@@ -89,12 +91,13 @@ namespace Ecwid.Services.Legacy
         /// <typeparam name="T"></typeparam>
         /// <param name="baseUrl">The base URL.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <exception cref="LimitException">Limit overheat exception</exception>
-        protected override async Task<T> GetApiResponceAsync<T>(Url baseUrl, CancellationToken cancellationToken)
+        /// <exception cref="EcwidLimitException">Limit overheat exception</exception>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        protected override async Task<T> GetApiResponseAsync<T>(Url baseUrl, CancellationToken cancellationToken)
         {
             // Wait open window for request
             WaitLimit();
-            return await base.GetApiResponceAsync<T>(baseUrl, cancellationToken);
+            return await base.GetApiResponseAsync<T>(baseUrl, cancellationToken);
         }
 
         /// <summary>
@@ -102,7 +105,7 @@ namespace Ecwid.Services.Legacy
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="baseUrl">The base URL.</param>
-        /// <exception cref="LimitException">Limit overheat exception</exception>
+        /// <exception cref="EcwidLimitException">Limit overheat exception</exception>
         protected override async Task<T> UpdateApiAsync<T>(Url baseUrl)
         {
             // Wait open window for request
@@ -116,7 +119,7 @@ namespace Ecwid.Services.Legacy
         /// <typeparam name="T"></typeparam>
         /// <param name="baseUrl">The base URL.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <exception cref="LimitException">Limit overheat exception</exception>
+        /// <exception cref="EcwidLimitException">Limit overheat exception</exception>
         protected override async Task<T> UpdateApiAsync<T>(Url baseUrl, CancellationToken cancellationToken)
         {
             // Wait open window for request
@@ -124,10 +127,11 @@ namespace Ecwid.Services.Legacy
             return await base.UpdateApiAsync<T>(baseUrl, cancellationToken);
         }
 
+        // TODO exceptions
         /// <summary>
         /// Waits the limit.
         /// </summary>
-        /// <exception cref="Ecwid.Tools.LimitException">Limit overheat exception</exception>
+        /// <exception cref="EcwidLimitException">Limit overheat exception.</exception>
         private void WaitLimit()
         {
             var start = DateTime.Now;
@@ -138,11 +142,11 @@ namespace Ecwid.Services.Legacy
             while (!agreement)
             {
                 // If time limit is over
-                if (start.AddSeconds(Options.MaxSecondsToWait) < DateTime.Now)
+                if (start.AddSeconds(Settings.MaxSecondsToWait) < DateTime.Now)
                     // TODO tests
-                    throw new LimitException("Limit overheat exception");
+                    throw new EcwidLimitException("Limit overheat exception");
 
-                Task.Delay(Options.RetryInterval*1000).Wait();
+                Task.Delay(Settings.RetryInterval*1000).Wait();
                 agreement = LimitsService.Value.Tick();
             }
         }

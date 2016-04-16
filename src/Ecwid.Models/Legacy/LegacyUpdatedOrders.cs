@@ -1,6 +1,5 @@
 ﻿// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
 
-using System;
 using System.Collections.Generic;
 
 namespace Ecwid.Models.Legacy
@@ -21,7 +20,6 @@ namespace Ecwid.Models.Legacy
         /// Initializes a new instance of the <see cref="LegacyUpdatedOrders" /> class.
         /// </summary>
         /// <param name="list">The list.</param>
-        /// <exception cref="ArgumentNullException">Collection is null.</exception>
         public LegacyUpdatedOrders(ICollection<LegacyUpdatedOrder> list)
         {
             if (list != null && list.Count > 0)

@@ -22,7 +22,7 @@ namespace Ecwid.Models
         /// The value.
         /// </value>
         [JsonProperty("value")]
-        public int Value { get; set; }
+        public double Value { get; set; }
 
         /// <summary>
         /// Gets or sets the description.

@@ -25,7 +25,7 @@ namespace Ecwid.Models
         /// The value.
         /// </value>
         [JsonProperty("value")]
-        public int Value { get; set; }
+        public double Value { get; set; }
 
         /// <summary>
         /// Gets or sets the tax amount for the item.
@@ -52,6 +52,6 @@ namespace Ecwid.Models
         /// The tax on shipping.
         /// </value>
         [JsonProperty("taxOnShipping")]
-        public int TaxOnShipping { get; set; }
+        public double TaxOnShipping { get; set; }
     }
 }

@@ -2,10 +2,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Ecwid.Models;
-using Ecwid.Tools;
 using Flurl;
 
 namespace Ecwid.Services
@@ -15,22 +15,24 @@ namespace Ecwid.Services
     /// </summary>
     public partial class EcwidClient
     {
-        /// <summary>
-        /// Gets the orders URL.
-        /// </summary>
-        /// <value>
-        /// The orders URL.
-        /// </value>
-        private string OrdersUrl => Validators.ShopIdValidate(Options.ShopId) && Validators.TokenValidate(Options.Token)
-            ? Options.ApiUrl
-                .AppendPathSegments(Options.ShopId.ToString(), "orders")
-                .SetQueryParam("token", Options.Token)
-            : null;
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
+        private string OrdersUrl
+        {
+            get
+            {
+                if (Credentials == null)
+                    throw new EcwidConfigException("Credentials are null. Can not do a request.");
+                return Settings.ApiUrl
+                    .AppendPathSegments(Credentials.ShopId.ToString(), "orders")
+                    .SetQueryParam("token", Credentials.Token);
+            }
+        }
 
         /// <summary>
         /// Checks the shop authentication asynchronous.
         /// </summary>
-        /// <exception cref="Flurl.Http.FlurlHttpException">Condition.</exception>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
         public async Task<bool> CheckOrdersTokenAsync()
             => await CheckTokenAsync<SearchResult>(OrdersUrl);
 
@@ -38,7 +40,8 @@ namespace Ecwid.Services
         /// Checks the shop authentication asynchronous.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <exception cref="Flurl.Http.FlurlHttpException">Condition.</exception>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
         public async Task<bool> CheckOrdersTokenAsync(CancellationToken cancellationToken)
             => await CheckTokenAsync<SearchResult>(OrdersUrl, cancellationToken);
 
@@ -51,87 +54,112 @@ namespace Ecwid.Services
         public OrdersQueryBuilder<OrderEntry, UpdateStatus> Orders
             => new OrdersQueryBuilder<OrderEntry, UpdateStatus>(this);
 
-        public Task<List<OrderEntry>> GetNewOrdersAsync()
-        {
-            throw new NotImplementedException();
-        }
+        /// <summary>
+        /// Gets the new orders asynchronous. This orders is new or is not processed.
+        /// </summary>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
+        public async Task<List<OrderEntry>> GetNewOrdersAsync()
+            => await GetOrdersAsync(new {fulfillmentStatus = "AWAITING_PROCESSING"});
 
-        public Task<List<OrderEntry>> GetNewOrdersAsync(CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
+        /// <summary>
+        /// Gets the new orders asynchronous. This orders is new or is not processed.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
+        public async Task<List<OrderEntry>> GetNewOrdersAsync(CancellationToken cancellationToken)
+            => await GetOrdersAsync(new {fulfillmentStatus = "AWAITING_PROCESSING"}, cancellationToken);
 
-        public Task<List<OrderEntry>> GetNonPaidOrdersAsync()
-        {
-            throw new NotImplementedException();
-        }
+        /// <summary>
+        /// Gets the non paid orders asynchronous.
+        /// </summary>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
+        public async Task<List<OrderEntry>> GetNonPaidOrdersAsync()
+            => await GetOrdersAsync(new {paymentStatus = "AWAITING_PAYMENT"});
 
-        public Task<List<OrderEntry>> GetNonPaidOrdersAsync(CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
+        /// <summary>
+        /// Gets the non paid orders asynchronous.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
+        public async Task<List<OrderEntry>> GetNonPaidOrdersAsync(CancellationToken cancellationToken)
+            => await GetOrdersAsync(new {paymentStatus = "AWAITING_PAYMENT"}, cancellationToken);
 
-        public Task<List<OrderEntry>> GetOrdersAsync(object query)
-        {
-            throw new NotImplementedException();
-        }
+        /// <summary>
+        /// Gets the orders asynchronous.
+        /// </summary>
+        /// <param name="query">The orders query builder</param>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
+        public async Task<List<OrderEntry>> GetOrdersAsync(OrdersQueryBuilder<OrderEntry, UpdateStatus> query)
+            => await GetOrdersAsync(query.Query);
 
-        public Task<List<OrderEntry>> GetOrdersAsync(OrdersQueryBuilder<OrderEntry, UpdateStatus> query)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<OrderEntry>> GetOrdersAsync(object query, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<OrderEntry>> GetOrdersAsync(OrdersQueryBuilder<OrderEntry, UpdateStatus> query,
+        /// <summary>
+        /// Gets the orders asynchronous.
+        /// </summary>
+        /// <param name="query">The orders query builder</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
+        public async Task<List<OrderEntry>> GetOrdersAsync(OrdersQueryBuilder<OrderEntry, UpdateStatus> query,
             CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
+            => await GetOrdersAsync(query.Query, cancellationToken);
 
-        public Task<int> GetOrdersCountAsync()
-        {
-            throw new NotImplementedException();
-        }
+        /// <summary>
+        /// Gets the orders count asynchronous.
+        /// </summary>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
+        public async Task<int> GetOrdersCountAsync()
+            => (await GetApiResponseAsync<SearchResult>(OrdersUrl, new {limit = 1})).Total;
 
-        public Task<int> GetOrdersCountAsync(CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
+        /// <summary>
+        /// Gets the orders count asynchronous.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
+        public async Task<int> GetOrdersCountAsync(CancellationToken cancellationToken)
+            => (await GetApiResponseAsync<SearchResult>(OrdersUrl, new {limit = 1}, cancellationToken)).Total;
 
-        public Task<List<OrderEntry>> GetOrdersPageAsync(OrdersQueryBuilder<OrderEntry, UpdateStatus> query)
-        {
-            throw new NotImplementedException();
-        }
+        /// <summary>
+        /// Gets the paid and not shipped orders asynchronous.
+        /// </summary>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
+        public async Task<List<OrderEntry>> GetPaidNotShippedOrdersAsync()
+            => await GetOrdersAsync(new {paymentStatus = "PAID", fulfillmentStatus = "AWAITING_PROCESSING,PROCESSING"});
 
-        public Task<List<OrderEntry>> GetOrdersPageAsync(OrdersQueryBuilder<OrderEntry, UpdateStatus> query,
-            CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
+        /// <summary>
+        /// Gets the paid and not shipped orders asynchronous.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
+        public async Task<List<OrderEntry>> GetPaidNotShippedOrdersAsync(CancellationToken cancellationToken)
+            =>
+                await
+                    GetOrdersAsync(new {paymentStatus = "PAID", fulfillmentStatus = "AWAITING_PROCESSING,PROCESSING"},
+                        cancellationToken);
 
-        public Task<List<OrderEntry>> GetPaidNotShippedOrdersAsync()
-        {
-            throw new NotImplementedException();
-        }
+        /// <summary>
+        /// Gets the shipped and not delivered orders asynchronous.
+        /// </summary>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
+        public async Task<List<OrderEntry>> GetShippedNotDeliveredOrdersAsync()
+            => await GetOrdersAsync(new {fulfillmentStatus = "SHIPPED"});
 
-        public Task<List<OrderEntry>> GetPaidNotShippedOrdersAsync(CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<OrderEntry>> GetShippedNotDeliveredOrdersAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<OrderEntry>> GetShippedNotDeliveredOrdersAsync(CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
+        /// <summary>
+        /// Gets the shipped and not delivered orders asynchronous.
+        /// </summary>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
+        public async Task<List<OrderEntry>> GetShippedNotDeliveredOrdersAsync(CancellationToken cancellationToken)
+            => await GetOrdersAsync(new {fulfillmentStatus = "SHIPPED"}, cancellationToken);
 
         public Task<UpdateStatus> UpdateOrdersAsync(OrdersQueryBuilder<OrderEntry, UpdateStatus> query)
         {
@@ -142,6 +170,33 @@ namespace Ecwid.Services
             CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Gets the orders asynchronous.
+        /// </summary>
+        /// <param name="query">The query.</param>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
+        public async Task<List<OrderEntry>> GetOrdersAsync(object query)
+        {
+            var response = await GetApiResponseAsync<SearchResult>(OrdersUrl, query);
+
+            return response.Orders?.ToList() ?? new List<OrderEntry>();
+        }
+
+        /// <summary>
+        /// Gets the orders asynchronous.
+        /// </summary>
+        /// <param name="query">The query.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
+        public async Task<List<OrderEntry>> GetOrdersAsync(object query, CancellationToken cancellationToken)
+        {
+            var response = await GetApiResponseAsync<SearchResult>(OrdersUrl, query, cancellationToken);
+
+            return response.Orders?.ToList() ?? new List<OrderEntry>();
         }
     }
 }

@@ -27,7 +27,7 @@ namespace Ecwid.Models
         /// The subtotal
         /// </value>
         [JsonProperty("subtotal")]
-        public int Subtotal { get; set; }
+        public double Subtotal { get; set; }
 
         /// <summary>
         /// Gets or sets the total cost.
@@ -81,7 +81,7 @@ namespace Ecwid.Models
         /// The tax
         /// </value>
         [JsonProperty("tax")]
-        public int Tax { get; set; }
+        public double Tax { get; set; }
 
         /// <summary>
         /// Gets or sets the ip address.
@@ -99,7 +99,7 @@ namespace Ecwid.Models
         /// The coupon discount
         /// </value>
         [JsonProperty("couponDiscount")]
-        public int CouponDiscount { get; set; }
+        public double CouponDiscount { get; set; }
 
         /// <summary>
         /// Gets or sets the credit card status.
@@ -164,7 +164,7 @@ namespace Ecwid.Models
         /// The order comments
         /// </value>
         [JsonProperty("orderComments")]
-        public int OrderComments { get; set; }
+        public string OrderComments { get; set; }
 
         /// <summary>
         /// Gets or sets the URL of the page when order was placed (without hash (#) part).
@@ -182,7 +182,7 @@ namespace Ecwid.Models
         /// The volume discount
         /// </value>
         [JsonProperty("volumeDiscount")]
-        public int VolumeDiscount { get; set; }
+        public double VolumeDiscount { get; set; }
 
         /// <summary>
         /// Gets or sets the sum of discounts based on customer group. Is included into the discount field.
@@ -191,7 +191,7 @@ namespace Ecwid.Models
         /// The membership based discount.
         /// </value>
         [JsonProperty("membershipBasedDiscount")]
-        public int MembershipBasedDiscount { get; set; }
+        public double MembershipBasedDiscount { get; set; }
 
         /// <summary>
         /// Gets or sets the sum of discount based on subtotal AND customer group. Is included into the discount field.
@@ -200,7 +200,7 @@ namespace Ecwid.Models
         /// The total and membership based discount.
         /// </value>
         [JsonProperty("totalAndMembershipBasedDiscount")]
-        public int TotalAndMembershipBasedDiscount { get; set; }
+        public double TotalAndMembershipBasedDiscount { get; set; }
 
         /// <summary>
         /// Gets or sets the sum of all applied discounts except for the coupon discount.
@@ -210,7 +210,7 @@ namespace Ecwid.Models
         /// The discount.
         /// </value>
         [JsonProperty("discount")]
-        public int Discount { get; set; }
+        public double Discount { get; set; }
 
         /// <summary>
         /// Gets or sets the information about applied discounts (coupons are not included).

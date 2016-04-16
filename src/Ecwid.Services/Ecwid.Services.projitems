@@ -11,21 +11,27 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)BaseEcwidClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EcwidClient.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)BaseEcwidOptions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EcwidClientOrders.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)EcwidOptions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\EcwidException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\EcwidHttpException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\EcwidLimitException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\EcwidConfigException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Legacy\EcwidLegacyClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Legacy\EcwidLegacyClientOrders.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Legacy\EcwidLegacyOptions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Legacy\EcwidLegacySettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Legacy\Interfaces.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Legacy\ITimeProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Legacy\EcwidLegacyCredentials.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Legacy\Limit.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Legacy\LimitService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)QueryBuilder\BaseQueryBuilder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)QueryBuilder\OrdersQueryBuilder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)QueryBuilder\LegacyOrdersQueryBuilderExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)QueryBuilder\OrdersQueryBuilderExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Tools\Exceptions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Settings\EcwidSettings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Settings\BaseCredentials.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Settings\EcwidCredentials.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Tools\Extensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Tools\Validators.cs" />
   </ItemGroup>

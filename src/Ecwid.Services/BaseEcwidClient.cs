@@ -16,18 +16,18 @@ namespace Ecwid.Services
         /// <summary>
         /// Checks the shop authentication asynchronous.
         /// </summary>
-        /// <exception cref="FlurlHttpException">Condition.</exception>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
         protected async Task<bool> CheckTokenAsync<T>(Url url)
             where T : class
         {
             try
             {
-                await GetApiResponceAsync<T>(url, new {limit = 1});
+                await GetApiResponseAsync<T>(url, new {limit = 1});
                 return true;
             }
-            catch (FlurlHttpException exception)
+            catch (EcwidHttpException exception)
             {
-                var status = exception.Call.Response?.StatusCode;
+                var status = exception.StatusCode;
                 if (status == HttpStatusCode.Forbidden)
                     return false;
 
@@ -38,18 +38,18 @@ namespace Ecwid.Services
         /// <summary>
         /// Checks the shop authentication asynchronous.
         /// </summary>
-        /// <exception cref="FlurlHttpException">Condition.</exception>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
         protected async Task<bool> CheckTokenAsync<T>(Url url, CancellationToken cancellationToken)
             where T : class
         {
             try
             {
-                await GetApiResponceAsync<T>(url, new {limit = 1}, cancellationToken);
+                await GetApiResponseAsync<T>(url, new {limit = 1}, cancellationToken);
                 return true;
             }
-            catch (FlurlHttpException exception)
+            catch (EcwidHttpException exception)
             {
-                var status = exception.Call.Response?.StatusCode;
+                var status = exception.StatusCode;
                 if (status == HttpStatusCode.Forbidden)
                     return false;
 
@@ -62,8 +62,25 @@ namespace Ecwid.Services
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="baseUrl">The base URL.</param>
-        protected virtual async Task<T> GetApiResponceAsync<T>(Url baseUrl) where T : class
-            => await baseUrl.GetJsonAsync<T>();
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        protected virtual async Task<T> GetApiResponseAsync<T>(Url baseUrl) where T : class
+        {
+            T poco;
+            try
+            {
+                poco = await baseUrl.GetJsonAsync<T>();
+            }
+            catch (FlurlHttpException exception)
+            {
+                var call = exception.Call;
+                var status = call.Response?.StatusCode;
+                var error = call.ErrorResponseBody ?? call.Exception?.Message ?? "Something happened to the HTTP call.";
+
+                throw new EcwidHttpException(error, status, exception);
+            }
+
+            return poco;
+        }
 
         /// <summary>
         /// Gets the API responce asynchronous.
@@ -71,9 +88,26 @@ namespace Ecwid.Services
         /// <typeparam name="T"></typeparam>
         /// <param name="baseUrl">The base URL.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        protected virtual async Task<T> GetApiResponceAsync<T>(Url baseUrl, CancellationToken cancellationToken)
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        protected virtual async Task<T> GetApiResponseAsync<T>(Url baseUrl, CancellationToken cancellationToken)
             where T : class
-            => await baseUrl.GetJsonAsync<T>(cancellationToken);
+        {
+            T poco;
+            try
+            {
+                poco = await baseUrl.GetJsonAsync<T>(cancellationToken);
+            }
+            catch (FlurlHttpException exception)
+            {
+                var call = exception.Call;
+                var status = call.Response?.StatusCode;
+                var error = call.ErrorResponseBody ?? call.Exception?.Message ?? "Something happened to the HTTP call.";
+
+                throw new EcwidHttpException(error, status, exception);
+            }
+
+            return poco;
+        }
 
         /// <summary>
         /// Updates the API asynchronous.
@@ -100,10 +134,7 @@ namespace Ecwid.Services
         /// <param name="baseUrl">The base URL.</param>
         /// <param name="query">The query.</param>
         protected async Task<T> UpdateApiAsync<T>(Url baseUrl, object query) where T : class
-        {
-            var url = query != null ? baseUrl.SetQueryParams(query) : baseUrl;
-            return await UpdateApiAsync<T>(url);
-        }
+            => await UpdateApiAsync<T>(baseUrl.SetQueryParams(query));
 
         /// <summary>
         /// Updates the API asynchronous.
@@ -113,11 +144,7 @@ namespace Ecwid.Services
         /// <param name="query">The query.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         protected async Task<T> UpdateApiAsync<T>(Url baseUrl, object query, CancellationToken cancellationToken)
-            where T : class
-        {
-            var url = query != null ? baseUrl.SetQueryParams(query) : baseUrl;
-            return await UpdateApiAsync<T>(url, cancellationToken);
-        }
+            where T : class => await UpdateApiAsync<T>(baseUrl.SetQueryParams(query), cancellationToken);
 
         /// <summary>
         /// Gets the API responce asynchronous.
@@ -125,12 +152,9 @@ namespace Ecwid.Services
         /// <typeparam name="T"></typeparam>
         /// <param name="baseUrl">The base URL.</param>
         /// <param name="query">The query.</param>
-        protected async Task<T> GetApiResponceAsync<T>(Url baseUrl, object query) where T : class
-        {
-            var url = query != null ? baseUrl.SetQueryParams(query) : baseUrl;
-
-            return await GetApiResponceAsync<T>(url);
-        }
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        protected async Task<T> GetApiResponseAsync<T>(Url baseUrl, object query) where T : class
+            => await GetApiResponseAsync<T>(baseUrl.SetQueryParams(query));
 
         /// <summary>
         /// Gets the API responce asynchronous.
@@ -139,12 +163,9 @@ namespace Ecwid.Services
         /// <param name="baseUrl">The base URL.</param>
         /// <param name="query">The query.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        protected async Task<T> GetApiResponceAsync<T>(Url baseUrl, object query, CancellationToken cancellationToken)
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        protected async Task<T> GetApiResponseAsync<T>(Url baseUrl, object query, CancellationToken cancellationToken)
             where T : class
-        {
-            var url = query != null ? baseUrl.SetQueryParams(query) : baseUrl;
-
-            return await GetApiResponceAsync<T>(url, cancellationToken);
-        }
+            => await GetApiResponseAsync<T>(baseUrl.SetQueryParams(query), cancellationToken);
     }
 }

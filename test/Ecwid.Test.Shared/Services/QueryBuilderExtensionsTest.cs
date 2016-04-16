@@ -17,8 +17,10 @@ namespace Ecwid.Test.Services
         [Fact]
         public void ExtensionFail()
         {
-            Assert.Throws<ArgumentNullException>(() => _defaultLegacyClient.Orders.Order(null));
-            Assert.Throws<ArgumentNullException>(() => _defaultLegacyClient.Orders.Custom(null, new {a = 1}));
+            Assert.Throws<ArgumentException>(() => _defaultLegacyClient.Orders.Order(null));
+            Assert.Throws<ArgumentException>(() => _defaultLegacyClient.Orders.Custom(null, new {a = 1}));
+            Assert.Throws<ArgumentException>(() => _defaultLegacyClient.Orders.Custom("", new {a = 1}));
+            Assert.Throws<ArgumentException>(() => _defaultLegacyClient.Orders.Custom(" ", new {a = 1}));
         }
 
         [Fact]
@@ -82,13 +84,13 @@ namespace Ecwid.Test.Services
         [InlineData("", "")]
         public void StatusesFail(string paid, string full)
         {
-            Assert.Throws<ArgumentException>(() => _defaultLegacyClient.Orders.Statuses(paid, full));
+            Assert.Throws<EcwidConfigException>(() => _defaultLegacyClient.Orders.Statuses(paid, full));
         }
 
         [Fact]
         public void AddPaymentStatusesPass()
         {
-            var result = _defaultLegacyClient.Orders.AddPaymentStatuses("PAID, DECLINED").Query["statuses"];
+            var result = _defaultLegacyClient.Orders.PaymentStatuses("PAID, DECLINED").Query["statuses"];
             Assert.Equal(result, "PAID,DECLINED");
         }
 
@@ -96,7 +98,7 @@ namespace Ecwid.Test.Services
         public void AddAddPaymentStatusesPass()
         {
             var result =
-                _defaultLegacyClient.Orders.AddPaymentStatuses("PAID, DECLINED").AddPaymentStatuses("Cancelled").Query[
+                _defaultLegacyClient.Orders.PaymentStatuses("PAID, DECLINED").PaymentStatuses("Cancelled").Query[
                     "statuses"];
             Assert.Equal(result, "PAID,DECLINED,CANCELLED");
         }
@@ -104,7 +106,7 @@ namespace Ecwid.Test.Services
         [Fact]
         public void AddFulfillmentStatusesPass()
         {
-            var result = _defaultLegacyClient.Orders.AddFulfillmentStatuses("NEW PROCESSING").Query["statuses"];
+            var result = _defaultLegacyClient.Orders.FulfillmentStatuses("NEW PROCESSING").Query["statuses"];
             Assert.Equal(result, "NEW,PROCESSING");
         }
 
@@ -112,7 +114,7 @@ namespace Ecwid.Test.Services
         public void AddAddFulfillmentStatusesPass()
         {
             var result =
-                _defaultLegacyClient.Orders.AddFulfillmentStatuses("NEW").AddFulfillmentStatuses("PROCESSING").Query[
+                _defaultLegacyClient.Orders.FulfillmentStatuses("NEW").FulfillmentStatuses("PROCESSING").Query[
                     "statuses"];
             Assert.Equal(result, "NEW,PROCESSING");
         }
@@ -121,8 +123,8 @@ namespace Ecwid.Test.Services
         public void AddBothStatusesPass()
         {
             var result =
-                _defaultLegacyClient.Orders.AddPaymentStatuses("PAID, DECLINED")
-                    .AddFulfillmentStatuses("NEW PROCESSING")
+                _defaultLegacyClient.Orders.PaymentStatuses("PAID, DECLINED")
+                    .FulfillmentStatuses("NEW PROCESSING")
                     .Query["statuses"];
             Assert.Equal(result, "PAID,DECLINED,NEW,PROCESSING");
         }
