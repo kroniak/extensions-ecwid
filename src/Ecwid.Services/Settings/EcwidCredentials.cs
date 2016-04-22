@@ -1,8 +1,9 @@
 ﻿// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
 
 using System.Text.RegularExpressions;
+using Ecwid.Tools;
 
-namespace Ecwid.Services
+namespace Ecwid
 {
     /// <summary>
     /// Shop credentials for Ecwid Client v3.
@@ -49,7 +50,7 @@ namespace Ecwid.Services
             get { return _token; }
             set
             {
-                if (string.IsNullOrEmpty(value))
+                if (Validators.IsNullOrEmpty(value))
                     throw new EcwidConfigException("The authorization token is invalid.");
 
                 var regex = new Regex("^[0-9a-zA-Z]{32,}");

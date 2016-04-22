@@ -1,35 +1,48 @@
 ﻿// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
 
+using System.Diagnostics.CodeAnalysis;
+using Ecwid.Legacy;
+using Xunit;
+
 namespace Ecwid.Test.Services
 {
-    //public class CredentialsTest
-    //{
-    //    [Fact]
-    //    public void ShopIdValidatePass()
-    //    {
-    //        var result = Validators.ShopIdValidate(1);
-    //        Assert.True(result);
-    //    }
+    [SuppressMessage("ReSharper", "ExceptionNotDocumented")]
+    [SuppressMessage("ReSharper", "ExceptionNotDocumentedOptional")]
+    public class CredentialsTest
+    {
+        // Tests params
+        private const int ShopId = 123;
+        private const string Token = "nmGjgfnmGjgfnmGjgfnmGjgfnmGjgfsd";
 
-    //    [Theory]
-    //    [InlineData(0)]
-    //    [InlineData(-1)]
-    //    public void ShopIdValidateRangeFail(int shopId)
-    //        => Assert.Throws<EcwidConfigException>(() => Validators.ShopIdValidate(shopId));
+        [Fact]
+        public void Credentials()
+        {
+            var result = new EcwidCredentials(ShopId, Token);
+            var result2 = new EcwidLegacyCredentials(ShopId, Token, Token);
 
-    //    [Theory]
-    //    [InlineData("")]
-    //    [InlineData(null)]
-    //    public void ShopAuthValidateNullOrEmptyFail(string str)
-    //    {
-    //        Assert.Throws<EcwidConfigException>(() => Validators.TokenValidate(str));
-    //    }
+            Assert.NotNull(result);
+            Assert.NotNull(result2);
+        }
 
-    //    [Fact]
-    //    public void ShopAuthValidatePass()
-    //    {
-    //        var result = Validators.TokenValidate("test");
-    //        Assert.True(result);
-    //    }
-    //}
+        [Fact]
+        public void CredentialsFail()
+        {
+            Assert.Throws<EcwidConfigException>(() => new EcwidCredentials(0, Token));
+            Assert.Throws<EcwidConfigException>(() => new EcwidCredentials(ShopId, null));
+            Assert.Throws<EcwidConfigException>(() => new EcwidCredentials(ShopId, ""));
+            Assert.Throws<EcwidConfigException>(() => new EcwidCredentials(ShopId, " "));
+            Assert.Throws<EcwidConfigException>(() => new EcwidCredentials(ShopId, "test"));
+            Assert.Throws<EcwidConfigException>(() => new EcwidLegacyCredentials(0, Token, Token));
+            Assert.Throws<EcwidConfigException>(() => new EcwidLegacyCredentials(ShopId));
+            Assert.Throws<EcwidConfigException>(() => new EcwidLegacyCredentials(ShopId, " ", " "));
+            Assert.Throws<EcwidConfigException>(() => new EcwidLegacyCredentials(ShopId, "", ""));
+            Assert.Throws<EcwidConfigException>(() => new EcwidLegacyCredentials(ShopId, Token, Token).OrderToken = " ");
+            Assert.Throws<EcwidConfigException>(
+                () => new EcwidLegacyCredentials(ShopId, Token, Token).OrderToken = "test");
+            Assert.Throws<EcwidConfigException>(
+                () => new EcwidLegacyCredentials(ShopId, Token, Token).ProductToken = " ");
+            Assert.Throws<EcwidConfigException>(
+                () => new EcwidLegacyCredentials(ShopId, Token, Token).ProductToken = "test");
+        }
+    }
 }

@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Flurl;
 
-namespace Ecwid.Services.Legacy
+namespace Ecwid.Legacy
 {
     /// <summary>
     /// Ecwid API Client v1 (Legacy).
@@ -127,7 +127,6 @@ namespace Ecwid.Services.Legacy
             return await base.UpdateApiAsync<T>(baseUrl, cancellationToken);
         }
 
-        // TODO exceptions
         /// <summary>
         /// Waits the limit.
         /// </summary>
@@ -136,18 +135,26 @@ namespace Ecwid.Services.Legacy
         {
             var start = DateTime.Now;
 
-            // Get agreement from limits service
-            var agreement = LimitsService.Value.Tick();
-
-            while (!agreement)
+            try
             {
-                // If time limit is over
-                if (start.AddSeconds(Settings.MaxSecondsToWait) < DateTime.Now)
-                    // TODO tests
-                    throw new EcwidLimitException("Limit overheat exception");
+                // Get agreement from limits service
+                var agreement = LimitsService.Value.Tick();
 
-                Task.Delay(Settings.RetryInterval*1000).Wait();
-                agreement = LimitsService.Value.Tick();
+                while (!agreement)
+                {
+                    // If time limit is over
+                    if (start.AddSeconds(Settings.MaxSecondsToWait) < DateTime.Now)
+                        // TODO tests
+                        throw new EcwidLimitException("Limit overheat exception");
+
+                    Task.Delay(Settings.RetryInterval*1000).Wait();
+                    agreement = LimitsService.Value.Tick();
+                }
+            }
+                // ReSharper disable once CatchAllClause
+            catch (Exception exception)
+            {
+                throw new EcwidLimitException("Internal error in limits sevices. Look inner exception.", exception);
             }
         }
 

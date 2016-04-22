@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using Ecwid.Services.Legacy;
+using Ecwid.Legacy;
 using Xunit;
 
 namespace Ecwid.Test.Services.Legacy
@@ -18,7 +18,7 @@ namespace Ecwid.Test.Services.Legacy
         private readonly List<bool> _results = new List<bool>();
 
         [Fact]
-        public void TickExpectPass()
+        public void TickExpect()
         {
             var limit = new Limit(1000, 3);
 
@@ -41,7 +41,7 @@ namespace Ecwid.Test.Services.Legacy
         [InlineData(5, 3)]
         [InlineData(50, 3)]
         [InlineData(500, 3)]
-        public void TickExpectPass(int timeInterval, int limitValue)
+        public void TickExpect(int timeInterval, int limitValue)
         {
             var mockTime = Moqs.MockTime();
 

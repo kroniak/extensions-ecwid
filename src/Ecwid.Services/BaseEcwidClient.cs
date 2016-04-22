@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Flurl;
 using Flurl.Http;
 
-namespace Ecwid.Services
+namespace Ecwid
 {
     /// <summary>
     /// Abstract client class contains shared methods.

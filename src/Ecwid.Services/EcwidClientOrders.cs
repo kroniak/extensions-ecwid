@@ -7,8 +7,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ecwid.Models;
 using Flurl;
+using Flurl.Util;
 
-namespace Ecwid.Services
+namespace Ecwid
 {
     /// <summary>
     /// Ecwid API Client v3.
@@ -28,6 +29,17 @@ namespace Ecwid.Services
             }
         }
 
+        #region Implementation of IEcwidOrdersClient
+
+        /// <summary>
+        /// Gets the orders query builder.
+        /// </summary>
+        /// <value>
+        /// The orders.
+        /// </value>
+        public OrdersQueryBuilder<OrderEntry, UpdateStatus> Orders
+            => new OrdersQueryBuilder<OrderEntry, UpdateStatus>(this);
+
         /// <summary>
         /// Checks the shop authentication asynchronous.
         /// </summary>
@@ -44,15 +56,6 @@ namespace Ecwid.Services
         /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
         public async Task<bool> CheckOrdersTokenAsync(CancellationToken cancellationToken)
             => await CheckTokenAsync<SearchResult>(OrdersUrl, cancellationToken);
-
-        /// <summary>
-        /// Gets the orders query builder.
-        /// </summary>
-        /// <value>
-        /// The orders.
-        /// </value>
-        public OrdersQueryBuilder<OrderEntry, UpdateStatus> Orders
-            => new OrdersQueryBuilder<OrderEntry, UpdateStatus>(this);
 
         /// <summary>
         /// Gets the new orders asynchronous. This orders is new or is not processed.
@@ -87,26 +90,6 @@ namespace Ecwid.Services
         /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
         public async Task<List<OrderEntry>> GetNonPaidOrdersAsync(CancellationToken cancellationToken)
             => await GetOrdersAsync(new {paymentStatus = "AWAITING_PAYMENT"}, cancellationToken);
-
-        /// <summary>
-        /// Gets the orders asynchronous.
-        /// </summary>
-        /// <param name="query">The orders query builder</param>
-        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
-        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
-        public async Task<List<OrderEntry>> GetOrdersAsync(OrdersQueryBuilder<OrderEntry, UpdateStatus> query)
-            => await GetOrdersAsync(query.Query);
-
-        /// <summary>
-        /// Gets the orders asynchronous.
-        /// </summary>
-        /// <param name="query">The orders query builder</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
-        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
-        public async Task<List<OrderEntry>> GetOrdersAsync(OrdersQueryBuilder<OrderEntry, UpdateStatus> query,
-            CancellationToken cancellationToken)
-            => await GetOrdersAsync(query.Query, cancellationToken);
 
         /// <summary>
         /// Gets the orders count asynchronous.
@@ -150,7 +133,7 @@ namespace Ecwid.Services
         /// </summary>
         /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
         /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
-        public async Task<List<OrderEntry>> GetShippedNotDeliveredOrdersAsync()
+        public async Task<List<OrderEntry>> GetShippedOrdersAsync()
             => await GetOrdersAsync(new {fulfillmentStatus = "SHIPPED"});
 
         /// <summary>
@@ -158,7 +141,7 @@ namespace Ecwid.Services
         /// </summary>
         /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
         /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
-        public async Task<List<OrderEntry>> GetShippedNotDeliveredOrdersAsync(CancellationToken cancellationToken)
+        public async Task<List<OrderEntry>> GetShippedOrdersAsync(CancellationToken cancellationToken)
             => await GetOrdersAsync(new {fulfillmentStatus = "SHIPPED"}, cancellationToken);
 
         public Task<UpdateStatus> UpdateOrdersAsync(OrdersQueryBuilder<OrderEntry, UpdateStatus> query)
@@ -173,22 +156,49 @@ namespace Ecwid.Services
         }
 
         /// <summary>
-        /// Gets the orders asynchronous.
+        /// Gets the orders asynchronous. If <paramref name="query" /> contains limit or offset parameters gets only one page.
         /// </summary>
-        /// <param name="query">The query.</param>
+        /// <param name="query">
+        /// The query. It's a list of key-value pairs. e.g.
+        /// <code>new {fulfillmentStatus = "SHIPPED", limit = 100}</code> or Dictionary{string, object}
+        /// </param>
         /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
         /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
         public async Task<List<OrderEntry>> GetOrdersAsync(object query)
         {
             var response = await GetApiResponseAsync<SearchResult>(OrdersUrl, query);
 
-            return response.Orders?.ToList() ?? new List<OrderEntry>();
+            var result = response.Orders?.ToList() ?? new List<OrderEntry>();
+
+            // return if responce is null or response is full
+            if (result.Count == 0 || response.Total == response.Count) return result;
+
+            // if query is not null check it contains limit or offset.
+            if (query?.ToKeyValuePairs().Count(pair => pair.Key == "limit" || pair.Key == "offset") > 0)
+                return result;
+
+            while (response.Count == response.Limit)
+            {
+                response =
+                    await
+                        GetApiResponseAsync<SearchResult>(
+                            OrdersUrl.SetQueryParams(
+                                new {offset = response.Offset + response.Limit}), query);
+
+                // ReSharper disable once ExceptionNotDocumentedOptional
+                if (response.Orders != null) result.AddRange(response.Orders);
+            }
+
+            return result;
         }
 
         /// <summary>
-        /// Gets the orders asynchronous.
+        /// Gets the orders asynchronous. If <paramref name="query" /> contains limit or offset parameters gets only one page.
         /// </summary>
-        /// <param name="query">The query.</param>
+        /// <param name="query">
+        /// The query. It's a list of key-value pairs. e.g.
+        /// <code>new {fulfillmentStatus = "SHIPPED", limit = 100}</code> or Dictionary{string, object}
+        /// </param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
         /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
@@ -196,7 +206,50 @@ namespace Ecwid.Services
         {
             var response = await GetApiResponseAsync<SearchResult>(OrdersUrl, query, cancellationToken);
 
-            return response.Orders?.ToList() ?? new List<OrderEntry>();
+            var result = response.Orders?.ToList() ?? new List<OrderEntry>();
+
+            // return if responce is null or response is full
+            if (result.Count == 0 || response.Total == response.Count)
+                return result;
+
+            // if query is not null check it contains limit or offset.
+            if (query?.ToKeyValuePairs().Count(pair => pair.Key == "limit" || pair.Key == "offset") > 0)
+                return result;
+
+            while (response.Count == response.Limit)
+            {
+                response =
+                    await
+                        GetApiResponseAsync<SearchResult>(
+                            OrdersUrl.SetQueryParams(
+                                new {offset = response.Offset + response.Limit}), query, cancellationToken);
+
+                // ReSharper disable once ExceptionNotDocumentedOptional
+                if (response.Orders != null)
+                    result.AddRange(response.Orders);
+            }
+
+            return result;
         }
+
+        /// <summary>
+        /// Gets the incomplete orders asynchronous. This orders is new or is not processed.
+        /// </summary>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
+        public async Task<List<OrderEntry>> GetIncompleteOrdersAsync()
+            => await GetOrdersAsync(new {paymentStatus = "INCOMPLETE"});
+
+
+        /// <summary>
+        /// Gets the incomplete orders asynchronous. This orders is new or is not processed.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        public async Task<List<OrderEntry>> GetIncompleteOrdersAsync(CancellationToken cancellationToken)
+            => await GetOrdersAsync(new {paymentStatus = "INCOMPLETE"}, cancellationToken);
+
+        #endregion
     }
 }

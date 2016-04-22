@@ -2,7 +2,7 @@
 
 using System;
 
-namespace Ecwid.Services.Legacy
+namespace Ecwid.Legacy
 {
     /// <summary>
     /// Interface to shim DateTime.Now

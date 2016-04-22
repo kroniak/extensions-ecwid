@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Ecwid.Models;
 
-namespace Ecwid.Services
+namespace Ecwid
 {
     /// <summary>
     /// Orders query builder for Ecwid client.

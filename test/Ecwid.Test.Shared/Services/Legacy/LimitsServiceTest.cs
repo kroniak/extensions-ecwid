@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using Ecwid.Services.Legacy;
+using Ecwid.Legacy;
 using Xunit;
 
 namespace Ecwid.Test.Services.Legacy
@@ -29,7 +29,7 @@ namespace Ecwid.Test.Services.Legacy
         }
 
         [Fact]
-        public void TickExpectPass()
+        public void TickExpect()
         {
             var mockTime = Moqs.MockTime();
             // Init service

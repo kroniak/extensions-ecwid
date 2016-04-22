@@ -1,5 +1,6 @@
 ﻿// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
 
+using System;
 using System.Diagnostics.CodeAnalysis;
 using Ecwid.Tools;
 using Xunit;
@@ -11,9 +12,9 @@ namespace Ecwid.Test.Tools
     public class ExtensionsTest
     {
         [Theory]
-        [InlineData("A B C   D, E;  ")]
-        [InlineData("A B C   D, E; 0 9 ; 223  ")]
-        public void TrimReplaceSplitPass(string str)
+        [InlineData("A B C   D, E  ")]
+        [InlineData("A B,, , C   D, E   ")]
+        public void TrimReplaceSplit(string str)
         {
             var result = str.TrimUpperReplaceSplit();
 
@@ -25,6 +26,13 @@ namespace Ecwid.Test.Tools
             Assert.DoesNotContain(" ", result);
             Assert.DoesNotContain(",", result);
             Assert.DoesNotContain(";", result);
+        }
+
+        [Fact]
+        public void TrimReplaceSplitFail()
+        {
+            string str = null;
+            Assert.Throws<ArgumentException>(() => str.TrimUpperReplaceSplit());
         }
     }
 }

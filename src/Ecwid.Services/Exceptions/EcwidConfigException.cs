@@ -2,7 +2,7 @@
 
 using System;
 
-namespace Ecwid.Services
+namespace Ecwid
 {
     /// <summary>
     /// Throws when credentials are invalid or query builder can not build a query with some errors in parameters.

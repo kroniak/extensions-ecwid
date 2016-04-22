@@ -4,6 +4,9 @@ using Newtonsoft.Json;
 
 namespace Ecwid.Models.Legacy
 {
+    /// <summary>
+    /// Represent favorites for product.
+    /// </summary>
     public class LegacyFavorites
     {
         /// <summary>

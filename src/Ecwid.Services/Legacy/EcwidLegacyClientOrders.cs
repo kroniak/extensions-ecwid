@@ -1,14 +1,14 @@
 ﻿// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Ecwid.Models.Legacy;
 using Flurl;
+using Flurl.Util;
 
-namespace Ecwid.Services.Legacy
+namespace Ecwid.Legacy
 {
     /// <summary>
     /// Ecwid API Client v1 (Legacy).
@@ -73,49 +73,6 @@ namespace Ecwid.Services.Legacy
                 (await
                     GetApiResponseAsync<LegacyOrderResponse<LegacyOrder>>(OrdersUrl, new {limit = 0}, cancellationToken))
                     .Total;
-
-        /// <summary>
-        /// Gets the orders asynchronous.
-        /// </summary>
-        /// <param name="query">The orders query builder</param>
-        /// <exception cref="EcwidLimitException">Limit overheat exception</exception>
-        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
-        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
-        public async Task<List<LegacyOrder>> GetOrdersAsync(OrdersQueryBuilder<LegacyOrder, LegacyUpdatedOrders> query)
-            => await GetOrdersAsync(query.Query);
-
-        /// <summary>
-        /// Gets the orders asynchronous.
-        /// </summary>
-        /// <param name="query">The orders query builder</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <exception cref="EcwidLimitException">Limit overheat exception</exception>
-        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
-        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
-        public async Task<List<LegacyOrder>> GetOrdersAsync(OrdersQueryBuilder<LegacyOrder, LegacyUpdatedOrders> query,
-            CancellationToken cancellationToken)
-            => await GetOrdersAsync(query.Query, cancellationToken);
-
-        /// <summary>
-        /// Gets the one page orders asynchronous. It ignores next url.
-        /// </summary>
-        /// <param name="query">The orders query builder</param>
-        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
-        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
-        public async Task<List<LegacyOrder>> GetOrdersPageAsync(
-            OrdersQueryBuilder<LegacyOrder, LegacyUpdatedOrders> query)
-            => await GetOrdersPageAsync(query.Query);
-
-        /// <summary>
-        /// Gets the one page orders asynchronous. It ignores next url.
-        /// </summary>
-        /// <param name="query">The orders query builder</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
-        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
-        public async Task<List<LegacyOrder>> GetOrdersPageAsync(
-            OrdersQueryBuilder<LegacyOrder, LegacyUpdatedOrders> query, CancellationToken cancellationToken)
-            => await GetOrdersPageAsync(query.Query, cancellationToken);
 
         /// <summary>
         /// Gets the new orders asynchronous. This orders is new or is not processed.
@@ -183,7 +140,7 @@ namespace Ecwid.Services.Legacy
         /// <exception cref="EcwidLimitException">Limit overheat exception</exception>
         /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
         /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
-        public async Task<List<LegacyOrder>> GetShippedNotDeliveredOrdersAsync()
+        public async Task<List<LegacyOrder>> GetShippedOrdersAsync()
             => await GetOrdersAsync(new {statuses = "SHIPPED"});
 
         /// <summary>
@@ -193,7 +150,7 @@ namespace Ecwid.Services.Legacy
         /// <exception cref="EcwidLimitException">Limit overheat exception</exception>
         /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
         /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
-        public async Task<List<LegacyOrder>> GetShippedNotDeliveredOrdersAsync(CancellationToken cancellationToken)
+        public async Task<List<LegacyOrder>> GetShippedOrdersAsync(CancellationToken cancellationToken)
             => await GetOrdersAsync(new {statuses = "SHIPPED"}, cancellationToken);
 
         /// <summary>
@@ -225,9 +182,12 @@ namespace Ecwid.Services.Legacy
         }
 
         /// <summary>
-        /// Gets the orders asynchronous.
+        /// Gets the orders asynchronous. If <paramref name="query" /> contains limit or offset parameters gets only one page.
         /// </summary>
-        /// <param name="query">The query.</param>
+        /// <param name="query">
+        /// The query. It's a list of key-value pairs. e.g.
+        /// <code>new {fulfillmentStatus = "SHIPPED", limit = 100}</code> or Dictionary{string, object}
+        /// </param>
         /// <exception cref="EcwidLimitException">Limit overheat exception</exception>
         /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
         /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
@@ -235,36 +195,33 @@ namespace Ecwid.Services.Legacy
         {
             var response = await GetApiResponseAsync<LegacyOrderResponse<LegacyOrder>>(OrdersUrl, query);
 
-            var orders = new List<LegacyOrder>();
+            var result = response.Orders?.ToList() ?? new List<LegacyOrder>();
 
-            if (response != null)
-                try
-                {
-                    orders.AddRange(response.Orders);
-                }
-                catch (ArgumentNullException)
-                {
-                }
+            // return if responce is null or response is full
+            if (result.Count == 0 || response.Total == response.Count) return result;
 
-            while (response?.NextUrl != null)
+            // if query is not null check it contains limit or offset.
+            if (query?.ToKeyValuePairs().Count(pair => pair.Key == "limit" || pair.Key == "offset") > 0)
+                return result;
+
+            while (response.NextUrl != null)
             {
                 response = await GetApiResponseAsync<LegacyOrderResponse<LegacyOrder>>(response.NextUrl);
-                if (response == null) continue;
-                try
-                {
-                    orders.AddRange(response.Orders);
-                }
-                catch (ArgumentNullException)
-                {
-                }
+
+                // ReSharper disable once ExceptionNotDocumentedOptional
+                if (response.Orders != null)
+                    result.AddRange(response.Orders);
             }
-            return orders;
+            return result;
         }
 
         /// <summary>
-        /// Gets the orders asynchronous.
+        /// Gets the orders asynchronous. If <paramref name="query" /> contains limit or offset parameters gets only one page.
         /// </summary>
-        /// <param name="query">The query.</param>
+        /// <param name="query">
+        /// The query. It's a list of key-value pairs. e.g.
+        /// <code>new {fulfillmentStatus = "SHIPPED", limit = 100}</code> or Dictionary{string, object}
+        /// </param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <exception cref="EcwidLimitException">Limit overheat exception.</exception>
         /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
@@ -274,60 +231,26 @@ namespace Ecwid.Services.Legacy
             var response =
                 await GetApiResponseAsync<LegacyOrderResponse<LegacyOrder>>(OrdersUrl, query, cancellationToken);
 
-            var orders = new List<LegacyOrder>();
+            var result = response.Orders?.ToList() ?? new List<LegacyOrder>();
 
-            if (response != null)
-                try
-                {
-                    orders.AddRange(response.Orders);
-                }
-                catch (ArgumentNullException)
-                {
-                }
+            // return if responce is null or response is full
+            if (result.Count == 0 || response.Total == response.Count)
+                return result;
 
-            while (response?.NextUrl != null)
+            // if query is not null check it contains limit or offset.
+            if (query?.ToKeyValuePairs().Count(pair => pair.Key == "limit" || pair.Key == "offset") > 0)
+                return result;
+
+            while (response.NextUrl != null)
             {
                 response =
                     await GetApiResponseAsync<LegacyOrderResponse<LegacyOrder>>(response.NextUrl, cancellationToken);
-                if (response == null) continue;
-                try
-                {
-                    orders.AddRange(response.Orders);
-                }
-                catch (ArgumentNullException)
-                {
-                }
+
+                // ReSharper disable once ExceptionNotDocumentedOptional
+                if (response.Orders != null)
+                    result.AddRange(response.Orders);
             }
-            return orders;
-        }
-
-        /// <summary>
-        /// Gets the one page of orders asynchronous.
-        /// </summary>
-        /// <param name="query">The query.</param>
-        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
-        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
-        private async Task<List<LegacyOrder>> GetOrdersPageAsync(object query)
-        {
-            var response = await GetApiResponseAsync<LegacyOrderResponse<LegacyOrder>>(OrdersUrl, query);
-
-            return response.Orders?.ToList() ?? new List<LegacyOrder>();
-        }
-
-        /// <summary>
-        /// Gets the one page of orders asynchronous.
-        /// </summary>
-        /// <param name="query">The query.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
-        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
-        private async Task<List<LegacyOrder>> GetOrdersPageAsync(object query,
-            CancellationToken cancellationToken)
-        {
-            var response =
-                await GetApiResponseAsync<LegacyOrderResponse<LegacyOrder>>(OrdersUrl, query, cancellationToken);
-
-            return response.Orders?.ToList() ?? new List<LegacyOrder>();
+            return result;
         }
     }
 }

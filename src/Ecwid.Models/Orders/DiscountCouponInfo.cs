@@ -4,6 +4,9 @@ using Newtonsoft.Json;
 
 namespace Ecwid.Models
 {
+    /// <summary>
+    /// Represent discount's coupon information. 
+    /// </summary>
     public class DiscountCouponInfo
     {
         /// <summary>

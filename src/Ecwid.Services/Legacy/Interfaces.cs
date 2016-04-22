@@ -1,11 +1,8 @@
 ﻿// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
 
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using Ecwid.Models.Legacy;
 
-namespace Ecwid.Services.Legacy
+namespace Ecwid.Legacy
 {
     /// <summary>
     /// Public legacy client API.
@@ -58,18 +55,5 @@ namespace Ecwid.Services.Legacy
     /// </summary>
     public interface IEcwidOrdersLegacyClient : IEcwidOrdersClient<LegacyOrder, LegacyUpdatedOrders>
     {
-        /// <summary>
-        /// Gets the one page orders asynchronous. It ignores next url.
-        /// </summary>
-        /// <param name="query">The orders query builder</param>
-        Task<List<LegacyOrder>> GetOrdersPageAsync(OrdersQueryBuilder<LegacyOrder, LegacyUpdatedOrders> query);
-
-        /// <summary>
-        /// Gets the one page orders asynchronous. It ignores next url.
-        /// </summary>
-        /// <param name="query">The orders query builder</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        Task<List<LegacyOrder>> GetOrdersPageAsync(OrdersQueryBuilder<LegacyOrder, LegacyUpdatedOrders> query,
-            CancellationToken cancellationToken);
     }
 }

@@ -1,13 +1,12 @@
 ﻿// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
 
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Ecwid.Models.Legacy;
 using Ecwid.Tools;
 
-namespace Ecwid.Services.Legacy
+namespace Ecwid.Legacy
 {
     /// <summary>
     /// LINQ like extensions for the OrdersQueryBuilder.
@@ -99,9 +98,12 @@ namespace Ecwid.Services.Legacy
         /// </summary>
         /// <param name="query">The query.</param>
         /// <param name="number">The ordinary order number</param>
+        /// <exception cref="ArgumentException"><paramref name="number" /> must be greater than 0</exception>
         public static OrdersQueryBuilder<LegacyOrder, LegacyUpdatedOrders> Order(
             this OrdersQueryBuilder<LegacyOrder, LegacyUpdatedOrders> query, int number)
         {
+            if (number <= 0) throw new ArgumentException("Number must be greater than 0", nameof(number));
+
             query.AddOrUpdate("order", number);
             return query;
         }
@@ -111,9 +113,13 @@ namespace Ecwid.Services.Legacy
         /// </summary>
         /// <param name="query">The query.</param>
         /// <param name="vendorNumber">The vendor order number (order number with prefix/suffix)</param>
+        /// <exception cref="ArgumentException"><paramref name="vendorNumber" /> is null or empty.</exception>
         public static OrdersQueryBuilder<LegacyOrder, LegacyUpdatedOrders> Order(
             this OrdersQueryBuilder<LegacyOrder, LegacyUpdatedOrders> query, string vendorNumber)
         {
+            if (string.IsNullOrEmpty(vendorNumber))
+                throw new ArgumentException("VendorNumber is null or empty.", nameof(vendorNumber));
+
             query.AddOrUpdate("order", vendorNumber);
             return query;
         }
@@ -123,9 +129,12 @@ namespace Ecwid.Services.Legacy
         /// </summary>
         /// <param name="query">The query.</param>
         /// <param name="number">The ordinary order number</param>
+        /// <exception cref="ArgumentException"><paramref name="number" /> must be greater than 0</exception>
         public static OrdersQueryBuilder<LegacyOrder, LegacyUpdatedOrders> FromOrder(
             this OrdersQueryBuilder<LegacyOrder, LegacyUpdatedOrders> query, int number)
         {
+            if (number <= 0) throw new ArgumentException("Number must be greater than 0", nameof(number));
+
             query.AddOrUpdate("from_order", number);
             return query;
         }
@@ -135,9 +144,13 @@ namespace Ecwid.Services.Legacy
         /// </summary>
         /// <param name="query">The query.</param>
         /// <param name="vendorNumber">The vendor order number (order number with prefix/suffix)</param>
+        /// <exception cref="ArgumentException"><paramref name="vendorNumber" /> is null or empty.</exception>
         public static OrdersQueryBuilder<LegacyOrder, LegacyUpdatedOrders> FromOrder(
             this OrdersQueryBuilder<LegacyOrder, LegacyUpdatedOrders> query, string vendorNumber)
         {
+            if (string.IsNullOrEmpty(vendorNumber))
+                throw new ArgumentException("VendorNumber is null or empty.", nameof(vendorNumber));
+
             query.AddOrUpdate("from_order", vendorNumber);
             return query;
         }
@@ -151,21 +164,17 @@ namespace Ecwid.Services.Legacy
             this OrdersQueryBuilder<LegacyOrder, LegacyUpdatedOrders> query, int? customerId)
         {
             if (customerId == null)
-            {
                 query.AddOrUpdate("customer_id", "null");
-            }
             else
-            {
                 query.AddOrUpdate("customer_id", customerId);
-            }
             return query;
         }
 
         /// <summary>
-        /// Customer email or null for orders with empty or absent emails.
+        /// Customer email or <c>null</c> for orders with empty or absent emails.
         /// </summary>
         /// <param name="query">The query.</param>
-        /// <param name="customerEmail">The customer email.</param>
+        /// <param name="customerEmail">The customer email or <c>null</c>.</param>
         public static OrdersQueryBuilder<LegacyOrder, LegacyUpdatedOrders> CustomerEmail(
             this OrdersQueryBuilder<LegacyOrder, LegacyUpdatedOrders> query, string customerEmail)
         {
@@ -266,37 +275,17 @@ namespace Ecwid.Services.Legacy
         /// Number of orders returned in response. The default and maximal value is 200, any greater value is
         /// reset to 200.
         /// </param>
+        /// <exception cref="ArgumentException"><paramref name="limit" /> must be greater than 0</exception>
         public static OrdersQueryBuilder<LegacyOrder, LegacyUpdatedOrders> Limit(
             this OrdersQueryBuilder<LegacyOrder, LegacyUpdatedOrders> query, int limit)
         {
+            if (limit <= 0)
+                throw new ArgumentException("Limit must be greater than 0", nameof(limit));
+
+            if (limit > 200) limit = 200;
+
             query.AddOrUpdate("limit", limit);
             return query;
-        }
-
-        /// <summary>
-        /// Gets the one page of orders asynchronous. It ignores next url.
-        /// </summary>
-        /// <param name="query">The query.</param>
-        public static async Task<List<LegacyOrder>> GetPageAsync(
-            this OrdersQueryBuilder<LegacyOrder, LegacyUpdatedOrders> query)
-        {
-            var client = (IEcwidOrdersLegacyClient) query.Client;
-
-            return await client.GetOrdersPageAsync(query);
-        }
-
-
-        /// <summary>
-        /// Gets the one page of orders asynchronous. It ignores next url.
-        /// </summary>
-        /// <param name="query">The query.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        public static async Task<List<LegacyOrder>> GetPageAsync(
-            this OrdersQueryBuilder<LegacyOrder, LegacyUpdatedOrders> query, CancellationToken cancellationToken)
-        {
-            var client = (IEcwidOrdersLegacyClient) query.Client;
-
-            return await client.GetOrdersPageAsync(query, cancellationToken);
         }
 
         /// <summary>
@@ -325,13 +314,13 @@ namespace Ecwid.Services.Legacy
                 Validators.ValidateNewLegacyStatuses(query.Query, newPaymentStatus, newFulfillmentStatus,
                     newShippingTrackingCode);
 
-                if (!string.IsNullOrEmpty(newPaymentStatus))
+                if (!Validators.IsNullOrEmpty(newPaymentStatus))
                     query.AddOrUpdate("new_payment_status",
                         Validators.StatusValidate(newPaymentStatus, Validators.AvailableLegacyPaymentStatuses));
-                if (!string.IsNullOrEmpty(newFulfillmentStatus))
+                if (!Validators.IsNullOrEmpty(newFulfillmentStatus))
                     query.AddOrUpdate("new_fulfillment_status",
                         Validators.StatusValidate(newFulfillmentStatus, Validators.AvailableLegacyFulfillmentStatuses));
-                if (!string.IsNullOrEmpty(newShippingTrackingCode))
+                if (!Validators.IsNullOrEmpty(newShippingTrackingCode))
                     query.AddOrUpdate("new_shipping_tracking_code", newShippingTrackingCode);
             }
             catch (ArgumentException exception)
@@ -369,13 +358,13 @@ namespace Ecwid.Services.Legacy
                 Validators.ValidateNewLegacyStatuses(query.Query, newPaymentStatus, newFulfillmentStatus,
                     newShippingTrackingCode);
 
-                if (!string.IsNullOrEmpty(newPaymentStatus))
+                if (!Validators.IsNullOrEmpty(newPaymentStatus))
                     query.AddOrUpdate("new_payment_status",
                         Validators.StatusValidate(newPaymentStatus, Validators.AvailableLegacyPaymentStatuses));
-                if (!string.IsNullOrEmpty(newFulfillmentStatus))
+                if (!Validators.IsNullOrEmpty(newFulfillmentStatus))
                     query.AddOrUpdate("new_fulfillment_status",
                         Validators.StatusValidate(newFulfillmentStatus, Validators.AvailableLegacyFulfillmentStatuses));
-                if (!string.IsNullOrEmpty(newShippingTrackingCode))
+                if (!Validators.IsNullOrEmpty(newShippingTrackingCode))
                     query.AddOrUpdate("new_shipping_tracking_code", newShippingTrackingCode);
             }
             catch (ArgumentException exception)

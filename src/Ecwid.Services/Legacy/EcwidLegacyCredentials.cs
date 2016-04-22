@@ -3,7 +3,7 @@
 using System.Text.RegularExpressions;
 using Ecwid.Tools;
 
-namespace Ecwid.Services.Legacy
+namespace Ecwid.Legacy
 {
     /// <summary>
     /// Credentials for Ecwid Client v1 (Legacy).
@@ -30,10 +30,10 @@ namespace Ecwid.Services.Legacy
             if (Validators.AreNullOrEmpty(orderToken, productToken))
                 throw new EcwidConfigException("The authorization tokens are null.");
 
-            if (!string.IsNullOrEmpty(orderToken))
+            if (!Validators.IsNullOrEmpty(orderToken))
                 OrderToken = orderToken;
 
-            if (!string.IsNullOrEmpty(productToken))
+            if (!Validators.IsNullOrEmpty(productToken))
                 ProductToken = productToken;
         }
 
@@ -50,7 +50,7 @@ namespace Ecwid.Services.Legacy
             get { return _orderToken; }
             set
             {
-                if (string.IsNullOrEmpty(value))
+                if (Validators.IsNullOrEmpty(value))
                     throw new EcwidConfigException("The order authorization token is invalid.");
 
                 var regex = new Regex("^[0-9a-zA-Z]{12,}");
@@ -74,7 +74,7 @@ namespace Ecwid.Services.Legacy
             get { return _productToken; }
             set
             {
-                if (string.IsNullOrEmpty(value))
+                if (Validators.IsNullOrEmpty(value))
                     throw new EcwidConfigException("The product authorization token is invalid.");
 
                 var regex = new Regex("^[0-9a-zA-Z]{12,}");

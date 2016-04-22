@@ -2,8 +2,6 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
-using Ecwid.Services;
-using Ecwid.Services.Legacy;
 using Xunit;
 
 namespace Ecwid.Test.Services
@@ -12,131 +10,219 @@ namespace Ecwid.Test.Services
     [SuppressMessage("ReSharper", "ExceptionNotDocumentedOptional")]
     public class QueryBuilderExtensionsTest
     {
-        private readonly IEcwidLegacyClient _defaultLegacyClient = new EcwidLegacyClient();
+        private readonly IEcwidClient _defaultClient = new EcwidClient();
 
         [Fact]
-        public void ExtensionFail()
+        public void AddFulfillmentStatuses()
         {
-            Assert.Throws<ArgumentException>(() => _defaultLegacyClient.Orders.Order(null));
-            Assert.Throws<ArgumentException>(() => _defaultLegacyClient.Orders.Custom(null, new {a = 1}));
-            Assert.Throws<ArgumentException>(() => _defaultLegacyClient.Orders.Custom("", new {a = 1}));
-            Assert.Throws<ArgumentException>(() => _defaultLegacyClient.Orders.Custom(" ", new {a = 1}));
+            var result =
+                _defaultClient.Orders.FulfillmentStatuses("AWAITING_PROCESSING").FulfillmentStatuses("PROCESSING").Query
+                    ["fulfillmentStatus"];
+            Assert.Equal(result, "AWAITING_PROCESSING,PROCESSING");
         }
 
         [Fact]
-        public void DatePass()
+        public void AddTwicePaymentStatuses()
         {
-            var result = _defaultLegacyClient.Orders.Date(Convert.ToDateTime("2000-01-01")).Query["date"];
-            var result2 = _defaultLegacyClient.Orders.FromDate(Convert.ToDateTime("2000-01-01")).Query["from_date"];
-            var result3 = _defaultLegacyClient.Orders.ToDate(Convert.ToDateTime("2000-01-01")).Query["to_date"];
-            var result4 =
-                _defaultLegacyClient.Orders.FromUpdateDate(Convert.ToDateTime("2000-01-01")).Query["from_update_date"];
-            var result5 =
-                _defaultLegacyClient.Orders.ToUpdateDate(Convert.ToDateTime("2000-01-01")).Query["to_update_date"];
-
-            Assert.Equal(result, "2000-01-01");
-            Assert.Equal(result2, "2000-01-01");
-            Assert.Equal(result3, "2000-01-01");
-            Assert.Equal(result4, "2000-01-01");
-            Assert.Equal(result5, "2000-01-01");
+            var result =
+                _defaultClient.Orders.PaymentStatuses("PAID").PaymentStatuses("CANCELLED").Query[
+                    "paymentStatus"];
+            Assert.Equal(result, "PAID,CANCELLED");
         }
 
         [Fact]
-        public void OrderPass()
+        public void CouponCode()
         {
-            var result = _defaultLegacyClient.Orders.Order(123).Query["order"];
-            var result2 = _defaultLegacyClient.Orders.FromOrder(123).Query["from_order"];
-            var result3 = _defaultLegacyClient.Orders.Order("123").Query["order"];
-            var result4 = _defaultLegacyClient.Orders.FromOrder("123").Query["from_order"];
+            var result = _defaultClient.Orders.CouponCode(1).Query["couponCode"];
 
-            Assert.Equal(result, 123);
-            Assert.Equal(result2, 123);
-            Assert.Equal(result3, "123");
-            Assert.Equal(result4, "123");
+            Assert.Equal(1, result);
+            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.CouponCode(-1));
         }
 
         [Fact]
-        public void CustomerPass()
+        public void Custom()
         {
-            var result = _defaultLegacyClient.Orders.CustomerId(123).Query["customer_id"];
-            var result2 = _defaultLegacyClient.Orders.CustomerId(null).Query["customer_id"];
-            var result3 = _defaultLegacyClient.Orders.CustomerEmail("test").Query["customer_email"];
-            var result4 = _defaultLegacyClient.Orders.CustomerEmail(null).Query["customer_email"];
-            var result5 = _defaultLegacyClient.Orders.CustomerEmail("").Query["customer_email"];
+            var result = _defaultClient.Orders.Custom("date", "test").Query["date"];
 
-            Assert.Equal(result, 123);
-            Assert.Equal(result2, "null");
-            Assert.Equal(result3, "test");
-            Assert.Equal(result4, "");
-            Assert.Equal(result5, "");
+            Assert.Equal("test", result);
         }
 
         [Fact]
-        public void StatusesPass()
+        public void Customer()
         {
-            var result = _defaultLegacyClient.Orders.Statuses("PAID, DECLINED", "NEW PROCESSING").Query["statuses"];
-            Assert.Equal(result, "PAID,DECLINED,NEW,PROCESSING");
+            var result = _defaultClient.Orders.Customer("test").Query["customer"];
+
+            Assert.Equal(result, "test");
+            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Customer(""));
+        }
+
+        [Fact]
+        public void CustomFail()
+        {
+            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Custom(null, new {a = 1}));
+            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Custom(null, null));
+            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Custom("", new {a = 1}));
+            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Custom(" ", new {a = 1}));
+        }
+
+        [Fact]
+        public void Date()
+        {
+            var date = new DateTime(2015, 4, 22, 18, 48, 38);
+            const string check = "2015-04-22 18:48:38";
+
+            var result = _defaultClient.Orders.CreatedFrom(date).Query["createdFrom"];
+            var result2 = _defaultClient.Orders.CreatedTo(date).Query["createdTo"];
+            var result3 = _defaultClient.Orders.UpdatedFrom(date).Query["updatedFrom"];
+            var result4 = _defaultClient.Orders.UpdatedTo(date).Query["updatedTo"];
+
+            var qb = _defaultClient.Orders.Created(date, date);
+            var result5 = qb.Query["createdFrom"];
+            var result6 = qb.Query["createdTo"];
+
+            var qb2 = _defaultClient.Orders.Updated(date, date);
+            var result7 = qb2.Query["updatedFrom"];
+            var result8 = qb2.Query["updatedTo"];
+
+            Assert.Equal(check, result);
+            Assert.Equal(check, result2);
+            Assert.Equal(check, result3);
+            Assert.Equal(check, result4);
+            Assert.Equal(check, result5);
+            Assert.Equal(check, result6);
+            Assert.Equal(check, result7);
+            Assert.Equal(check, result8);
         }
 
         [Theory]
-        [InlineData("PAID, DECLIN", "NEW PROCESSING")]
-        [InlineData("PAID, DECLINED", "NEW PROCESS")]
-        [InlineData("", "")]
-        public void StatusesFail(string paid, string full)
+        [InlineData("2015-04-22")]
+        [InlineData("2015-04-22 18:48:38")]
+        [InlineData("2015-04-22 18:48:38 -0500")]
+        [InlineData("1447804800")]
+        public void DateString(string date)
         {
-            Assert.Throws<EcwidConfigException>(() => _defaultLegacyClient.Orders.Statuses(paid, full));
+            var result = _defaultClient.Orders.CreatedFrom(date).Query["createdFrom"];
+            var result2 = _defaultClient.Orders.CreatedTo(date).Query["createdTo"];
+            var result3 = _defaultClient.Orders.UpdatedFrom(date).Query["updatedFrom"];
+            var result4 = _defaultClient.Orders.UpdatedTo(date).Query["updatedTo"];
+
+            var qb = _defaultClient.Orders.Created(date, date);
+            var result5 = qb.Query["createdFrom"];
+            var result6 = qb.Query["createdTo"];
+
+            var qb2 = _defaultClient.Orders.Updated(date, date);
+            var result7 = qb2.Query["updatedFrom"];
+            var result8 = qb2.Query["updatedTo"];
+
+            Assert.Equal(date, result);
+            Assert.Equal(date, result2);
+            Assert.Equal(date, result3);
+            Assert.Equal(date, result4);
+            Assert.Equal(date, result5);
+            Assert.Equal(date, result6);
+            Assert.Equal(date, result7);
+            Assert.Equal(date, result8);
         }
 
         [Fact]
-        public void AddPaymentStatusesPass()
-        {
-            var result = _defaultLegacyClient.Orders.PaymentStatuses("PAID, DECLINED").Query["statuses"];
-            Assert.Equal(result, "PAID,DECLINED");
-        }
-
-        [Fact]
-        public void AddAddPaymentStatusesPass()
+        public void FulfillmentStatuses()
         {
             var result =
-                _defaultLegacyClient.Orders.PaymentStatuses("PAID, DECLINED").PaymentStatuses("Cancelled").Query[
-                    "statuses"];
-            Assert.Equal(result, "PAID,DECLINED,CANCELLED");
+                _defaultClient.Orders.FulfillmentStatuses("AWAITING_PROCESSING PROCESSING").Query["fulfillmentStatus"];
+            Assert.Equal(result, "AWAITING_PROCESSING,PROCESSING");
+        }
+
+        [Theory]
+        [InlineData("PAID, DECLINE")]
+        [InlineData("")]
+        public void FulfillmentStatusesFail(string paid)
+        {
+            Assert.Throws<EcwidConfigException>(() => _defaultClient.Orders.FulfillmentStatuses(paid));
         }
 
         [Fact]
-        public void AddFulfillmentStatusesPass()
+        public void Keywords()
         {
-            var result = _defaultLegacyClient.Orders.FulfillmentStatuses("NEW PROCESSING").Query["statuses"];
-            Assert.Equal(result, "NEW,PROCESSING");
+            var result = _defaultClient.Orders.Keywords("John").Query["keywords"];
+
+            Assert.Equal("John", result);
+            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Keywords(""));
+            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Keywords(null));
         }
 
         [Fact]
-        public void AddAddFulfillmentStatusesPass()
+        public void LimitAndOffset()
         {
-            var result =
-                _defaultLegacyClient.Orders.FulfillmentStatuses("NEW").FulfillmentStatuses("PROCESSING").Query[
-                    "statuses"];
-            Assert.Equal(result, "NEW,PROCESSING");
+            var result = _defaultClient.Orders.Limit(12).Query["limit"];
+            var result2 = _defaultClient.Orders.Limit(120).Query["limit"];
+            var result3 = _defaultClient.Orders.Offset(100).Query["offset"];
+
+            Assert.Equal(12, result);
+            Assert.Equal(100, result2);
+            Assert.Equal(100, result3);
+            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Limit(-1));
+            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Offset(-1));
         }
 
         [Fact]
-        public void AddBothStatusesPass()
+        public void Methods()
         {
-            var result =
-                _defaultLegacyClient.Orders.PaymentStatuses("PAID, DECLINED")
-                    .FulfillmentStatuses("NEW PROCESSING")
-                    .Query["statuses"];
-            Assert.Equal(result, "PAID,DECLINED,NEW,PROCESSING");
+            var result = _defaultClient.Orders.PaymentMethod("test").Query["paymentMethod"];
+            var result2 = _defaultClient.Orders.ShippingMethod("test").Query["shippingMethod"];
+
+            Assert.Equal("test", result);
+            Assert.Equal("test", result2);
+            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.PaymentMethod(null));
+            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.PaymentMethod(""));
+            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.ShippingMethod(null));
+            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.ShippingMethod(""));
         }
 
         [Fact]
-        public void LimitOffsetPass()
+        public void Order()
         {
-            var result = _defaultLegacyClient.Orders.Limit(123).Query["limit"];
-            var result2 = _defaultLegacyClient.Orders.Offset(100).Query["offset"];
+            var result = _defaultClient.Orders.Order(1).Query["orderNumber"];
+            var result2 = _defaultClient.Orders.Order("test").Query["vendorOrderNumber"];
 
-            Assert.Equal(result, 123);
-            Assert.Equal(result2, 100);
+            Assert.Equal(1, result);
+            Assert.Equal("test", result2);
+            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Order(-1));
+            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Order(""));
+        }
+
+        [Fact]
+        public void PaymentStatuses()
+        {
+            var result = _defaultClient.Orders.PaymentStatuses("PAID, CANCELLED").Query["paymentStatus"];
+            Assert.Equal(result, "PAID,CANCELLED");
+        }
+
+        [Theory]
+        [InlineData("PAID, DECLINE")]
+        [InlineData("")]
+        public void PaymentStatusesFail(string paid)
+        {
+            Assert.Throws<EcwidConfigException>(() => _defaultClient.Orders.PaymentStatuses(paid));
+        }
+
+        [Fact]
+        public void Totals()
+        {
+            var qb = _defaultClient.Orders.Totals(1, 1);
+            var result = qb.Query["totalFrom"];
+            var result2 = qb.Query["totalTo"];
+            var result3 = _defaultClient.Orders.TotalFrom(1).Query["totalFrom"];
+            var result4 = _defaultClient.Orders.TotalTo(1).Query["totalTo"];
+
+            Assert.Equal(1.0, result);
+            Assert.Equal(1.0, result2);
+            Assert.Equal(1.0, result3);
+            Assert.Equal(1.0, result4);
+            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Totals(-1, -1));
+            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Totals(-1, 1));
+            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Totals(1, -1));
+            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.TotalFrom(-1));
+            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.TotalTo(-1));
         }
     }
 }

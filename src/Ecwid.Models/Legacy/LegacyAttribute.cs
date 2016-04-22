@@ -4,6 +4,9 @@ using Newtonsoft.Json;
 
 namespace Ecwid.Models.Legacy
 {
+    /// <summary>
+    /// Represent attributes for legacy product.
+    /// </summary>
     public class LegacyAttribute : BaseEntity
     {
         /// <summary>

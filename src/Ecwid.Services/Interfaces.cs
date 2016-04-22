@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ecwid.Models;
 
-namespace Ecwid.Services
+namespace Ecwid
 {
     /// <summary>
     /// Public client API.
@@ -13,20 +13,20 @@ namespace Ecwid.Services
     public interface IEcwidClient : IEcwidOrdersClient
     {
         /// <summary>
-        /// Gets and sets the settings. Created by default.
-        /// </summary>
-        /// <value>
-        /// The settings.
-        /// </value>
-        EcwidSettings Settings { get; set; }
-
-        /// <summary>
         /// Gets and sets the credentials. Default value is <see langword="null" />.
         /// </summary>
         /// <value>
         /// The credentials.
         /// </value>
         EcwidCredentials Credentials { get; set; }
+
+        /// <summary>
+        /// Gets and sets the settings. Created by default.
+        /// </summary>
+        /// <value>
+        /// The settings.
+        /// </value>
+        EcwidSettings Settings { get; set; }
 
         /// <summary>
         /// Configures with specified settings.
@@ -65,6 +65,20 @@ namespace Ecwid.Services
     /// </summary>
     public interface IEcwidOrdersClient : IEcwidOrdersClient<OrderEntry, UpdateStatus>
     {
+        /// <summary>
+        /// Gets the incomplete orders asynchronous. This orders is new or is not processed.
+        /// </summary>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        Task<List<OrderEntry>> GetIncompleteOrdersAsync();
+
+        /// <summary>
+        /// Gets the incomplete orders asynchronous. This orders is new or is not processed.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        Task<List<OrderEntry>> GetIncompleteOrdersAsync(CancellationToken cancellationToken);
     }
 
     /// <summary>
@@ -82,7 +96,7 @@ namespace Ecwid.Services
         /// <example>
         /// This sample shows how to gets last 10 orders by the <see cref="OrdersQueryBuilder{TOrder,TUpdateResponse}" />.
         /// <code>
-        /// var orders = client.Configure(credentionals).Orders.Limit(10).GetAsync();
+        /// var orders = client.Configure(credentials).Orders.Limit(10).GetAsync();
         /// </code>
         /// </example>
         /// <value>
@@ -100,44 +114,6 @@ namespace Ecwid.Services
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
         Task<bool> CheckOrdersTokenAsync(CancellationToken cancellationToken);
-
-        /// <summary>
-        /// Gets the orders count asynchronous.
-        /// </summary>
-        Task<int> GetOrdersCountAsync();
-
-        /// <summary>
-        /// Gets the orders count asynchronous.
-        /// </summary>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        Task<int> GetOrdersCountAsync(CancellationToken cancellationToken);
-
-        /// <summary>
-        /// Gets the orders asynchronous.
-        /// </summary>
-        /// <param name="query">The orders query builder</param>
-        Task<List<TOrder>> GetOrdersAsync(OrdersQueryBuilder<TOrder, TUpdateResponse> query);
-
-        /// <summary>
-        /// Gets the orders asynchronous.
-        /// </summary>
-        /// <param name="query">The orders query builder</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        Task<List<TOrder>> GetOrdersAsync(OrdersQueryBuilder<TOrder, TUpdateResponse> query,
-            CancellationToken cancellationToken);
-
-        /// <summary>
-        /// Gets the orders asynchronous.
-        /// </summary>
-        /// <param name="query">The query.</param>
-        Task<List<TOrder>> GetOrdersAsync(object query);
-
-        /// <summary>
-        /// Gets the orders asynchronous.
-        /// </summary>
-        /// <param name="query">The query.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        Task<List<TOrder>> GetOrdersAsync(object query, CancellationToken cancellationToken);
 
         /// <summary>
         /// Gets the new orders asynchronous. This orders is new or is not processed.
@@ -162,6 +138,36 @@ namespace Ecwid.Services
         Task<List<TOrder>> GetNonPaidOrdersAsync(CancellationToken cancellationToken);
 
         /// <summary>
+        /// Gets the orders asynchronous. If <paramref name="query" /> contains limit or offset parameters gets only one page.
+        /// </summary>
+        /// <param name="query">
+        /// The query. It's a list of key-value pairs. e.g.
+        /// <code>new {fulfillmentStatus = "SHIPPED", limit = 100}</code> or Dictionary{string, object}
+        /// </param>
+        Task<List<TOrder>> GetOrdersAsync(object query);
+
+        /// <summary>
+        /// Gets the orders asynchronous. If <paramref name="query" /> contains limit or offset parameters gets only one page.
+        /// </summary>
+        /// <param name="query">
+        /// The query. It's a list of key-value pairs. e.g.
+        /// <code>new {fulfillmentStatus = "SHIPPED", limit = 100}</code> or Dictionary{string, object}
+        /// </param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        Task<List<TOrder>> GetOrdersAsync(object query, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Gets the orders count asynchronous.
+        /// </summary>
+        Task<int> GetOrdersCountAsync();
+
+        /// <summary>
+        /// Gets the orders count asynchronous.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        Task<int> GetOrdersCountAsync(CancellationToken cancellationToken);
+
+        /// <summary>
         /// Gets the paid and not shipped orders asynchronous.
         /// </summary>
         Task<List<TOrder>> GetPaidNotShippedOrdersAsync();
@@ -175,12 +181,12 @@ namespace Ecwid.Services
         /// <summary>
         /// Gets the shipped and not delivered orders asynchronous.
         /// </summary>
-        Task<List<TOrder>> GetShippedNotDeliveredOrdersAsync();
+        Task<List<TOrder>> GetShippedOrdersAsync();
 
         /// <summary>
         /// Gets the shipped and not delivered orders asynchronous.
         /// </summary>
-        Task<List<TOrder>> GetShippedNotDeliveredOrdersAsync(CancellationToken cancellationToken);
+        Task<List<TOrder>> GetShippedOrdersAsync(CancellationToken cancellationToken);
 
         /// <summary>
         /// Update the orders asynchronous.

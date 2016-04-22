@@ -11,6 +11,7 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Services\CredentialsTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\EcwidClientTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Legacy\LegacyQueryBuilderExtensionsTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Legacy\LimitsServiceTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Legacy\Moqs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Legacy\OneLimitTest.cs" />

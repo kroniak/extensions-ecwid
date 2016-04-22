@@ -3,7 +3,7 @@
 using System;
 using System.Net;
 
-namespace Ecwid.Services
+namespace Ecwid
 {
     /// <summary>
     /// Throws when Ecwid API responces with status other than 200.

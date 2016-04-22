@@ -4,6 +4,9 @@ using Newtonsoft.Json;
 
 namespace Ecwid.Models
 {
+    /// <summary>
+    /// HandlingFee charges.
+    /// </summary>
     public class HandlingFeeInfo
     {
         /// <summary>

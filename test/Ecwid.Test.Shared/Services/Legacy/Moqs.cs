@@ -2,12 +2,15 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Ecwid.Models.Legacy;
-using Ecwid.Services.Legacy;
+using Ecwid.Legacy;
 using Moq;
 
 namespace Ecwid.Test.Services.Legacy
 {
+    [SuppressMessage("ReSharper", "ExceptionNotDocumented")]
+    [SuppressMessage("ReSharper", "ExceptionNotDocumentedOptional")]
     internal abstract class Moqs
     {
         /// <summary>
@@ -18,22 +21,9 @@ namespace Ecwid.Test.Services.Legacy
                 new LegacyOrderResponse<LegacyOrder>
                 {
                     Count = 1,
-                    Total = 10,
+                    Total = 1,
                     NextUrl = null,
                     Orders = MockLegacyOrders(1)
-                };
-
-        /// <summary>
-        /// Moqs the responce with many order.
-        /// </summary>
-        public static LegacyOrderResponse<LegacyOrder> MockLegacyOrderResponseWithManyOrder
-            =>
-                new LegacyOrderResponse<LegacyOrder>
-                {
-                    Count = 10,
-                    Total = 10,
-                    NextUrl = null,
-                    Orders = MockLegacyOrders(10)
                 };
 
         /// <summary>
@@ -46,17 +36,32 @@ namespace Ecwid.Test.Services.Legacy
             => new LegacyOrderResponse<LegacyUpdatedOrder> {Count = 1, Total = 10, Orders = MockBaseOrders(1)};
 
         /// <summary>
-        /// Mocks the legacy order response with many order and pages.
+        /// Moqs the responce with many order.
         /// </summary>
-        /// <param name="nextUrl">The next URL.</param>
-        public static LegacyOrderResponse<LegacyOrder> MockLegacyOrderResponseWithManyOrderAndPages(string nextUrl)
+        public static LegacyOrderResponse<LegacyOrder> MockLegacyOrderResponseWithManyOrder(int count = 10)
             =>
                 new LegacyOrderResponse<LegacyOrder>
                 {
-                    Count = 10,
-                    Total = 10,
+                    Count = count,
+                    Total = count*2,
+                    NextUrl = null,
+                    Orders = MockLegacyOrders(count)
+                };
+
+        /// <summary>
+        /// Mocks the legacy order response with many order and pages.
+        /// </summary>
+        /// <param name="nextUrl">The next URL.</param>
+        /// <param name="count">The count.</param>
+        public static LegacyOrderResponse<LegacyOrder> MockLegacyOrderResponseWithManyOrderAndPages(string nextUrl,
+            int count = 200)
+            =>
+                new LegacyOrderResponse<LegacyOrder>
+                {
+                    Count = count,
+                    Total = count*2,
                     NextUrl = nextUrl,
-                    Orders = MockLegacyOrders(10)
+                    Orders = MockLegacyOrders(count)
                 };
 
         /// <summary>
@@ -92,8 +97,8 @@ namespace Ecwid.Test.Services.Legacy
             var orders = new LegacyUpdatedOrders();
             var order = new LegacyUpdatedOrder
             {
-                Number = 123,
-                VendorNumber = "123",
+                Number = 1,
+                VendorNumber = "1",
                 ShippingTrackingCode = "EA222222222222222",
                 PaymentStatus = "ACCEPTED",
                 FulfillmentStatus = "SHIPPED",

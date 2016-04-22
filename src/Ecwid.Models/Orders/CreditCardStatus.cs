@@ -4,6 +4,9 @@ using Newtonsoft.Json;
 
 namespace Ecwid.Models
 {
+    /// <summary>
+    /// Represent credit card status. 
+    /// </summary>
     public class CreditCardStatus
     {
         /// <summary>

@@ -23,7 +23,7 @@ namespace Ecwid.Tools
 
             try
             {
-                var result = new Regex("[^A-Za-z]").Replace(str, " "); //delete all non character symbols
+                var result = new Regex("[,]", RegexOptions.None).Replace(str, " "); //replace all double spaces
                 result = new Regex("[ ]{2,}", RegexOptions.None).Replace(result, " "); //replace all double spaces
                 result = result.Trim().Replace(" ", ","); //trim and replace " " to ","
                 result = result.ToUpper();

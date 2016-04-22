@@ -4,6 +4,9 @@ using Newtonsoft.Json;
 
 namespace Ecwid.Models
 {
+    /// <summary>
+    /// Client's information. 
+    /// </summary>
     public class PersonInfo
     {
         /// <summary>

@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Ecwid.Tools
 {
@@ -72,7 +73,16 @@ namespace Ecwid.Tools
         /// <returns>True if the all of the strings are <see langword="null" /> or <see langword="empty" /></returns>
         public static bool AreNullOrEmpty(params string[] strings)
         {
-            return strings.All(string.IsNullOrEmpty);
+            return strings.All(IsNullOrEmpty);
+        }
+
+        /// <summary>
+        /// Determines whether [is null or empty] [the specified value].
+        /// </summary>
+        /// <param name="value">The value.</param>
+        public static bool IsNullOrEmpty(string value)
+        {
+            return string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value);
         }
 
         /// <summary>
@@ -83,10 +93,13 @@ namespace Ecwid.Tools
         /// <exception cref="ArgumentException">Statuses string is invalid.</exception>
         public static bool StatusesValidate(string statuses, ICollection<string> statusesAvailable)
         {
-            if (string.IsNullOrEmpty(statuses))
+            if (IsNullOrEmpty(statuses))
                 throw new ArgumentException("Statuses string is invalid.", nameof(statuses));
 
-            if (statusesAvailable?.Count == 0)
+            if (statusesAvailable == null)
+                throw new ArgumentException("Statuses collection is invalid.", nameof(statusesAvailable));
+
+            if (statusesAvailable.Count == 0)
                 throw new ArgumentException("Statuses collection is invalid.", nameof(statusesAvailable));
 
             try
@@ -113,16 +126,7 @@ namespace Ecwid.Tools
         {
             StatusesValidate(status, statusesAvailable);
 
-            IList<string> result;
-
-            try
-            {
-                result = status.TrimUpperReplaceSplit();
-            }
-            catch (ArgumentException exception)
-            {
-                throw new ArgumentException("Status string is invalid.", nameof(status), exception);
-            }
+            var result = status.TrimUpperReplaceSplit();
 
             if (result.Count > 1)
                 throw new ArgumentException("Status string is invalid. Support only one status.", nameof(status));
@@ -161,7 +165,37 @@ namespace Ecwid.Tools
 
             // Throw ex if all string is NullOrEmpty 
             if (AreNullOrEmpty(strings))
-                throw new ArgumentException("All new statuses are null or empty", nameof(strings));
+                throw new ArgumentException("All new statuses are null or empty.", nameof(strings));
+        }
+
+
+        /// <summary>
+        /// Validates the date time.
+        /// </summary>
+        /// <param name="date">The date.</param>
+        /// <exception cref="ArgumentException"><paramref name="date" /> string is null or empty.</exception>
+        /// <exception cref="ArgumentException"><paramref name="date" /> string is invalid.</exception>
+        public static bool ValidateDateTime(string date)
+        {
+            if (string.IsNullOrEmpty(date))
+                throw new ArgumentException("Date string is null or empty.", nameof(date));
+
+            if (new Regex(@"^\d{4}-\d{2}-\d{2}").IsMatch(date))
+            {
+                DateTime dt;
+                if (!DateTime.TryParse(date, out dt))
+                    throw new ArgumentException("Date string is invalid.", nameof(date));
+            }
+            else
+            {
+                long dt;
+                if (!long.TryParse(date, out dt))
+                    throw new ArgumentException("Date string is invalid.", nameof(date));
+                if (dt <= 0)
+                    throw new ArgumentException("Date string is invalid.", nameof(date));
+            }
+
+            return true;
         }
     }
 }

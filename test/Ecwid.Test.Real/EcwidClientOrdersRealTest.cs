@@ -1,7 +1,6 @@
 ﻿// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
 
 using System.Diagnostics.CodeAnalysis;
-using Ecwid.Services;
 using Xunit;
 
 namespace Ecwid.Test.Real
@@ -14,20 +13,20 @@ namespace Ecwid.Test.Real
     [SuppressMessage("ReSharper", "MissingXmlDoc")]
     public class EcwidClientOrdersRealTest
     {
+        private const int ShopId = 123;
+        private const string Token = "nmGjgfnmGjgfnmGjgfnmGjgfnmGjgfsd";
         private readonly EcwidCredentials _credentials;
-        private readonly int _shopId = 123;
-        private readonly string _token = "nmGjgfnmGjgfnmGjgfnmGjgfnmGjgfsd";
 
         public EcwidClientOrdersRealTest()
         {
-            _credentials = new EcwidCredentials(_shopId, _token);
+            _credentials = new EcwidCredentials(ShopId, Token);
         }
 
         /// <summary>
         /// Checks the orders authentication asynchronous pass.
         /// </summary>
         [Fact]
-        public async void CheckOrdersAuthAsyncPass()
+        public async void CheckOrdersTokenAsync()
         {
             IEcwidOrdersClient client = new EcwidClient
             {
@@ -42,12 +41,12 @@ namespace Ecwid.Test.Real
             Assert.Equal(true, result);
         }
 
-        ///// <summary>
-        ///// Checks the orders authentication asynchronous fail.
-        ///// </summary>
-        //[Fact]
-
         //public async void CheckOrdersAuthAsyncFail()
+        //[Fact]
+        ///// </summary>
+        ///// Checks the orders authentication asynchronous fail.
+
+        ///// <summary>
         //{
         //    IEcwidOrdersClient client = new EcwidClient
         //    {
@@ -55,7 +54,7 @@ namespace Ecwid.Test.Real
         //        {
         //            ApiUrl = "http://www.mocky.io/v2/56fa70921100009b28a72180",
         //            //empty set with count, total and 403 code
-        //            ShopId = 123,
+        //            ShopId = ShopId,
         //            OrderToken = "test"
         //        }
         //    };
@@ -69,14 +68,14 @@ namespace Ecwid.Test.Real
         ///// Gets the orders count asynchronous pass.
         ///// </summary>
         //[Fact]
-        //public async void GetOrdersCountAsyncPass()
+        //public async void GetOrdersCountAsync()
         //{
         //    IEcwidOrdersClient client = new EcwidClient
         //    {
         //        Settings =
         //        {
         //            ApiUrl = "http://www.mocky.io/v2/56fa69ff110000c627a72174", //empty set with count and total
-        //            ShopId = 123,
+        //            ShopId = ShopId,
         //            OrderToken = "test"
         //        }
         //    };
@@ -90,7 +89,7 @@ namespace Ecwid.Test.Real
         ///// Gets the new orders asynchronous pass.
         ///// </summary>
         //[Fact]
-        //public async void GetNewOrdersAsyncPass()
+        //public async void GetNewOrdersAsync()
         //{
         //    IEcwidOrdersClient client = new EcwidClient
         //    {
@@ -98,7 +97,7 @@ namespace Ecwid.Test.Real
         //        {
         //            ApiUrl = "http://www.mocky.io/v2/56fa73b51100000429a72183",
         //            //one orders set with count and total and empty next url
-        //            ShopId = 123,
+        //            ShopId = ShopId,
         //            OrderToken = "test"
         //        }
         //    };
@@ -112,7 +111,7 @@ namespace Ecwid.Test.Real
         ///// Gets the non paid orders asynchronous pass.
         ///// </summary>
         //[Fact]
-        //public async void GetNonPaidOrdersAsyncPass()
+        //public async void GetNonPaidOrdersAsync()
         //{
         //    IEcwidOrdersClient client = new EcwidClient
         //    {
@@ -120,7 +119,7 @@ namespace Ecwid.Test.Real
         //        {
         //            ApiUrl = "http://www.mocky.io/v2/56fa73b51100000429a72183",
         //            //one orders set with count and total and empty next url
-        //            ShopId = 123,
+        //            ShopId = ShopId,
         //            OrderToken = "test"
         //        }
         //    };
@@ -134,7 +133,7 @@ namespace Ecwid.Test.Real
         ///// Gets the paid not shipped orders asynchronous pass.
         ///// </summary>
         //[Fact]
-        //public async void GetPaidNotShippedOrdersAsyncPass()
+        //public async void GetPaidNotShippedOrdersAsync()
         //{
         //    IEcwidOrdersClient client = new EcwidClient
         //    {
@@ -142,7 +141,7 @@ namespace Ecwid.Test.Real
         //        {
         //            ApiUrl = "http://www.mocky.io/v2/56fa73b51100000429a72183",
         //            //one orders set with count and total and empty next url
-        //            ShopId = 123,
+        //            ShopId = ShopId,
         //            OrderToken = "test"
         //        }
         //    };
@@ -156,7 +155,7 @@ namespace Ecwid.Test.Real
         ///// Gets the shipped not delivered orders asynchronous pass.
         ///// </summary>
         //[Fact]
-        //public async void GetShippedNotDeliveredOrdersAsyncPass()
+        //public async void GetShippedOrdersAsync()
         //{
         //    IEcwidOrdersClient client = new EcwidClient
         //    {
@@ -164,12 +163,12 @@ namespace Ecwid.Test.Real
         //        {
         //            ApiUrl = "http://www.mocky.io/v2/56fa73b51100000429a72183",
         //            //one orders set with count and total and empty next url
-        //            ShopId = 123,
+        //            ShopId = ShopId,
         //            OrderToken = "test"
         //        }
         //    };
 
-        //    var result = await client.GetShippedNotDeliveredOrdersAsync();
+        //    var result = await client.GetShippedOrdersAsync();
 
         //    Assert.NotEmpty(result);
         //}
@@ -186,7 +185,7 @@ namespace Ecwid.Test.Real
         //        {
         //            ApiUrl = "http://www.mocky.io/v2/56fa76b61100007629a72187",
         //            //one orders set with count and total and NON empty next url
-        //            ShopId = 123,
+        //            ShopId = ShopId,
         //            OrderToken = "test"
         //        }
         //    };
@@ -208,7 +207,7 @@ namespace Ecwid.Test.Real
         //        {
         //            ApiUrl = "http://www.mocky.io/v2/56fa76b61100007629a72187",
         //            //one orders set with count and total and NON empty next url
-        //            ShopId = 123,
+        //            ShopId = ShopId,
         //            OrderToken = "test"
         //        }
         //    };
@@ -237,7 +236,7 @@ namespace Ecwid.Test.Real
         //        {
         //            ApiUrl = "http://www.mocky.io/v2/56fa76b61100007629a72187",
         //            //one orders set with count and total and NON empty next url
-        //            ShopId = 123,
+        //            ShopId = ShopId,
         //            OrderToken = "test"
         //        }
         //    };
@@ -265,7 +264,7 @@ namespace Ecwid.Test.Real
         //            {
         //                ApiUrl = "http://www.mocky.io/v2/56fa76b61100007629a72187",
         //                //one orders set with count and total and NON empty next url
-        //                ShopId = 123,
+        //                ShopId = ShopId,
         //                OrderToken = "test"
         //            }
         //        };

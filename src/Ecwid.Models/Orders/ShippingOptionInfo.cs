@@ -4,6 +4,9 @@ using Newtonsoft.Json;
 
 namespace Ecwid.Models
 {
+    /// <summary>
+    /// Options of shipping method.
+    /// </summary>
     public class ShippingOptionInfo
     {
         /// <summary>

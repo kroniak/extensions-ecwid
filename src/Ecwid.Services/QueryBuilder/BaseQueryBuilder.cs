@@ -2,8 +2,9 @@
 
 using System;
 using System.Collections.Generic;
+using Ecwid.Tools;
 
-namespace Ecwid.Services
+namespace Ecwid
 {
     /// <summary>
     /// Base query builder for Ecwid client
@@ -25,7 +26,7 @@ namespace Ecwid.Services
         /// <exception cref="ArgumentException"><paramref name="value" /> is <see langword="null" />.</exception>
         internal void AddOrUpdate(string name, object value)
         {
-            if (string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name))
+            if (Validators.IsNullOrEmpty(name))
                 throw new ArgumentException("Can not add value to query.", nameof(name));
 
             if (value == null)

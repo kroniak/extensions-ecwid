@@ -1,6 +1,6 @@
 ﻿// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
 
-namespace Ecwid.Services.Legacy
+namespace Ecwid.Legacy
 {
     /// <summary>
     /// Settings for Ecwid Legacy Client <see cref="EcwidLegacyClient" />

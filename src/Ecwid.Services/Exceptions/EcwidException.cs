@@ -2,7 +2,7 @@
 
 using System;
 
-namespace Ecwid.Services
+namespace Ecwid
 {
     /// <summary>
     /// Base class for Ecwid client exception

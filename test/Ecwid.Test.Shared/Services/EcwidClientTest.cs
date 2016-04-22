@@ -1,10 +1,10 @@
 ﻿// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
 
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
 using System.Threading;
-using Ecwid.Services;
-using Ecwid.Services.Legacy;
+using Ecwid.Legacy;
 using Flurl.Http.Testing;
 using Xunit;
 
@@ -52,42 +52,61 @@ namespace Ecwid.Test.Services
 
         #endregion
 
+        #region Readme and Wiki tests
+
+        [Fact]
+        public async void ReadmeTest()
+        {
+            const int someShopId = 123;
+            const string someToken = "4843094390fdskldgsfkldkljKLLKklfdkldsffds";
+
+            _httpTest
+                .RespondWithJson(Moqs.MockSearchResultWithManyOrder());
+
+            var client = new EcwidClient();
+            var result = await client.Configure(someShopId, someToken).Orders
+                .Limit(10)
+                .CreatedFrom(DateTime.Today)
+                .PaymentStatuses("PAID")
+                .GetAsync();
+
+            Assert.Equal(10, result.Count);
+        }
+
+        #endregion
+
         #region DefaultClient
 
         [Fact]
-        public void DefaultCreatePass()
+        public void DefaultCreate()
         {
             var settings = _defaultClient.Settings;
             var credentials = _defaultClient.Credentials;
 
             Assert.Null(credentials);
-            Assert.Equal("https://app.ecwid.com/api/v3/", settings.ApiUrl);
+            Assert.NotNull(settings);
         }
 
         [Fact]
-        public void DefaultChangeApiUrlPass()
+        public void DefaultChangeApiUrl()
         {
-            var settings = _defaultClient.Settings;
-            settings.ApiUrl = "https://app.ecwid.com/api/v1/";
+            var settings = new EcwidSettings {ApiUrl = "https://app.ecwid.com/api/v1/"};
+            _defaultClient.Settings = settings;
+            var client = _defaultClient.Configure(settings);
 
             Assert.Equal("https://app.ecwid.com/api/v1/", settings.ApiUrl);
+            Assert.Equal(_defaultClient, client);
         }
 
         [Fact]
-        public void DefaultConfigurePass()
+        public void DefaultConfigure()
         {
-            var result = _defaultClient.Configure(123, Token);
+            var result = _defaultClient.Configure(ShopId, Token);
 
             Assert.NotNull(result);
             Assert.StrictEqual(_defaultClient, result);
-            Assert.Equal(123, result.Credentials.ShopId);
+            Assert.Equal(ShopId, result.Credentials.ShopId);
             Assert.Equal(Token, result.Credentials.Token);
-        }
-
-        [Fact]
-        public void DefaultConfigureFail()
-        {
-            Assert.Throws<EcwidConfigException>(() => _defaultClient.Configure(0, null));
         }
 
         #endregion
@@ -102,7 +121,7 @@ namespace Ecwid.Test.Services
                         () => _defaultClient.CheckOrdersTokenAsync(new CancellationToken()));
 
         [Fact]
-        public void OrdersGetEmptyPass()
+        public void OrdersGetEmpty()
         {
             var query = _ordersClient.Orders;
             Assert.NotNull(query);
@@ -112,33 +131,21 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void OrdersCheckOrdersAuthAsyncPass()
+        public async void OrdersCheckOrdersAuthAsync()
         {
             _httpTest
-                .RespondWithJson(Moqs.MockSearchResultWithLimit1);
-
-            var result = await _ordersClient.CheckOrdersTokenAsync();
-
-            _httpTest.ShouldHaveCalled($"{_checkOrdersUrl}&limit=1")
-                .WithVerb(HttpMethod.Get)
-                .Times(1);
-
-            Assert.Equal(true, result);
-        }
-
-        [Fact]
-        public async void OrdersCheckOrdersAuthAsyncFail()
-        {
-            _httpTest
+                .RespondWithJson(Moqs.MockSearchResultWithLimit1)
                 .RespondWithJson(403, Moqs.MockSearchResultWithLimit1);
 
             var result = await _ordersClient.CheckOrdersTokenAsync();
+            Assert.Equal(true, result);
+
+            result = await _ordersClient.CheckOrdersTokenAsync();
+            Assert.Equal(false, result);
 
             _httpTest.ShouldHaveCalled($"{_checkOrdersUrl}&limit=1")
                 .WithVerb(HttpMethod.Get)
-                .Times(1);
-
-            Assert.Equal(false, result);
+                .Times(2);
         }
 
         [Fact]
@@ -162,7 +169,7 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void OrdersGetOrdersCountAsyncPass()
+        public async void OrdersGetOrdersCountAsync()
         {
             _httpTest
                 .RespondWithJson(Moqs.MockSearchResultWithLimit1)
@@ -182,34 +189,51 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void OrdersGetNewOrdersAsyncPass()
+        public async void OrdersGetNewOrdersAsync()
         {
             _httpTest
-                .RespondWithJson(Moqs.MockSearchResultWithLimit1)
-                .RespondWithJson(Moqs.MockSearchResultWithLimit1)
-                .RespondWithJson(Moqs.MockSearchResultZeroResult);
+                .RespondWithJson(Moqs.MockSearchResultWithOneOrder)
+                .RespondWithJson(Moqs.MockSearchResultWithOneOrder);
 
             var result = await _ordersClient.GetNewOrdersAsync();
             Assert.NotEmpty(result);
+
             result = await _ordersClient.GetNewOrdersAsync(new CancellationToken());
             Assert.NotEmpty(result);
-            result = await _ordersClient.GetNewOrdersAsync();
-            Assert.Empty(result);
 
             _httpTest.ShouldHaveCalled($"{_checkOrdersUrl}&fulfillmentStatus=*")
                 .WithVerb(HttpMethod.Get)
-                .Times(3);
+                .Times(2);
         }
 
         [Fact]
-        public async void OrdersGetNonPaidOrdersAsyncPass()
+        public async void OrdersGetIncompleteOrdersAsync()
         {
             _httpTest
-                .RespondWithJson(Moqs.MockSearchResultWithLimit1)
-                .RespondWithJson(Moqs.MockSearchResultWithLimit1);
+                .RespondWithJson(Moqs.MockSearchResultWithOneOrder)
+                .RespondWithJson(Moqs.MockSearchResultWithOneOrder);
+
+            var result = await _ordersClient.GetIncompleteOrdersAsync();
+            Assert.NotEmpty(result);
+
+            result = await _ordersClient.GetIncompleteOrdersAsync(new CancellationToken());
+            Assert.NotEmpty(result);
+
+            _httpTest.ShouldHaveCalled($"{_checkOrdersUrl}&paymentStatus=*")
+                .WithVerb(HttpMethod.Get)
+                .Times(2);
+        }
+
+        [Fact]
+        public async void OrdersGetNonPaidOrdersAsync()
+        {
+            _httpTest
+                .RespondWithJson(Moqs.MockSearchResultWithOneOrder)
+                .RespondWithJson(Moqs.MockSearchResultWithOneOrder);
 
             var result = await _ordersClient.GetNonPaidOrdersAsync();
             Assert.NotEmpty(result);
+
             result = await _ordersClient.GetNonPaidOrdersAsync(new CancellationToken());
             Assert.NotEmpty(result);
 
@@ -219,14 +243,15 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void OrdersGetPaidNotShippedOrdersAsyncPass()
+        public async void OrdersGetPaidNotShippedOrdersAsync()
         {
             _httpTest
-                .RespondWithJson(Moqs.MockSearchResultWithLimit1)
-                .RespondWithJson(Moqs.MockSearchResultWithLimit1);
+                .RespondWithJson(Moqs.MockSearchResultWithOneOrder)
+                .RespondWithJson(Moqs.MockSearchResultWithOneOrder);
 
             var result = await _ordersClient.GetPaidNotShippedOrdersAsync();
             Assert.NotEmpty(result);
+
             result = await _ordersClient.GetPaidNotShippedOrdersAsync(new CancellationToken());
             Assert.NotEmpty(result);
 
@@ -236,15 +261,16 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void OrdersGetShippedNotDeliveredOrdersAsyncPass()
+        public async void OrdersGetShippedOrdersAsync()
         {
             _httpTest
-                .RespondWithJson(Moqs.MockSearchResultWithLimit1)
-                .RespondWithJson(Moqs.MockSearchResultWithLimit1);
+                .RespondWithJson(Moqs.MockSearchResultWithOneOrder)
+                .RespondWithJson(Moqs.MockSearchResultWithOneOrder);
 
-            var result = await _ordersClient.GetShippedNotDeliveredOrdersAsync();
+            var result = await _ordersClient.GetShippedOrdersAsync();
             Assert.NotEmpty(result);
-            result = await _ordersClient.GetShippedNotDeliveredOrdersAsync(new CancellationToken());
+
+            result = await _ordersClient.GetShippedOrdersAsync(new CancellationToken());
             Assert.NotEmpty(result);
 
             _httpTest.ShouldHaveCalled($"{_checkOrdersUrl}&fulfillmentStatus=*")
@@ -252,12 +278,69 @@ namespace Ecwid.Test.Services
                 .Times(2);
         }
 
+        [Fact]
+        public async void OrdersGetOrdersAsyncQueryMultiPagesResult()
+        {
+            const int count = 100;
+            const string query = "paymentStatus=paid";
+
+            _httpTest
+                .RespondWithJson(Moqs.MockSearchResultWithManyOrderAndPages(count, count*0, count))
+                .RespondWithJson(Moqs.MockSearchResultWithManyOrderAndPages(count, count*1, count))
+                .RespondWithJson(Moqs.MockSearchResultWithManyOrderAndPages(count, count*2, count))
+                .RespondWithJson(Moqs.MockSearchResultWithManyOrderAndPages(count, count*3, 0))
+                .RespondWithJson(Moqs.MockSearchResultWithManyOrderAndPages(count, count*0, count))
+                .RespondWithJson(Moqs.MockSearchResultWithManyOrderAndPages(count, count*1, count))
+                .RespondWithJson(Moqs.MockSearchResultWithManyOrderAndPages(count, count*2, count))
+                .RespondWithJson(Moqs.MockSearchResultWithManyOrderAndPages(count, count*3, 0));
+
+            var result = await _ordersClient.GetOrdersAsync(new {paymentStatus = "paid"});
+            var result2 = await _ordersClient.GetOrdersAsync(new {paymentStatus = "paid"}, new CancellationToken());
+
+            _httpTest.ShouldHaveCalled($"{_checkOrdersUrl}&{query}")
+                .WithVerb(HttpMethod.Get)
+                .Times(2);
+
+            _httpTest.ShouldHaveCalled($"{_checkOrdersUrl}&offset=*&{query}")
+                .WithVerb(HttpMethod.Get)
+                .Times(6);
+
+            Assert.Equal(count*3, result.Count);
+            Assert.Equal(count*3, result2.Count);
+        }
+
+        [Fact]
+        public async void OrdersGetOrdersAsyncQueryOnePagesResult()
+        {
+            const int count = 100;
+            const string query = "limit=100&paymentStatus=paid";
+
+            _httpTest
+                .RespondWithJson(Moqs.MockSearchResultWithManyOrderAndPages(count, 0, count))
+                .RespondWithJson(Moqs.MockSearchResultWithManyOrderAndPages(count, 0, count));
+
+            var result = await _ordersClient.GetOrdersAsync(new {limit = count, paymentStatus = "paid"});
+            var result2 =
+                await _ordersClient.GetOrdersAsync(new {limit = count, paymentStatus = "paid"}, new CancellationToken());
+
+            _httpTest.ShouldHaveCalled($"{_checkOrdersUrl}&{query}")
+                .WithVerb(HttpMethod.Get)
+                .Times(2);
+
+            _httpTest.ShouldNotHaveCalled($"{_checkOrdersUrl}&offset=*&{query}")
+                .WithVerb(HttpMethod.Get)
+                .Times(6);
+
+            Assert.Equal(count, result.Count);
+            Assert.Equal(count, result2.Count);
+        }
+
         #endregion
 
         #region DefaultLegacyClient
 
         [Fact]
-        public void DefaultLegacyCreatePass()
+        public void DefaultLegacyCreate()
         {
             var settings = _defaultLegacyClient.Settings;
             var credentials = _defaultLegacyClient.Credentials;
@@ -269,25 +352,30 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public void DefaultLegacyConfigureShopPass()
+        public void DefaultLegacyChangeApiUrl()
         {
-            var client3 = _defaultLegacyClient.Configure(123, Token, Token);
+            var settings = new EcwidLegacySettings {ApiUrl = "https://app.ecwid.com/api/v1/"};
+            _defaultLegacyClient.Settings = settings;
+            var client = _defaultLegacyClient.Configure(settings);
 
-            Assert.NotNull(client3);
-            Assert.StrictEqual(_defaultLegacyClient, client3);
-            Assert.Equal(Token, client3.Credentials.OrderToken);
-            Assert.Equal(Token, client3.Credentials.ProductToken);
+            Assert.Equal("https://app.ecwid.com/api/v1/", settings.ApiUrl);
+            Assert.Equal(_defaultLegacyClient, client);
         }
 
         [Fact]
-        public void DefaultLegacyConfigureShopFail()
+        public void DefaultLegacyConfigureShop()
         {
-            Assert.Throws<EcwidConfigException>(
-                () => _defaultLegacyClient.Configure(123));
-            Assert.Throws<EcwidConfigException>(
-                () => _defaultLegacyClient.Configure(123, "", ""));
-            Assert.Throws<EcwidConfigException>(
-                () => _defaultLegacyClient.Configure(123, "test", "test"));
+            var client = _defaultLegacyClient.Configure(ShopId, Token, Token);
+            var client2 = _defaultLegacyClient.Configure(new EcwidLegacyCredentials(ShopId, Token, Token));
+
+            Assert.NotNull(client);
+            Assert.StrictEqual(_defaultLegacyClient, client);
+            Assert.Equal(Token, client.Credentials.OrderToken);
+            Assert.Equal(Token, client.Credentials.ProductToken);
+            Assert.NotNull(client2);
+            Assert.StrictEqual(_defaultLegacyClient, client2);
+            Assert.Equal(Token, client2.Credentials.OrderToken);
+            Assert.Equal(Token, client2.Credentials.ProductToken);
         }
 
         #endregion
@@ -302,17 +390,15 @@ namespace Ecwid.Test.Services
                         () => _defaultLegacyClient.CheckOrdersTokenAsync(new CancellationToken()));
 
         [Fact]
-        public void LegacyOrdersGetEmptyPass()
+        public void LegacyOrdersGetEmpty()
         {
             var query = _ordersLegacyClient.Orders;
-            Assert.NotNull(query);
             Assert.Empty(query.Query);
-            Assert.NotNull(query.Client);
             Assert.StrictEqual(_ordersLegacyClient, query.Client);
         }
 
         [Fact]
-        public async void LegacyOrdersCheckOrdersAuthAsyncPass()
+        public async void LegacyOrdersCheckOrdersTokenAsync()
         {
             _httpTest
                 .RespondWithJson(new {count = 0, total = 0, order = "[]"})
@@ -349,7 +435,7 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void LegacyOrdersGetOrdersCountAsyncPass()
+        public async void LegacyOrdersGetOrdersCountAsync()
         {
             _httpTest
                 .RespondWithJson(new {count = 0, total = 10, order = "[]"})
@@ -367,7 +453,7 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void LegacyOrdersGetNewOrdersAsyncPass()
+        public async void LegacyOrdersGetNewOrdersAsync()
         {
             var responce = Legacy.Moqs.MockLegacyOrderResponseWithOneOrder;
 
@@ -387,7 +473,7 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void LegacyOrdersGetNonPaidOrdersAsyncPass()
+        public async void LegacyOrdersGetNonPaidOrdersAsync()
         {
             var responce = Legacy.Moqs.MockLegacyOrderResponseWithOneOrder;
 
@@ -407,7 +493,7 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void LegacyOrdersGetPaidNotShippedOrdersAsyncPass()
+        public async void LegacyOrdersGetPaidNotShippedOrdersAsync()
         {
             var responce = Legacy.Moqs.MockLegacyOrderResponseWithOneOrder;
 
@@ -427,7 +513,7 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void LegacyOrdersGetShippedNotDeliveredOrdersAsyncPass()
+        public async void LegacyOrdersGetShippedOrdersAsync()
         {
             var responce = Legacy.Moqs.MockLegacyOrderResponseWithOneOrder;
 
@@ -435,8 +521,8 @@ namespace Ecwid.Test.Services
                 .RespondWithJson(responce)
                 .RespondWithJson(responce);
 
-            var result = await _ordersLegacyClient.GetShippedNotDeliveredOrdersAsync();
-            var result2 = await _ordersLegacyClient.GetShippedNotDeliveredOrdersAsync(new CancellationToken());
+            var result = await _ordersLegacyClient.GetShippedOrdersAsync();
+            var result2 = await _ordersLegacyClient.GetShippedOrdersAsync(new CancellationToken());
 
             _httpTest.ShouldHaveCalled($"{_checkOrdersLegacyUrl}&statuses=*")
                 .WithVerb(HttpMethod.Get)
@@ -447,41 +533,49 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void LegacyOrdersGetOrdersAsyncQueryMultiPagesResultPass()
+        public async void LegacyOrdersGetOrdersAsyncQueryMultiPagesResult()
         {
+            const int count = 200;
+            const string query = "statuses=paid";
+
             _httpTest
                 .RespondWithJson(
                     Legacy.Moqs.MockLegacyOrderResponseWithManyOrderAndPages(
-                        $"{_checkOrdersLegacyUrl}&limit=5&offset=5"))
-                .RespondWithJson(Legacy.Moqs.MockLegacyOrderResponseWithManyOrder);
+                        $"{_checkOrdersLegacyUrl}&{query}&offset={count}"))
+                .RespondWithJson(Legacy.Moqs.MockLegacyOrderResponseWithManyOrder(count))
+                .RespondWithJson(
+                    Legacy.Moqs.MockLegacyOrderResponseWithManyOrderAndPages(
+                        $"{_checkOrdersLegacyUrl}&{query}&offset={count}"))
+                .RespondWithJson(Legacy.Moqs.MockLegacyOrderResponseWithManyOrder(count));
 
-            var result = await _ordersLegacyClient.GetOrdersAsync(new {limit = 5});
+            var result = await _ordersLegacyClient.GetOrdersAsync(new {statuses = "paid"});
+            var result2 = await _ordersLegacyClient.GetOrdersAsync(new {statuses = "paid"}, new CancellationToken());
 
-            _httpTest.ShouldHaveCalled($"{_checkOrdersLegacyUrl}&limit=5")
+            _httpTest.ShouldHaveCalled($"{_checkOrdersLegacyUrl}&{query}")
+                .WithVerb(HttpMethod.Get)
+                .Times(4);
+
+            _httpTest.ShouldHaveCalled($"{_checkOrdersLegacyUrl}&{query}&offset={count}")
                 .WithVerb(HttpMethod.Get)
                 .Times(2);
 
-            _httpTest.ShouldHaveCalled($"{_checkOrdersLegacyUrl}&limit=5&offset=5")
-                .WithVerb(HttpMethod.Get)
-                .Times(1);
-
-            Assert.Equal(20, result.Count);
+            Assert.Equal(count*2, result.Count);
+            Assert.Equal(count*2, result2.Count);
         }
 
         [Fact]
-        public async void LegacyOrdersGetOrdersAsyncQueryMultiPagesResultOnePagePass()
+        public async void LegacyOrdersGetOrdersAsyncQueryMultiPagesResultOnePage()
         {
             _httpTest
                 .RespondWithJson(
                     Legacy.Moqs.MockLegacyOrderResponseWithManyOrderAndPages(
                         $"{_checkOrdersLegacyUrl}&limit=5&offset=5"))
-                .RespondWithJson(Legacy.Moqs.MockLegacyOrderResponseWithManyOrder).RespondWithJson(
+                .RespondWithJson(
                     Legacy.Moqs.MockLegacyOrderResponseWithManyOrderAndPages(
-                        $"{_checkOrdersLegacyUrl}&limit=5&offset=5"))
-                .RespondWithJson(Legacy.Moqs.MockLegacyOrderResponseWithManyOrder);
+                        $"{_checkOrdersLegacyUrl}&limit=5&offset=5"));
 
-            var result = await _ordersLegacyClient.Orders.Limit(5).GetPageAsync();
-            var result2 = await _ordersLegacyClient.Orders.Limit(5).GetPageAsync(new CancellationToken());
+            var result = await _ordersLegacyClient.Orders.Limit(5).GetAsync();
+            var result2 = await _ordersLegacyClient.Orders.Limit(5).GetAsync(new CancellationToken());
 
             _httpTest.ShouldHaveCalled($"{_checkOrdersLegacyUrl}&limit=5")
                 .WithVerb(HttpMethod.Get)
@@ -491,74 +585,8 @@ namespace Ecwid.Test.Services
                 .WithVerb(HttpMethod.Get)
                 .Times(2);
 
-            Assert.Equal(10, result.Count);
-            Assert.Equal(10, result2.Count);
-        }
-
-        [Fact]
-        public async void LegacyOrdersGetOrdersAsyncQueryMultiPagesResultCancellationPass()
-        {
-            _httpTest
-                .RespondWithJson(
-                    Legacy.Moqs.MockLegacyOrderResponseWithManyOrderAndPages(
-                        $"{_checkOrdersLegacyUrl}&limit=5&offset=5"))
-                .RespondWithJson(Legacy.Moqs.MockLegacyOrderResponseWithManyOrder);
-
-            var result = await _ordersLegacyClient.GetOrdersAsync(new {limit = 5}, new CancellationToken());
-
-            _httpTest.ShouldHaveCalled($"{_checkOrdersLegacyUrl}&limit=5")
-                .WithVerb(HttpMethod.Get)
-                .Times(2);
-
-            _httpTest.ShouldHaveCalled($"{_checkOrdersLegacyUrl}&limit=5&offset=5")
-                .WithVerb(HttpMethod.Get)
-                .Times(1);
-
-            Assert.Equal(20, result.Count);
-        }
-
-        [Fact]
-        public async void LegacyOrdersGetOrdersAsyncQueryBuilderMultiPagesResultPass()
-        {
-            _httpTest
-                .RespondWithJson(
-                    Legacy.Moqs.MockLegacyOrderResponseWithManyOrderAndPages(
-                        $"{_checkOrdersLegacyUrl}&limit=5&offset=5"))
-                .RespondWithJson(Legacy.Moqs.MockLegacyOrderResponseWithManyOrder);
-
-            var result = await _ordersLegacyClient.Orders.Limit(5).GetAsync();
-
-            _httpTest.ShouldHaveCalled($"{_checkOrdersLegacyUrl}&limit=5")
-                .WithVerb(HttpMethod.Get)
-                .Times(2);
-
-            _httpTest.ShouldHaveCalled($"{_checkOrdersLegacyUrl}&limit=5&offset=5")
-                .WithVerb(HttpMethod.Get)
-                .Times(1);
-
-            Assert.Equal(20, result.Count);
-        }
-
-        [Fact]
-        public async void LegacyOrdersGetOrdersAsyncQueryBuilderMultiPagesResultCancellationPass()
-        {
-            _httpTest
-                .RespondWithJson(
-                    Legacy.Moqs.MockLegacyOrderResponseWithManyOrderAndPages(
-                        $"{_checkOrdersLegacyUrl}&limit=5&offset=5"))
-                .RespondWithJson(Legacy.Moqs.MockLegacyOrderResponseWithManyOrder);
-
-            var result = await _ordersLegacyClient.Orders.Limit(5).GetAsync(new CancellationToken());
-
-            _httpTest.ShouldHaveCalled($"{_checkOrdersLegacyUrl}&limit=5")
-                .WithVerb(HttpMethod.Get)
-                .Times(2);
-
-            _httpTest.ShouldHaveCalled($"{_checkOrdersLegacyUrl}&limit=5&offset=5")
-                .WithVerb(HttpMethod.Get)
-                .Times(1);
-
-            Assert.Equal(20, result.Count);
+            Assert.Equal(200, result.Count);
+            Assert.Equal(200, result2.Count);
         }
 
         [Fact]
@@ -569,7 +597,11 @@ namespace Ecwid.Test.Services
                     async () => await _ordersLegacyClient.Orders.UpdateAsync("", "", ""));
             await
                 Assert.ThrowsAsync<EcwidConfigException>(
-                    async () => await _ordersLegacyClient.Orders.Limit(5).Offset(5).UpdateAsync("", "", ""));
+                    async () =>
+                        await
+                            _ordersLegacyClient.Orders.Limit(5)
+                                .Offset(5)
+                                .UpdateAsync("", "", "", new CancellationToken()));
         }
 
         [Fact]
@@ -577,20 +609,20 @@ namespace Ecwid.Test.Services
             => await _ordersLegacyClient.Orders.Order(1).UpdateAsync("", "", ""));
 
         [Fact]
-        public async void LegacyOrdersUpdateAsyncNullResultPass()
+        public async void LegacyOrdersUpdateAsyncNullResult()
         {
             _httpTest
                 .RespondWithJson(new {count = 0, total = 10, order = "[]"})
                 .RespondWithJson(new {count = 0, total = 10, order = "[]"});
 
-            var result = await _ordersLegacyClient.Orders.Order(123).UpdateAsync("PAID", "PROCESSING", "");
+            var result = await _ordersLegacyClient.Orders.Order(ShopId).UpdateAsync("PAID", "PROCESSING", "");
             var result2 =
                 await
-                    _ordersLegacyClient.Orders.Order(123)
-                        .UpdateAsync("PAID", "PROCESSING", "", new CancellationToken());
+                    _ordersLegacyClient.Orders.Order(ShopId)
+                        .UpdateAsync("PAID", "PROCESSING", "testCode", new CancellationToken());
 
             _httpTest.ShouldHaveCalled(
-                $"{_checkOrdersLegacyUrl}&order=123&new_payment_status=PAID&new_fulfillment_status=PROCESSING")
+                $"{_checkOrdersLegacyUrl}&order={ShopId}&new_payment_status=PAID&new_fulfillment_status=PROCESSING")
                 .WithVerb(HttpMethod.Post)
                 .Times(2);
 
@@ -599,15 +631,15 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void LegacyOrdersUpdateAsyncResultPass()
+        public async void LegacyOrdersUpdateAsyncResult()
         {
             _httpTest
                 .RespondWithJson(Legacy.Moqs.MockLegacyOrderResponseForUpdate);
 
-            var result = await _ordersLegacyClient.Orders.Order(123).UpdateAsync("PAID", "PROCESSING", "123");
+            var result = await _ordersLegacyClient.Orders.Order(1).UpdateAsync("PAID", "PROCESSING", "test_code");
 
             _httpTest.ShouldHaveCalled(
-                $"{_checkOrdersLegacyUrl}&order=123&new_payment_status=PAID&new_fulfillment_status=PROCESSING&new_shipping_tracking_code=123")
+                $"{_checkOrdersLegacyUrl}&order=1&new_payment_status=PAID&new_fulfillment_status=PROCESSING&new_shipping_tracking_code=test_code")
                 .WithVerb(HttpMethod.Post)
                 .Times(1);
 
