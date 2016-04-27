@@ -11,7 +11,7 @@
     }
   },
 
-  "compile": [ "../Ecwid.Test.Shared/**/*.cs", "../../src/**/*.cs" ],
+  "compile": [ "../Ecwid.Test.Shared/**/*.cs", "../../src/Ecwid.Models/**/*.cs", "../../src/Ecwid.Services/**/*.cs" ],
   "compileExclude": [ "../**/*RealTest.cs" ],
 
   "commands": {

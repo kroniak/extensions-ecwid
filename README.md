@@ -18,7 +18,7 @@ var result = await client.Configure(someShopId, someToken).Orders
 
 `PM> Install-Package Ecwid -Pre` - services and models
 
-`PM> Install-Package Ecwid.OAuth2 -Pre` - a pipeline OAuth2 wrapper for ASP.NET Core (aka ASP.NET 5)
+`PM> Install-Package Ecwid.OAuth -Pre` - a pipeline OAuth2 wrapper for ASP.NET Core (aka ASP.NET 5)
 ### Ecwid API
 You can learn abount v3 (general) API [here](https://developers.ecwid.com/api-documentation)
 

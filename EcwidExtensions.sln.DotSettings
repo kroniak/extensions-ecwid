@@ -8,7 +8,7 @@
 	<s:String x:Key="/Default/CodeStyle/CodeFormatting/XmlDocFormatter/TagAttributeIndenting/@EntryValue">ByFirstAttr</s:String>
 	<s:String x:Key="/Default/CodeStyle/FileHeader/FileHeaderText/@EntryValue">Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.</s:String>
 	<s:Boolean x:Key="/Default/Environment/Exceptional/InspectInternalMethods/@EntryValue">True</s:Boolean>
-	<s:Boolean x:Key="/Default/Environment/Exceptional/InspectPrivateMethods/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/Environment/Exceptional/InspectPrivateMethods/@EntryValue">False</s:Boolean>
 	<s:Boolean x:Key="/Default/Environment/Exceptional/InspectProtectedMethods/@EntryValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/Environment/Exceptional/IsDocumentationOfExceptionSubtypeSufficientForReferenceExpressions/@EntryValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/Environment/Exceptional/IsDocumentationOfExceptionSubtypeSufficientForThrowStatements/@EntryValue">True</s:Boolean>

@@ -1,11 +1,11 @@
 ﻿{
   "version": "1.0.0-beta",
-  "title": "Ecwid",
-  "description": "C# services and models classes to Ecwid API v1 and v3",
-  "summary": "C# services and models classes to Ecwid API v1 and v3",
+  "title": "Ecwid.OAuth",
+  "description": "ASP.NET Core OAuth2 middleware for Ecwid API v3",
+  "summary": "ASP.NET Core OAuth2 middleware for Ecwid API v3",
   "authors": [ "me@kroniak.net" ],
   "copyright": "Copyright ©2016 by me@kroniak.net",
-  "tags": [ "ecwid api client rest async" ],
+  "tags": [ "ecwid oauth middleware" ],
   "license": "GPL-3.0",
   "licenseUrl": "https://raw.githubusercontent.com/kroniak/extensions-ecwid/master/LICENSE",
   "requireLicenseAcceptance": false,
@@ -30,22 +30,12 @@
     }
   },
 
-  "compile": [ "../Ecwid.Models/**/*.cs", "../Ecwid.Services/**/*.cs" ],
-
   "dependencies": {
-    "Flurl.Http": "0.9.0"
+    "Microsoft.AspNet.Authentication.OAuth": "1.0.0-rc1-final"
   },
 
   "frameworks": {
-    "net45": {
-      "frameworkAssemblies": {
-        "System.Net.Http": "4.0.0.0" 
-      }
-    },
-    "dotnet54": {
-      "dependencies": {
-        "System.Collections.Concurrent": "4.0.10"
-      }
-    }
+    "net451": { },
+    "dotnet55": { }
   }
 }
