@@ -250,6 +250,42 @@ namespace Ecwid
         public async Task<List<OrderEntry>> GetIncompleteOrdersAsync(CancellationToken cancellationToken)
             => await GetOrdersAsync(new {paymentStatus = "INCOMPLETE"}, cancellationToken);
 
+        /// <summary>
+        /// Gets the one order asynchronous.
+        /// </summary>
+        /// <param name="orderNumber">The order number.</param>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="orderNumber" /> is out of range.</exception>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        public async Task<OrderEntry> GetOrderAsync(int orderNumber)
+        {
+            if (orderNumber <= 0) throw new ArgumentOutOfRangeException(nameof(orderNumber));
+
+            // ReSharper disable once RedundantAnonymousTypePropertyName
+            var orders = await GetOrdersAsync(new {orderNumber = orderNumber});
+
+            return orders.Count == 0 ? null : orders.FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Gets the one orders asynchronous.
+        /// </summary>
+        /// <param name="orderNumber">The order number.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="orderNumber" /> is out of range.</exception>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        public async Task<OrderEntry> GetOrderAsync(int orderNumber, CancellationToken cancellationToken)
+        {
+            if (orderNumber <= 0)
+                throw new ArgumentOutOfRangeException(nameof(orderNumber));
+
+            // ReSharper disable once RedundantAnonymousTypePropertyName
+            var orders = await GetOrdersAsync(new {orderNumber = orderNumber}, cancellationToken);
+
+            return orders.Count == 0 ? null : orders.FirstOrDefault();
+        }
+
         #endregion
     }
 }

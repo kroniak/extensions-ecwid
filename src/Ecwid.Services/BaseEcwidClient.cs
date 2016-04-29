@@ -63,7 +63,7 @@ namespace Ecwid
         /// <typeparam name="T"></typeparam>
         /// <param name="baseUrl">The base URL.</param>
         /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
-        protected virtual async Task<T> GetApiResponseAsync<T>(Url baseUrl) where T : class
+        protected async Task<T> GetApiResponseAsync<T>(Url baseUrl) where T : class
         {
             T poco;
             try
@@ -89,7 +89,7 @@ namespace Ecwid
         /// <param name="baseUrl">The base URL.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
-        protected virtual async Task<T> GetApiResponseAsync<T>(Url baseUrl, CancellationToken cancellationToken)
+        protected async Task<T> GetApiResponseAsync<T>(Url baseUrl, CancellationToken cancellationToken)
             where T : class
         {
             T poco;
@@ -108,43 +108,6 @@ namespace Ecwid
 
             return poco;
         }
-
-        /// <summary>
-        /// Updates the API asynchronous.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="baseUrl">The base URL.</param>
-        protected virtual async Task<T> UpdateApiAsync<T>(Url baseUrl) where T : class
-            => await baseUrl.PostAsync().ReceiveJson<T>();
-
-        /// <summary>
-        /// Updates the API asynchronous.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="baseUrl">The base URL.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        protected virtual async Task<T> UpdateApiAsync<T>(Url baseUrl, CancellationToken cancellationToken)
-            where T : class
-            => await baseUrl.PostAsync(cancellationToken).ReceiveJson<T>();
-
-        /// <summary>
-        /// Updates the API asynchronous.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="baseUrl">The base URL.</param>
-        /// <param name="query">The query.</param>
-        protected async Task<T> UpdateApiAsync<T>(Url baseUrl, object query) where T : class
-            => await UpdateApiAsync<T>(baseUrl.SetQueryParams(query));
-
-        /// <summary>
-        /// Updates the API asynchronous.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="baseUrl">The base URL.</param>
-        /// <param name="query">The query.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        protected async Task<T> UpdateApiAsync<T>(Url baseUrl, object query, CancellationToken cancellationToken)
-            where T : class => await UpdateApiAsync<T>(baseUrl.SetQueryParams(query), cancellationToken);
 
         /// <summary>
         /// Gets the API responce asynchronous.
@@ -167,5 +130,42 @@ namespace Ecwid
         protected async Task<T> GetApiResponseAsync<T>(Url baseUrl, object query, CancellationToken cancellationToken)
             where T : class
             => await GetApiResponseAsync<T>(baseUrl.SetQueryParams(query), cancellationToken);
+
+        /// <summary>
+        /// Updates the API asynchronous.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="baseUrl">The base URL.</param>
+        private async Task<T> UpdateApiAsync<T>(Url baseUrl) where T : class
+            => await baseUrl.PostAsync().ReceiveJson<T>();
+
+        /// <summary>
+        /// Updates the API asynchronous.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="baseUrl">The base URL.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        private async Task<T> UpdateApiAsync<T>(Url baseUrl, CancellationToken cancellationToken)
+            where T : class
+            => await baseUrl.PostAsync(cancellationToken).ReceiveJson<T>();
+
+        /// <summary>
+        /// Updates the API asynchronous.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="baseUrl">The base URL.</param>
+        /// <param name="query">The query.</param>
+        protected async Task<T> UpdateApiAsync<T>(Url baseUrl, object query) where T : class
+            => await UpdateApiAsync<T>(baseUrl.SetQueryParams(query));
+
+        /// <summary>
+        /// Updates the API asynchronous.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="baseUrl">The base URL.</param>
+        /// <param name="query">The query.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        protected async Task<T> UpdateApiAsync<T>(Url baseUrl, object query, CancellationToken cancellationToken)
+            where T : class => await UpdateApiAsync<T>(baseUrl.SetQueryParams(query), cancellationToken);
     }
 }

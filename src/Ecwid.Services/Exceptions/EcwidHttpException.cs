@@ -6,7 +6,7 @@ using System.Net;
 namespace Ecwid
 {
     /// <summary>
-    /// Throws when Ecwid API responces with status other than 200.
+    /// Throws when Ecwid API responses with status other than 200.
     /// </summary>
     public class EcwidHttpException : EcwidException
     {

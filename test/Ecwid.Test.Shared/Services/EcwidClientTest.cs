@@ -18,11 +18,11 @@ namespace Ecwid.Test.Services
         private const int ShopId = 123;
         private const string Token = "nmGjgfnmGjgfnmGjgfnmGjgfnmGjgfsd";
 
+        private static readonly string CheckOrdersUrl = $"https://app.ecwid.com/api/v3/{ShopId}/orders?token={Token}";
+
         // Urls for checking
         private readonly string _checkOrdersLegacyUrl =
             $"https://app.ecwid.com/api/v1/{ShopId}/orders?secure_auth_key={Token}";
-
-        private readonly string _checkOrdersUrl = $"https://app.ecwid.com/api/v3/{ShopId}/orders?token={Token}";
 
         // Global objects for testing
         private readonly IEcwidClient _defaultClient = new EcwidClient();
@@ -41,13 +41,15 @@ namespace Ecwid.Test.Services
         {
             _httpTest
                 .RespondWithJson(400,
-                    "{\"errorMessage\":\"\nStatus QUEUED is deprecated, use AWAITING_PAYMENT instead.\"}");
+                    "{\"errorMessage\":\"\nStatus QUEUED is deprecated, use AWAITING_PAYMENT instead.\"}")
+                .RespondWith(400, "Wrong numeric parameter 'orderNumber' value: not a number or a number out of range");
 
             await Assert.ThrowsAsync<EcwidHttpException>(async () => await _ordersClient.CheckOrdersTokenAsync());
+            await Assert.ThrowsAsync<EcwidHttpException>(async () => await _ordersClient.CheckOrdersTokenAsync());
 
-            _httpTest.ShouldHaveCalled($"{_checkOrdersUrl}&limit=1")
+            _httpTest.ShouldHaveCalled($"{CheckOrdersUrl}&limit=1")
                 .WithVerb(HttpMethod.Get)
-                .Times(1);
+                .Times(2);
         }
 
         #endregion
@@ -143,7 +145,7 @@ namespace Ecwid.Test.Services
             result = await _ordersClient.CheckOrdersTokenAsync();
             Assert.Equal(false, result);
 
-            _httpTest.ShouldHaveCalled($"{_checkOrdersUrl}&limit=1")
+            _httpTest.ShouldHaveCalled($"{CheckOrdersUrl}&limit=1")
                 .WithVerb(HttpMethod.Get)
                 .Times(2);
         }
@@ -163,7 +165,37 @@ namespace Ecwid.Test.Services
                 Assert.ThrowsAsync<EcwidHttpException>(
                     async () => await _ordersClient.CheckOrdersTokenAsync(new CancellationToken()));
 
-            _httpTest.ShouldHaveCalled($"{_checkOrdersUrl}&limit=1")
+            _httpTest.ShouldHaveCalled($"{CheckOrdersUrl}&limit=1")
+                .WithVerb(HttpMethod.Get)
+                .Times(2);
+        }
+
+        [Fact]
+        public async void GetOrderAsyncFail()
+        {
+            await
+                Assert.ThrowsAsync<ArgumentOutOfRangeException>(
+                    async () => await _ordersClient.GetOrderAsync(0));
+
+            await
+                Assert.ThrowsAsync<ArgumentOutOfRangeException>(
+                    async () => await _ordersClient.GetOrderAsync(0, new CancellationToken()));
+        }
+
+        [Fact]
+        public async void GetOrderAsyncNull()
+        {
+            _httpTest
+                .RespondWithJson(Moqs.MockSearchResultZeroResult)
+                .RespondWithJson(Moqs.MockSearchResultZeroResult);
+
+            var result = await _ordersClient.GetOrderAsync(1);
+            Assert.Null(result);
+
+            result = await _ordersClient.GetOrderAsync(1, new CancellationToken());
+            Assert.Null(result);
+
+            _httpTest.ShouldHaveCalled($"{CheckOrdersUrl}&orderNumber=1")
                 .WithVerb(HttpMethod.Get)
                 .Times(2);
         }
@@ -183,7 +215,7 @@ namespace Ecwid.Test.Services
             result = await _ordersClient.GetOrdersCountAsync();
             Assert.Equal(0, result);
 
-            _httpTest.ShouldHaveCalled($"{_checkOrdersUrl}&limit=1")
+            _httpTest.ShouldHaveCalled($"{CheckOrdersUrl}&limit=1")
                 .WithVerb(HttpMethod.Get)
                 .Times(3);
         }
@@ -201,7 +233,7 @@ namespace Ecwid.Test.Services
             result = await _ordersClient.GetNewOrdersAsync(new CancellationToken());
             Assert.NotEmpty(result);
 
-            _httpTest.ShouldHaveCalled($"{_checkOrdersUrl}&fulfillmentStatus=*")
+            _httpTest.ShouldHaveCalled($"{CheckOrdersUrl}&fulfillmentStatus=*")
                 .WithVerb(HttpMethod.Get)
                 .Times(2);
         }
@@ -219,7 +251,7 @@ namespace Ecwid.Test.Services
             result = await _ordersClient.GetIncompleteOrdersAsync(new CancellationToken());
             Assert.NotEmpty(result);
 
-            _httpTest.ShouldHaveCalled($"{_checkOrdersUrl}&paymentStatus=*")
+            _httpTest.ShouldHaveCalled($"{CheckOrdersUrl}&paymentStatus=*")
                 .WithVerb(HttpMethod.Get)
                 .Times(2);
         }
@@ -237,7 +269,7 @@ namespace Ecwid.Test.Services
             result = await _ordersClient.GetNonPaidOrdersAsync(new CancellationToken());
             Assert.NotEmpty(result);
 
-            _httpTest.ShouldHaveCalled($"{_checkOrdersUrl}&paymentStatus=*")
+            _httpTest.ShouldHaveCalled($"{CheckOrdersUrl}&paymentStatus=*")
                 .WithVerb(HttpMethod.Get)
                 .Times(2);
         }
@@ -255,7 +287,7 @@ namespace Ecwid.Test.Services
             result = await _ordersClient.GetPaidNotShippedOrdersAsync(new CancellationToken());
             Assert.NotEmpty(result);
 
-            _httpTest.ShouldHaveCalled($"{_checkOrdersUrl}&paymentStatus=*&fulfillmentStatus=*")
+            _httpTest.ShouldHaveCalled($"{CheckOrdersUrl}&paymentStatus=*&fulfillmentStatus=*")
                 .WithVerb(HttpMethod.Get)
                 .Times(2);
         }
@@ -273,7 +305,7 @@ namespace Ecwid.Test.Services
             result = await _ordersClient.GetShippedOrdersAsync(new CancellationToken());
             Assert.NotEmpty(result);
 
-            _httpTest.ShouldHaveCalled($"{_checkOrdersUrl}&fulfillmentStatus=*")
+            _httpTest.ShouldHaveCalled($"{CheckOrdersUrl}&fulfillmentStatus=*")
                 .WithVerb(HttpMethod.Get)
                 .Times(2);
         }
@@ -297,11 +329,11 @@ namespace Ecwid.Test.Services
             var result = await _ordersClient.GetOrdersAsync(new {paymentStatus = "paid"});
             var result2 = await _ordersClient.GetOrdersAsync(new {paymentStatus = "paid"}, new CancellationToken());
 
-            _httpTest.ShouldHaveCalled($"{_checkOrdersUrl}&{query}")
+            _httpTest.ShouldHaveCalled($"{CheckOrdersUrl}&{query}")
                 .WithVerb(HttpMethod.Get)
                 .Times(2);
 
-            _httpTest.ShouldHaveCalled($"{_checkOrdersUrl}&offset=*&{query}")
+            _httpTest.ShouldHaveCalled($"{CheckOrdersUrl}&offset=*&{query}")
                 .WithVerb(HttpMethod.Get)
                 .Times(6);
 
@@ -323,11 +355,11 @@ namespace Ecwid.Test.Services
             var result2 =
                 await _ordersClient.GetOrdersAsync(new {limit = count, paymentStatus = "paid"}, new CancellationToken());
 
-            _httpTest.ShouldHaveCalled($"{_checkOrdersUrl}&{query}")
+            _httpTest.ShouldHaveCalled($"{CheckOrdersUrl}&{query}")
                 .WithVerb(HttpMethod.Get)
                 .Times(2);
 
-            _httpTest.ShouldNotHaveCalled($"{_checkOrdersUrl}&offset=*&{query}")
+            _httpTest.ShouldNotHaveCalled($"{CheckOrdersUrl}&offset=*&{query}")
                 .WithVerb(HttpMethod.Get)
                 .Times(6);
 

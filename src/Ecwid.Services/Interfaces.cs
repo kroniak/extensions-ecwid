@@ -79,6 +79,25 @@ namespace Ecwid
         /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
         /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
         Task<List<OrderEntry>> GetIncompleteOrdersAsync(CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Gets the one order asynchronous.
+        /// </summary>
+        /// <param name="orderNumber">The order number.</param>
+        /// <exception cref="System.ArgumentOutOfRangeException"><paramref name="orderNumber" /> is out of range.</exception>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        Task<OrderEntry> GetOrderAsync(int orderNumber);
+
+        /// <summary>
+        /// Gets the one orders asynchronous.
+        /// </summary>
+        /// <param name="orderNumber">The order number.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <exception cref="System.ArgumentOutOfRangeException"><paramref name="orderNumber" /> is out of range.</exception>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        Task<OrderEntry> GetOrderAsync(int orderNumber, CancellationToken cancellationToken);
     }
 
     /// <summary>

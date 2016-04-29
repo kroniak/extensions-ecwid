@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
-using Ecwid.Models.Legacy;
 using Ecwid.Legacy;
+using Ecwid.Models.Legacy;
 using Xunit;
 
 namespace Ecwid.Test.Real
 {
     /// <summary>
-    /// Tests with real http responces.
+    /// Tests with real http responses.
     /// </summary>
     [SuppressMessage("ReSharper", "ExceptionNotDocumented")]
     [SuppressMessage("ReSharper", "ExceptionNotDocumentedOptional")]
@@ -25,25 +25,6 @@ namespace Ecwid.Test.Real
         public EcwidLegacyClientOrdersRealTest()
         {
             _credentials = new EcwidLegacyCredentials(ShopId, Token, Token);
-        }
-
-        /// <summary>
-        /// Checks the orders authentication asynchronous pass.
-        /// </summary>
-        [Fact]
-        public async void CheckOrdersTokenAsync()
-        {
-            var client = new EcwidLegacyClient
-            {
-                Settings =
-                {
-                    ApiUrl = "http://www.mocky.io/v2/56fa69ff110000c627a72174" //empty set with count and total
-                }
-            }.Configure(_credentials);
-
-            var result = await client.CheckOrdersTokenAsync();
-
-            Assert.True(result);
         }
 
         /// <summary>
@@ -67,10 +48,10 @@ namespace Ecwid.Test.Real
         }
 
         /// <summary>
-        /// Gets the orders count asynchronous pass.
+        /// Checks the orders authentication asynchronous pass.
         /// </summary>
         [Fact]
-        public async void GetOrdersCountAsync()
+        public async void CheckOrdersTokenAsync()
         {
             var client = new EcwidLegacyClient
             {
@@ -80,9 +61,9 @@ namespace Ecwid.Test.Real
                 }
             }.Configure(_credentials);
 
-            var result = await client.GetOrdersCountAsync();
+            var result = await client.CheckOrdersTokenAsync();
 
-            Assert.Equal(1021, result);
+            Assert.True(result);
         }
 
         /// <summary>
@@ -126,43 +107,57 @@ namespace Ecwid.Test.Real
         }
 
         /// <summary>
-        /// Gets the paid not shipped orders asynchronous pass.
+        /// Gets the orders asynchronous multi threading pass.
         /// </summary>
         [Fact]
-        public async void GetPaidNotShippedOrdersAsync()
+        public void GetOrdersAsyncMultiThreading()
         {
-            var client = new EcwidLegacyClient
+            var orders = new List<LegacyOrder>();
+            var tasks = new List<Task<List<LegacyOrder>>>();
+
+            // max 100 in 5 sec - real 50
+            for (var i = 0; i < 50; i++)
             {
-                Settings =
+                var client = new EcwidLegacyClient
                 {
-                    ApiUrl = "http://www.mocky.io/v2/56fa73b51100000429a72183"
-                    //one orders set with count and total and empty next url
-                }
-            }.Configure(_credentials);
+                    Settings =
+                    {
+                        ApiUrl = "http://www.mocky.io/v2/56fa76b61100007629a72187"
+                        //one orders set with count and total and NON empty next url
+                    }
+                }.Configure(_credentials);
 
-            var result = await client.GetPaidNotShippedOrdersAsync();
+                var task = client.Orders.Order(5).GetAsync();
+                tasks.Add(task);
+            }
 
-            Assert.Equal(1, result.Count);
+            // ReSharper disable once CoVariantArrayConversion
+            Task.WaitAll(tasks.ToArray());
+            tasks.ForEach(t => { orders.AddRange(t.Result); });
+
+            Assert.NotEmpty(orders);
+            Assert.Equal(100, orders.Count);
         }
 
         /// <summary>
-        /// Gets the shipped not delivered orders asynchronous pass.
+        /// Gets the orders asynchronous query builder multi pages result pass.
         /// </summary>
         [Fact]
-        public async void GetShippedOrdersAsync()
+        public async void GetOrdersAsyncQueryBuilderMultiPagesResult()
         {
             var client = new EcwidLegacyClient
             {
                 Settings =
                 {
-                    ApiUrl = "http://www.mocky.io/v2/56fa73b51100000429a72183"
-                    //one orders set with count and total and empty next url
+                    ApiUrl = "http://www.mocky.io/v2/56fa76b61100007629a72187"
+                    //one orders set with count and total and NON empty next url
                 }
             }.Configure(_credentials);
 
-            var result = await client.GetShippedOrdersAsync();
+            var result = await client.Orders.Order(5).GetAsync();
 
-            Assert.Equal(1, result.Count);
+            Assert.NotEmpty(result);
+            Assert.Equal(2, result.Count);
         }
 
         /// <summary>
@@ -215,57 +210,62 @@ namespace Ecwid.Test.Real
         }
 
         /// <summary>
-        /// Gets the orders asynchronous query builder multi pages result pass.
+        /// Gets the orders count asynchronous pass.
         /// </summary>
         [Fact]
-        public async void GetOrdersAsyncQueryBuilderMultiPagesResult()
+        public async void GetOrdersCountAsync()
         {
             var client = new EcwidLegacyClient
             {
                 Settings =
                 {
-                    ApiUrl = "http://www.mocky.io/v2/56fa76b61100007629a72187"
-                    //one orders set with count and total and NON empty next url
+                    ApiUrl = "http://www.mocky.io/v2/56fa69ff110000c627a72174" //empty set with count and total
                 }
             }.Configure(_credentials);
 
-            var result = await client.Orders.Order(5).GetAsync();
+            var result = await client.GetOrdersCountAsync();
 
-            Assert.NotEmpty(result);
-            Assert.Equal(2, result.Count);
+            Assert.Equal(1021, result);
         }
 
         /// <summary>
-        /// Gets the orders asynchronous multi threading pass.
+        /// Gets the paid not shipped orders asynchronous pass.
         /// </summary>
         [Fact]
-        public void GetOrdersAsyncMultiThreading()
+        public async void GetPaidNotShippedOrdersAsync()
         {
-            var orders = new List<LegacyOrder>();
-            var tasks = new List<Task<List<LegacyOrder>>>();
-
-            // max 100 in 5 sec - real 50
-            for (var i = 0; i < 50; i++)
+            var client = new EcwidLegacyClient
             {
-                var client = new EcwidLegacyClient
+                Settings =
                 {
-                    Settings =
-                    {
-                        ApiUrl = "http://www.mocky.io/v2/56fa76b61100007629a72187"
-                        //one orders set with count and total and NON empty next url
-                    }
-                }.Configure(_credentials);
+                    ApiUrl = "http://www.mocky.io/v2/56fa73b51100000429a72183"
+                    //one orders set with count and total and empty next url
+                }
+            }.Configure(_credentials);
 
-                var task = client.Orders.Order(5).GetAsync();
-                tasks.Add(task);
-            }
+            var result = await client.GetPaidNotShippedOrdersAsync();
 
-            // ReSharper disable once CoVariantArrayConversion
-            Task.WaitAll(tasks.ToArray());
-            tasks.ForEach(t => { orders.AddRange(t.Result); });
+            Assert.Equal(1, result.Count);
+        }
 
-            Assert.NotEmpty(orders);
-            Assert.Equal(100, orders.Count);
+        /// <summary>
+        /// Gets the shipped not delivered orders asynchronous pass.
+        /// </summary>
+        [Fact]
+        public async void GetShippedOrdersAsync()
+        {
+            var client = new EcwidLegacyClient
+            {
+                Settings =
+                {
+                    ApiUrl = "http://www.mocky.io/v2/56fa73b51100000429a72183"
+                    //one orders set with count and total and empty next url
+                }
+            }.Configure(_credentials);
+
+            var result = await client.GetShippedOrdersAsync();
+
+            Assert.Equal(1, result.Count);
         }
     }
 }
