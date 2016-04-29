@@ -1,49 +1,25 @@
-﻿using System;
+﻿// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
+
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Ecwid.Tools;
 using Xunit;
 
 namespace Ecwid.Test.Tools
 {
+    [SuppressMessage("ReSharper", "ExceptionNotDocumented")]
+    [SuppressMessage("ReSharper", "ExceptionNotDocumentedOptional")]
     public class ValidatorsTest
     {
-        [Fact]
-        public void ShopIdValidatePass()
-        {
-            var result = Validators.ShopIdValidate(1);
-            Assert.True(result);
-        }
-
-        [Theory]
-        [InlineData(0)]
-        [InlineData(-1)]
-        public void ShopIdValidateRangeFail(int shopId) => Assert.Throws<ArgumentException>(() => Validators.ShopIdValidate(shopId));
-
-        [Fact]
-        public void ShopIdValidateNullFail() => Assert.Throws<ArgumentException>(() => Validators.ShopIdValidate(null));
-
-        [Theory]
-        [InlineData("")]
-        [InlineData(null)]
-        public void ShopAuthValidateNullOrEmptyFail(string str)
-        {
-            Assert.Throws<ArgumentException>(() => Validators.ShopAuthValidate(str));
-        }
-
-        [Fact]
-        public void ShopAuthValidatePass()
-        {
-            var result = Validators.ShopAuthValidate("test");
-            Assert.True(result);
-        }
-
         [Theory]
         [InlineData("DECLINED, CANCELLED")]
         [InlineData("DECLINED,CANCELLED")]
         [InlineData("DECLINED ,CANCELLED")]
         [InlineData("DECLINED CANCELLED")]
-        public void PaymentStatusesValidatePass(string str)
+        public void StatusesValidate(string str)
         {
-            var result = Validators.PaymentStatusesValidate(str);
+            var result = Validators.StatusesValidate(str, Validators.AvailableLegacyPaymentStatuses);
             Assert.True(result);
         }
 
@@ -52,69 +28,72 @@ namespace Ecwid.Test.Tools
         [InlineData("DECLINED,CANCEL")]
         [InlineData("DECLINED ,CANCEL")]
         [InlineData("DECLINED CANCELLED FAIL")]
-        public void PaymentStatusesValidateFail(string str) => Assert.Throws<ArgumentException>(() => Validators.PaymentStatusesValidate(str));
+        public void StatusesValidateFail(string str)
+            =>
+                Assert.Throws<ArgumentException>(
+                    () => Validators.StatusesValidate(str, Validators.AvailableLegacyPaymentStatuses));
 
         [Fact]
-        public void PaymentStatusesValidateNullFail() => Assert.Throws<ArgumentException>(() => Validators.PaymentStatusesValidate(null));
+        public void StatusesValidateNullFail()
+        {
+            Assert.Throws<ArgumentException>(() => Validators.StatusesValidate(null, null));
+            Assert.Throws<ArgumentException>(() => Validators.StatusesValidate("DECLINED, CANCEL", null));
+            Assert.Throws<ArgumentException>(() => Validators.StatusesValidate("DECLINED, CANCEL", new List<string>()));
+        }
 
         [Theory]
         [InlineData("DECLINED")]
         [InlineData("DECLINED,")]
         [InlineData("declined")]
-        public void PaymentStatusValidatePass(string str)
+        public void StatusValidate(string str)
         {
-            var result = Validators.PaymentStatusValidate(str);
+            var result = Validators.StatusValidate(str, Validators.AvailableLegacyPaymentStatuses);
             Assert.Equal("DECLINED", result);
         }
 
         [Fact]
-        public void PaymentStatusValidateFail() => Assert.Throws<ArgumentException>(() => Validators.PaymentStatusValidate("FAIL"));
-
-        [Fact]
-        public void PaymentStatusValidateMultiFail() => Assert.Throws<ArgumentException>(() => Validators.PaymentStatusValidate("DECLINED, ACCEPTED"));
-
-        [Theory]
-        [InlineData("NEW")]
-        [InlineData("NEW,")]
-        [InlineData("new")]
-        public void FulfillmentStatusValidatePass(string str)
+        public void StatusValidateFail()
         {
-            var result = Validators.FulfillmentStatusValidate(str);
-            Assert.Equal("NEW", result);
+            Assert.Throws<ArgumentException>(
+                () => Validators.StatusValidate("FAIL", Validators.AvailableLegacyPaymentStatuses));
+
+            Assert.Throws<ArgumentException>(
+                () => Validators.StatusValidate("PAID, ACCEPTED", Validators.AvailableLegacyPaymentStatuses));
         }
 
         [Fact]
-        public void FulfillmentStatusValidateFail() => Assert.Throws<ArgumentException>(() => Validators.FulfillmentStatusValidate("FAIL"));
+        public void StatusValidateMultiFail()
+            =>
+                Assert.Throws<ArgumentException>(
+                    () => Validators.StatusValidate("DECLINED, ACCEPTED", Validators.AvailableLegacyPaymentStatuses));
 
         [Fact]
-        public void FulfillmentStatusValidateMultiFail() => Assert.Throws<ArgumentException>(() => Validators.FulfillmentStatusValidate("NEW, SHIPPED"));
-
-        [Theory]
-        [InlineData("NEW, PROCESSING")]
-        [InlineData("NEW,PROCESSING")]
-        [InlineData("NEW ,PROCESSING")]
-        [InlineData("NEW PROCESSING ")]
-        public void FulfillmentStatusesValidatePass(string str)
-        {
-            var result = Validators.FulfillmentStatusesValidate(str);
-            Assert.True(result);
-        }
-
-        [Theory]
-        [InlineData("NEW, PROCESSING ; FAIL")]
-        [InlineData("NEW, PROCESSINGFAIL")]
-        public void FulfillmentStatusesValidateFail(string str) => Assert.Throws<ArgumentException>(() => Validators.FulfillmentStatusesValidate(str));
-
-        [Fact]
-        public void FulfillmentStatusesValidateNullFail() => Assert.Throws<ArgumentException>(() => Validators.FulfillmentStatusesValidate(null));
-
-        [Fact]
-        public void StringsValidatePass() => Assert.True(Validators.StringsValidate("A", "B"));
+        public void StringsValidate() => Assert.False(Validators.AreNullOrEmpty("A", "B"));
 
         [Theory]
         [InlineData("", "", "")]
         [InlineData("", "", null)]
         [InlineData(null, null, null)]
-        public void StringsValidateFail(string str, string str2, string str3) => Assert.Throws<ArgumentException>(() => Validators.StringsValidate(str, str2, str3));
+        public void StringsValidateFail(string str, string str2, string str3)
+            => Assert.True(Validators.AreNullOrEmpty(str, str2, str3));
+
+        [Theory]
+        [InlineData("2015-04-22")]
+        [InlineData("2015-04-22 18:48:38")]
+        [InlineData("2015-04-22 18:48:38 -0500")]
+        [InlineData("1447804800")]
+        public void ValidateDateTime(string date) => Assert.True(Validators.ValidateDateTime(date));
+
+        [Theory]
+        [InlineData("2015-00-22")]
+        [InlineData("2015-00-22 18:48:38")]
+        [InlineData("2015-00-22 18:48:38 -0500")]
+        [InlineData("-1")]
+        [InlineData("")]
+        [InlineData(null)]
+        [InlineData(" ")]
+        [InlineData("1111111111111111111111111111111111111111111111111111111111")]
+        public void ValidateDateTimeFail(string date)
+            => Assert.Throws<ArgumentException>(() => Validators.ValidateDateTime(date));
     }
 }

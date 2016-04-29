@@ -10,15 +10,45 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)BaseEntity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BaseOrder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Legacy\LegacyAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Legacy\LegacyCategoryEntry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Legacy\LegacyCategory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Legacy\LegacyBaseOrder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Legacy\LegacyFavorites.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Legacy\LegacyGalleryImage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Legacy\LegacyOrder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Legacy\LegacyOrderDiscount.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Legacy\LegacyOrderItem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Legacy\LegacyOrderItemOption.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Legacy\LegacyOrderItemOrderFile.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Legacy\LegacyOrderItemProductFile.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Legacy\LegacyOrderItemTax.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Legacy\LegacyOrderResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Legacy\LegacyPerson.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Legacy\LegacyProduct.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Legacy\LegacyProductCombination.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Legacy\LegacyProductEntry.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Legacy\LegacyProductOption.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Legacy\LegacyProductOptionChoice.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Legacy\LegacyProductTax.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Legacy\LegacySettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Legacy\LegacyUpdatedOrder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Legacy\LegacyUpdatedOrders.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Orders\CreditCardStatus.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Orders\DiscountCouponCatalogLimit.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Orders\DiscountCouponInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Orders\DiscountInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Orders\OrderItemOrderFile.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Orders\OrderItemProductFile.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Orders\HandlingFeeInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Orders\OrderEntry.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Orders\OrderItem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Orders\OrderItemTax.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Orders\SearchResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Orders\OrderItemOption.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Orders\ShippingOptionInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Orders\PersonInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Orders\UpdateStatus.cs" />
   </ItemGroup>
 </Project>

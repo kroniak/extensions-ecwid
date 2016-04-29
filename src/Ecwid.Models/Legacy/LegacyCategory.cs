@@ -1,28 +1,29 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
-// ReSharper disable UnusedMember.Global
+﻿// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
 
-namespace Ecwid.Models
+using System.Collections.Generic;
+using Newtonsoft.Json;
+
+namespace Ecwid.Models.Legacy
 {
     /// <summary>
-    /// This object represents full information about the category and its products and subcategories
+    /// This object represents full information about the category and its products and subcategories.
     /// </summary>
     public class LegacyCategory : LegacyCategoryEntry
     {
         /// <summary>
-        /// A list of child subcategories, without nested products and subcategories
+        /// Gets or sets the a list of the child subcategories, without nested products and subcategories.
         /// </summary>
         /// <value>
-        /// The subcategories
+        /// The subcategories.
         /// </value>
         [JsonProperty("subcategories")]
         public IList<LegacyCategoryEntry> Subcategories { get; set; }
 
         /// <summary>
-        /// Gets or sets the products
+        /// Gets or sets the products.
         /// </summary>
         /// <value>
-        /// The products
+        /// The products.
         /// </value>
         [JsonProperty("products")]
         public IList<LegacyProductEntry> Products { get; set; }

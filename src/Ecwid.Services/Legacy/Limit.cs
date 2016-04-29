@@ -1,23 +1,25 @@
+// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
+
 using System;
 
-namespace Ecwid.Services
+namespace Ecwid.Legacy
 {
     /// <summary>
     /// Represent one limit by time interval and value limit
     /// </summary>
     internal class Limit
     {
-        // Counters
-        private DateTime _start;
-        private int _value;
+        private readonly int _limitValue;
 
         // Internal settings
         private readonly int _timeInterval;
-        private readonly int _limitValue;
+        // Counters
+        private DateTime _start;
         private ITimeProvider _timeProvider;
+        private int _value;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Limit"/> class.
+        /// Initializes a new instance of the <see cref="Limit" /> class.
         /// </summary>
         /// <param name="timeInterval">The time interval in seconds.</param>
         /// <param name="limitValue">The count limit.</param>
@@ -32,14 +34,11 @@ namespace Ecwid.Services
         /// Gets or sets the time provider
         /// </summary>
         /// <value>
-        /// The time provider <see cref="ITimeProvider"/>
+        /// The time provider <see cref="ITimeProvider" />
         /// </value>
         public ITimeProvider TimeProvider
         {
-            private get
-            {
-                return _timeProvider ?? (_timeProvider = new RealTimeProvider());
-            }
+            private get { return _timeProvider ?? (_timeProvider = new RealTimeProvider()); }
             set { _timeProvider = value; }
         }
 

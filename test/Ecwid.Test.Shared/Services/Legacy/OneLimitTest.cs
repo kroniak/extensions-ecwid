@@ -1,6 +1,9 @@
-﻿using System;
+﻿// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
+
+using System;
 using System.Collections.Generic;
-using Ecwid.Services;
+using System.Diagnostics.CodeAnalysis;
+using Ecwid.Legacy;
 using Xunit;
 
 namespace Ecwid.Test.Services.Legacy
@@ -8,12 +11,14 @@ namespace Ecwid.Test.Services.Legacy
     /// <summary>
     /// Test for one limit functionality of Ecwid Legacy
     /// </summary>
+    [SuppressMessage("ReSharper", "ExceptionNotDocumented")]
+    [SuppressMessage("ReSharper", "ExceptionNotDocumentedOptional")]
     public class OneLimitTest
     {
         private readonly List<bool> _results = new List<bool>();
 
         [Fact]
-        public void TickExpectPass()
+        public void TickExpect()
         {
             var limit = new Limit(1000, 3);
 
@@ -36,11 +41,11 @@ namespace Ecwid.Test.Services.Legacy
         [InlineData(5, 3)]
         [InlineData(50, 3)]
         [InlineData(500, 3)]
-        public void TickExpectPass(int timeInterval, int limitValue)
+        public void TickExpect(int timeInterval, int limitValue)
         {
             var mockTime = Moqs.MockTime();
 
-            var limit = new Limit(timeInterval, limitValue) { TimeProvider = mockTime.Object };
+            var limit = new Limit(timeInterval, limitValue) {TimeProvider = mockTime.Object};
 
             limitValue.Times(() => _results.Add(limit.Tick()));
 
@@ -61,7 +66,7 @@ namespace Ecwid.Test.Services.Legacy
         {
             var mockTime = Moqs.MockTime();
 
-            var limit = new Limit(timeInterval, limitValue) { TimeProvider = mockTime.Object };
+            var limit = new Limit(timeInterval, limitValue) {TimeProvider = mockTime.Object};
 
             limitValue.Times(() => _results.Add(limit.Tick()));
 

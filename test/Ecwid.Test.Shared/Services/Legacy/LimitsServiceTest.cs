@@ -1,6 +1,9 @@
-﻿using System;
+﻿// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
+
+using System;
 using System.Collections.Generic;
-using Ecwid.Services;
+using System.Diagnostics.CodeAnalysis;
+using Ecwid.Legacy;
 using Xunit;
 
 namespace Ecwid.Test.Services.Legacy
@@ -8,6 +11,8 @@ namespace Ecwid.Test.Services.Legacy
     /// <summary>
     /// Test for Limits functionality of Ecwid Legacy
     /// </summary>
+    [SuppressMessage("ReSharper", "ExceptionNotDocumented")]
+    [SuppressMessage("ReSharper", "ExceptionNotDocumentedOptional")]
     public class LimitsServiceTest
     {
         private readonly List<bool> _results = new List<bool>();
@@ -24,7 +29,7 @@ namespace Ecwid.Test.Services.Legacy
         }
 
         [Fact]
-        public void TickExpectPass()
+        public void TickExpect()
         {
             var mockTime = Moqs.MockTime();
             // Init service

@@ -1,27 +1,179 @@
-﻿using System.Collections.Generic;
+﻿// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
+
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Ecwid.Models;
 
-namespace Ecwid.Services
+namespace Ecwid
 {
     /// <summary>
-    /// Public API for client
+    /// Public client API.
     /// </summary>
-    public interface IEcwidClient { }
+    public interface IEcwidClient : IEcwidOrdersClient
+    {
+        /// <summary>
+        /// Gets and sets the credentials. Default value is <see langword="null" />.
+        /// </summary>
+        /// <value>
+        /// The credentials.
+        /// </value>
+        EcwidCredentials Credentials { get; set; }
+
+        /// <summary>
+        /// Gets and sets the settings. Created by default.
+        /// </summary>
+        /// <value>
+        /// The settings.
+        /// </value>
+        EcwidSettings Settings { get; set; }
+
+        /// <summary>
+        /// Configures with specified settings.
+        /// </summary>
+        /// <param name="settings">The settings.</param>
+        IEcwidClient Configure(EcwidSettings settings);
+
+        /// <summary>
+        /// Configures the shop credentials.
+        /// </summary>
+        /// <param name="shopId">The shop identifier.</param>
+        /// <param name="token">The authorization token.</param>
+        /// <exception cref="EcwidConfigException">The shop identifier is invalid.</exception>
+        /// <exception cref="EcwidConfigException">The authorization token is invalid.</exception>
+        IEcwidClient Configure(int shopId, string token);
+
+        /// <summary>
+        /// Configures the shop credentials.
+        /// </summary>
+        /// <param name="shopId">The shop identifier.</param>
+        /// <param name="token">The authorization token.</param>
+        /// <param name="scope">List of permissions (API access scopes) given to the app, separated by space.</param>
+        /// <exception cref="EcwidConfigException">The shop identifier is invalid.</exception>
+        /// <exception cref="EcwidConfigException">The authorization token is invalid.</exception>
+        IEcwidClient Configure(int shopId, string token, string scope);
+
+        /// <summary>
+        /// Configures with specified credentials.
+        /// </summary>
+        /// <param name="credentials">The credentials.</param>
+        IEcwidClient Configure(EcwidCredentials credentials);
+    }
 
     /// <summary>
-    /// Public orders API for client
+    /// Public orders client API.
     /// </summary>
-    public interface IEcwidOrdersClient : IEcwidClient
+    public interface IEcwidOrdersClient : IEcwidOrdersClient<OrderEntry, UpdateStatus>
+    {
+        /// <summary>
+        /// Gets the incomplete orders asynchronous. This orders is new or is not processed.
+        /// </summary>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        Task<List<OrderEntry>> GetIncompleteOrdersAsync();
+
+        /// <summary>
+        /// Gets the incomplete orders asynchronous. This orders is new or is not processed.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        Task<List<OrderEntry>> GetIncompleteOrdersAsync(CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Gets the one order asynchronous.
+        /// </summary>
+        /// <param name="orderNumber">The order number.</param>
+        /// <exception cref="System.ArgumentOutOfRangeException"><paramref name="orderNumber" /> is out of range.</exception>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        Task<OrderEntry> GetOrderAsync(int orderNumber);
+
+        /// <summary>
+        /// Gets the one orders asynchronous.
+        /// </summary>
+        /// <param name="orderNumber">The order number.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <exception cref="System.ArgumentOutOfRangeException"><paramref name="orderNumber" /> is out of range.</exception>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        Task<OrderEntry> GetOrderAsync(int orderNumber, CancellationToken cancellationToken);
+    }
+
+    /// <summary>
+    /// Shared public orders client API.
+    /// </summary>
+    /// <typeparam name="TOrder">The type of the order.</typeparam>
+    /// <typeparam name="TUpdateResponse">The type of the update response.</typeparam>
+    public interface IEcwidOrdersClient<TOrder, TUpdateResponse>
+        where TOrder : BaseOrder
+        where TUpdateResponse : class
     {
         /// <summary>
         /// Gets the orders query builder.
         /// </summary>
+        /// <example>
+        /// This sample shows how to gets last 10 orders by the <see cref="OrdersQueryBuilder{TOrder,TUpdateResponse}" />.
+        /// <code>
+        /// var orders = client.Configure(credentials).Orders.Limit(10).GetAsync();
+        /// </code>
+        /// </example>
         /// <value>
         /// The orders.
         /// </value>
-        OrdersQueryBuilder Orders { get; }
+        OrdersQueryBuilder<TOrder, TUpdateResponse> Orders { get; }
+
+        /// <summary>
+        /// Checks the shop authentication asynchronous.
+        /// </summary>
+        Task<bool> CheckOrdersTokenAsync();
+
+        /// <summary>
+        /// Checks the shop authentication asynchronous.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        Task<bool> CheckOrdersTokenAsync(CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Gets the new orders asynchronous. This orders is new or is not processed.
+        /// </summary>
+        Task<List<TOrder>> GetNewOrdersAsync();
+
+        /// <summary>
+        /// Gets the new orders asynchronous. This orders is new or is not processed.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        Task<List<TOrder>> GetNewOrdersAsync(CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Gets the non paid orders asynchronous.
+        /// </summary>
+        Task<List<TOrder>> GetNonPaidOrdersAsync();
+
+        /// <summary>
+        /// Gets the non paid orders asynchronous.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        Task<List<TOrder>> GetNonPaidOrdersAsync(CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Gets the orders asynchronous. If <paramref name="query" /> contains limit or offset parameters gets only one page.
+        /// </summary>
+        /// <param name="query">
+        /// The query. It's a list of key-value pairs. e.g.
+        /// <code>new {fulfillmentStatus = "SHIPPED", limit = 100}</code> or Dictionary{string, object}
+        /// </param>
+        Task<List<TOrder>> GetOrdersAsync(object query);
+
+        /// <summary>
+        /// Gets the orders asynchronous. If <paramref name="query" /> contains limit or offset parameters gets only one page.
+        /// </summary>
+        /// <param name="query">
+        /// The query. It's a list of key-value pairs. e.g.
+        /// <code>new {fulfillmentStatus = "SHIPPED", limit = 100}</code> or Dictionary{string, object}
+        /// </param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        Task<List<TOrder>> GetOrdersAsync(object query, CancellationToken cancellationToken);
 
         /// <summary>
         /// Gets the orders count asynchronous.
@@ -35,114 +187,38 @@ namespace Ecwid.Services
         Task<int> GetOrdersCountAsync(CancellationToken cancellationToken);
 
         /// <summary>
-        /// Gets the orders asynchronous.
-        /// </summary>
-        /// <param name="query">The orders query builder</param>
-        Task<List<LegacyOrder>> GetOrdersAsync(OrdersQueryBuilder query);
-
-        /// <summary>
-        /// Gets the orders asynchronous.
-        /// </summary>
-        /// <param name="query">The orders query builder</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        Task<List<LegacyOrder>> GetOrdersAsync(OrdersQueryBuilder query, CancellationToken cancellationToken);
-
-        /// <summary>
-        /// Gets the one page orders asynchronous. It ignores next url.
-        /// </summary>
-        /// <param name="query">The orders query builder</param>
-        Task<List<LegacyOrder>> GetOrdersPageAsync(OrdersQueryBuilder query);
-
-        /// <summary>
-        /// Gets the one page orders asynchronous. It ignores next url.
-        /// </summary>
-        /// <param name="query">The orders query builder</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        Task<List<LegacyOrder>> GetOrdersPageAsync(OrdersQueryBuilder query, CancellationToken cancellationToken);
-
-        /// <summary>
-        /// Gets the orders asynchronous.
-        /// </summary>
-        /// <param name="query">The query.</param>
-        Task<List<LegacyOrder>> GetOrdersAsync(object query);
-
-        /// <summary>
-        /// Gets the orders asynchronous.
-        /// </summary>
-        /// <param name="query">The query.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        Task<List<LegacyOrder>> GetOrdersAsync(object query, CancellationToken cancellationToken);
-
-        /// <summary>
-        /// Gets the new orders asynchronous. This orders is new or is not processed.
-        /// </summary>
-        Task<List<LegacyOrder>> GetNewOrdersAsync();
-
-        /// <summary>
-        /// Gets the new orders asynchronous. This orders is new or is not processed.
-        /// </summary>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        Task<List<LegacyOrder>> GetNewOrdersAsync(CancellationToken cancellationToken);
-
-        /// <summary>
-        /// Gets the non paid orders asynchronous.
-        /// </summary>
-        Task<List<LegacyOrder>> GetNonPaidOrdersAsync();
-
-        /// <summary>
-        /// Gets the non paid orders asynchronous.
-        /// </summary>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        Task<List<LegacyOrder>> GetNonPaidOrdersAsync(CancellationToken cancellationToken);
-
-        /// <summary>
         /// Gets the paid and not shipped orders asynchronous.
         /// </summary>
-        Task<List<LegacyOrder>> GetPaidNotShippedOrdersAsync();
+        Task<List<TOrder>> GetPaidNotShippedOrdersAsync();
 
         /// <summary>
         /// Gets the paid and not shipped orders asynchronous.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token.</param>
-        Task<List<LegacyOrder>> GetPaidNotShippedOrdersAsync(CancellationToken cancellationToken);
+        Task<List<TOrder>> GetPaidNotShippedOrdersAsync(CancellationToken cancellationToken);
 
         /// <summary>
         /// Gets the shipped and not delivered orders asynchronous.
         /// </summary>
-        Task<List<LegacyOrder>> GetShippedNotDeliveredOrdersAsync();
+        Task<List<TOrder>> GetShippedOrdersAsync();
 
         /// <summary>
         /// Gets the shipped and not delivered orders asynchronous.
         /// </summary>
-        Task<List<LegacyOrder>> GetShippedNotDeliveredOrdersAsync(CancellationToken cancellationToken);
+        Task<List<TOrder>> GetShippedOrdersAsync(CancellationToken cancellationToken);
 
         /// <summary>
         /// Update the orders asynchronous.
         /// </summary>
         /// <param name="query">The orders query builder</param>
-        Task<List<LegacyUpdatedOrder>> UpdateOrdersAsync(OrdersQueryBuilder query);
+        Task<TUpdateResponse> UpdateOrdersAsync(OrdersQueryBuilder<TOrder, TUpdateResponse> query);
 
         /// <summary>
         /// Update the orders asynchronous.
         /// </summary>
         /// <param name="query">The orders query builder</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        Task<List<LegacyUpdatedOrder>> UpdateOrdersAsync(OrdersQueryBuilder query, CancellationToken cancellationToken);
-    }
-
-    /// <summary>
-    /// Public orders API of legacy client
-    /// </summary>
-    public interface IEcwidOrdersClientLegacy : IEcwidOrdersClient
-    {
-        /// <summary>
-        /// Checks the shop authentication asynchronous.
-        /// </summary>
-        Task<bool> CheckOrdersAuthAsync();
-
-        /// <summary>
-        /// Checks the shop authentication asynchronous.
-        /// </summary>
-        Task<bool> CheckOrdersAuthAsync(CancellationToken cancellationToken);
+        Task<TUpdateResponse> UpdateOrdersAsync(OrdersQueryBuilder<TOrder, TUpdateResponse> query,
+            CancellationToken cancellationToken);
     }
 }

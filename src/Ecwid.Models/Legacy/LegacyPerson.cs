@@ -1,76 +1,76 @@
-﻿using Newtonsoft.Json;
-// ReSharper disable ClassNeverInstantiated.Global
-// ReSharper disable UnusedMember.Global
+﻿// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
 
-namespace Ecwid.Models
+using Newtonsoft.Json;
+
+namespace Ecwid.Models.Legacy
 {
     public class LegacyPerson
     {
         /// <summary>
-        /// Gets or sets the name
+        /// Gets or sets the name.
         /// </summary>
         /// <value>
-        /// The name
+        /// The name.
         /// </value>
         [JsonProperty("name")]
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the name of the company
+        /// Gets or sets the name of the company.
         /// </summary>
         /// <value>
-        /// The name of the company
+        /// The name of the company.
         /// </value>
         [JsonProperty("companyName")]
         public string CompanyName { get; set; }
 
         /// <summary>
-        /// Gets or sets the street
+        /// Gets or sets the street.
         /// </summary>
         /// <value>
-        /// The street
+        /// The street.
         /// </value>
         [JsonProperty("street")]
         public string Street { get; set; }
 
         /// <summary>
-        /// Gets or sets the city
+        /// Gets or sets the city.
         /// </summary>
         /// <value>
-        /// The city
+        /// The city.
         /// </value>
         [JsonProperty("city")]
         public string City { get; set; }
 
         /// <summary>
-        /// Country code ('US')
+        /// Gets or sets the country code ('US').
         /// </summary>
         /// <value>
-        /// The country code
+        /// The country code.
         /// </value>
         [JsonProperty("countryCode")]
         public string CountryCode { get; set; }
 
         /// <summary>
-        /// Gets or sets the postal code
+        /// Gets or sets the postal code.
         /// </summary>
         /// <value>
-        /// The postal code
+        /// The postal code.
         /// </value>
         [JsonProperty("postalCode")]
         public string PostalCode { get; set; }
 
         /// <summary>
-        /// State code ('NY')
+        /// Gets or sets the state code ('NY').
         /// </summary>
         /// <value>
-        /// The state or province code
+        /// The state or province code.
         /// </value>
         [JsonProperty("stateOrProvinceCode")]
         public string StateOrProvinceCode { get; set; }
 
         /// <summary>
-        /// Gets or sets the name of the state
+        /// Gets or sets the name of the state.
         /// </summary>
         /// <value>
         /// The name of the state.
@@ -79,7 +79,7 @@ namespace Ecwid.Models
         public string StateName { get; set; }
 
         /// <summary>
-        /// Gets or sets the name of the country
+        /// Gets or sets the name of the country.
         /// </summary>
         /// <value>
         /// The name of the country.
@@ -88,10 +88,10 @@ namespace Ecwid.Models
         public string CountryName { get; set; }
 
         /// <summary>
-        /// Gets or sets the phone
+        /// Gets or sets the phone.
         /// </summary>
         /// <value>
-        /// The phone
+        /// The phone.
         /// </value>
         [JsonProperty("phone")]
         public string Phone { get; set; }

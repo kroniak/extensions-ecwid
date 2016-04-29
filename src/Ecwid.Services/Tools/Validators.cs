@@ -1,139 +1,135 @@
-﻿using System;
+﻿// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Ecwid.Tools
 {
     /// <summary>
-    /// Some validators for classes
+    /// Some validators for classes.
     /// </summary>
     internal abstract class Validators
     {
         /// <summary>
-        /// Shops identifier validate.
+        /// The available legacy fulfillment statuses.
         /// </summary>
-        /// <param name="shopId">The shop identifier.</param>
-        /// <exception cref="ArgumentException">The shop identificator is null. Please reconfig the client.
-        /// or
-        /// The shop identificator is invalid. Please reconfig the client.</exception>
-        public static bool ShopIdValidate(int? shopId)
+        public static readonly IList<string> AvailableLegacyFulfillmentStatuses = new List<string>
         {
-            if (shopId == null || shopId <= 0)
-                throw new ArgumentException("The shop identificator is invalid. Please reconfig the client.", nameof(shopId));
-
-            return true;
-        }
+            "AWAITING_PROCESSING",
+            "NEW",
+            "PROCESSING",
+            "SHIPPED",
+            "DELIVERED",
+            "WILL_NOT_DELIVER",
+            "RETURNED"
+        };
 
         /// <summary>
-        /// Shops the authentication validate.
+        /// The available fulfillment statuses.
         /// </summary>
-        /// <param name="str">The string.</param>
-        /// <exception cref="ArgumentException">The shop auth identificator is null or empty. Please config the client.</exception>
-        public static bool ShopAuthValidate(string str)
+        public static readonly IList<string> AvailableFulfillmentStatuses = new List<string>
         {
-            if (string.IsNullOrEmpty(str))
-                throw new ArgumentException("The shop auth identificator is null or empty. Please reconfig the client.", nameof(str));
-
-            return true;
-        }
+            "AWAITING_PROCESSING",
+            "PROCESSING",
+            "SHIPPED",
+            "DELIVERED",
+            "WILL_NOT_DELIVER",
+            "RETURNED"
+        };
 
         /// <summary>
-        /// Strings validate.
+        /// The available legacy payment statuses.
+        /// </summary>
+        public static readonly IList<string> AvailableLegacyPaymentStatuses = new List<string>
+        {
+            "PAID",
+            "ACCEPTED",
+            "DECLINED",
+            "CANCELLED",
+            "AWAITING_PAYMENT",
+            "QUEUED",
+            "CHARGEABLE, REFUNDED",
+            "INCOMPLETE"
+        };
+
+        /// <summary>
+        /// The available payment statuses.
+        /// </summary>
+        public static readonly IList<string> AvailablePaymentStatuses = new List<string>
+        {
+            "PAID",
+            "CANCELLED",
+            "AWAITING_PAYMENT",
+            "REFUNDED",
+            "INCOMPLETE"
+        };
+
+        /// <summary>
+        /// Check strings for <see langword="null" /> or <see langword="empty" />.
         /// </summary>
         /// <param name="strings">The strings.</param>
-        /// <exception cref="ArgumentException">All strings params is null or empty</exception>
-        public static bool StringsValidate(params string[] strings)
+        /// <returns>True if the all of the strings are <see langword="null" /> or <see langword="empty" /></returns>
+        public static bool AreNullOrEmpty(params string[] strings)
         {
-            if (strings.All(string.IsNullOrEmpty))
-                throw new ArgumentException("All strings params is null or empty", nameof(strings));
-
-            return true;
+            return strings.All(IsNullOrEmpty);
         }
 
         /// <summary>
-        /// Payment statuses validate.
+        /// Determines whether [is null or empty] [the specified value].
+        /// </summary>
+        /// <param name="value">The value.</param>
+        public static bool IsNullOrEmpty(string value)
+        {
+            return string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value);
+        }
+
+        /// <summary>
+        /// Statuseses validate.
         /// </summary>
         /// <param name="statuses">The statuses.</param>
-        /// <exception cref="ArgumentException">Payment statuses string is invalid</exception>
-        public static bool PaymentStatusesValidate(string statuses)
+        /// <param name="statusesAvailable">The statuses available.</param>
+        /// <exception cref="ArgumentException">Statuses string is invalid.</exception>
+        public static bool StatusesValidate(string statuses, ICollection<string> statusesAvailable)
         {
-            if (string.IsNullOrEmpty(statuses))
-                throw new ArgumentException("Payment statuses string is invalid.", nameof(statuses));
+            if (IsNullOrEmpty(statuses))
+                throw new ArgumentException("Statuses string is invalid.", nameof(statuses));
 
-            var paymentStatusesAvailable = new List<string>()
-                { "PAID", "ACCEPTED", "DECLINED", "CANCELLED", "AWAITING_PAYMENT", "QUEUED", "CHARGEABLE, REFUNDED", "INCOMPLETE" };
+            if (statusesAvailable == null)
+                throw new ArgumentException("Statuses collection is invalid.", nameof(statusesAvailable));
 
-            if (!CheckContainsString(statuses, paymentStatusesAvailable))
-                throw new ArgumentException("Payment statuses string is invalid.", nameof(statuses));
+            if (statusesAvailable.Count == 0)
+                throw new ArgumentException("Statuses collection is invalid.", nameof(statusesAvailable));
+
+            try
+            {
+                if (!CheckContainsString(statuses, statusesAvailable))
+                    throw new ArgumentException("Statuses string is invalid.", nameof(statuses));
+            }
+            catch (ArgumentException argumentException)
+            {
+                throw new ArgumentException("Statuses string is invalid.", argumentException);
+            }
 
             return true;
         }
 
         /// <summary>
-        /// Payment status validate and return.
+        /// Validate the status.
         /// </summary>
         /// <param name="status">The status.</param>
-        /// <exception cref="ArgumentException">
-        /// Payment statuses string is invalid.
-        /// or
-        /// Payment statuses string is invalid. Support only one status.
-        /// </exception>
-        public static string PaymentStatusValidate(string status)
+        /// <param name="statusesAvailable">The statuses available.</param>
+        /// <exception cref="ArgumentException">Status string is invalid.</exception>
+        /// <exception cref="ArgumentException">Status string is invalid. Support only one status. </exception>
+        public static string StatusValidate(string status, ICollection<string> statusesAvailable)
         {
-            var paymentStatusesAvailable = new List<string>()
-                { "PAID", "ACCEPTED", "DECLINED", "CANCELLED", "AWAITING_PAYMENT", "QUEUED", "CHARGEABLE, REFUNDED", "INCOMPLETE" };
-
-            if (!CheckContainsString(status, paymentStatusesAvailable))
-                throw new ArgumentException("Payment status string is invalid.", nameof(status));
+            StatusesValidate(status, statusesAvailable);
 
             var result = status.TrimUpperReplaceSplit();
 
             if (result.Count > 1)
-                throw new ArgumentException("Payment status string is invalid. Support only one status.", nameof(status));
-
-            return result.First();
-        }
-
-        /// <summary>
-        /// Fulfillments statuses validate.
-        /// </summary>
-        /// <param name="statuses">The statuses.</param>
-        /// <exception cref="ArgumentException">Fulfillment statuses string is invalid</exception>
-        public static bool FulfillmentStatusesValidate(string statuses)
-        {
-            if (string.IsNullOrEmpty(statuses))
-                throw new ArgumentException("Fulfillment statuses string is invalid.", nameof(statuses));
-
-            var fulfillmentStatusesAvailable = new List<string>()
-                {"AWAITING_PROCESSING", "NEW", "PROCESSING", "SHIPPED", "DELIVERED", "WILL_NOT_DELIVER", "RETURNED"};
-
-            if (!CheckContainsString(statuses, fulfillmentStatusesAvailable))
-                throw new ArgumentException("Fulfillment statuses string is invalid.", nameof(statuses));
-
-            return true;
-        }
-
-        /// <summary>
-        /// Fulfillment status validate and return.
-        /// </summary>
-        /// <param name="status">The status.</param>
-        /// <exception cref="ArgumentException">
-        /// Fulfillment statuses string is invalid.
-        /// or
-        /// Fulfillment statuses string is invalid. Support only one status.
-        /// </exception>
-        public static string FulfillmentStatusValidate(string status)
-        {
-            var fulfillmentStatusesAvailable = new List<string>()
-                {"AWAITING_PROCESSING", "NEW", "PROCESSING", "SHIPPED", "DELIVERED", "WILL_NOT_DELIVER", "RETURNED"};
-
-            if (!CheckContainsString(status, fulfillmentStatusesAvailable))
-                throw new ArgumentException("Fulfillment status string is invalid.", nameof(status));
-
-            var result = status.TrimUpperReplaceSplit();
-
-            if (result.Count > 1)
-                throw new ArgumentException("Fulfillment status string is invalid. Support only one status.", nameof(status));
+                throw new ArgumentException("Status string is invalid. Support only one status.", nameof(status));
 
             return result.First();
         }
@@ -143,11 +139,63 @@ namespace Ecwid.Tools
         /// </summary>
         /// <param name="str">The string.</param>
         /// <param name="list">The list.</param>
+        /// <exception cref="ArgumentException">Unable replace and split string</exception>
         private static bool CheckContainsString(string str, ICollection<string> list)
         {
             var result = str.TrimUpperReplaceSplit();
 
             return result.Aggregate(true, (current, s) => current && list.Contains(s));
+        }
+
+        /// <summary>
+        /// Validates and add new parameters.
+        /// </summary>
+        /// <param name="query">The query.</param>
+        /// <param name="strings">The strings.</param>
+        /// <exception cref="ArgumentException">Query is empty. Prevent change all orders.</exception>
+        /// <exception cref="ArgumentException">All new statuses are null or empty.</exception>
+        public static void ValidateNewLegacyStatuses(
+            Dictionary<string, object> query, params string[] strings)
+        {
+            //check query builder query params count
+            var exceptionList = new List<string> {"limit", "offset"};
+            var count = query.Keys.Count(s => !exceptionList.Contains(s));
+            if (count == 0)
+                throw new ArgumentException("Query is empty. Prevent change all orders.", nameof(query));
+
+            // Throw ex if all string is NullOrEmpty 
+            if (AreNullOrEmpty(strings))
+                throw new ArgumentException("All new statuses are null or empty.", nameof(strings));
+        }
+
+
+        /// <summary>
+        /// Validates the date time.
+        /// </summary>
+        /// <param name="date">The date.</param>
+        /// <exception cref="ArgumentException"><paramref name="date" /> string is null or empty.</exception>
+        /// <exception cref="ArgumentException"><paramref name="date" /> string is invalid.</exception>
+        public static bool ValidateDateTime(string date)
+        {
+            if (string.IsNullOrEmpty(date))
+                throw new ArgumentException("Date string is null or empty.", nameof(date));
+
+            if (new Regex(@"^\d{4}-\d{2}-\d{2}").IsMatch(date))
+            {
+                DateTime dt;
+                if (!DateTime.TryParse(date, out dt))
+                    throw new ArgumentException("Date string is invalid.", nameof(date));
+            }
+            else
+            {
+                long dt;
+                if (!long.TryParse(date, out dt))
+                    throw new ArgumentException("Date string is invalid.", nameof(date));
+                if (dt <= 0)
+                    throw new ArgumentException("Date string is invalid.", nameof(date));
+            }
+
+            return true;
         }
     }
 }
