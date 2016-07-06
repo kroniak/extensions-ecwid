@@ -11,6 +11,7 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)BaseEcwidClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EcwidClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EcwidClientProfile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EcwidClientOrders.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\EcwidException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\EcwidHttpException.cs" />
@@ -18,6 +19,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\EcwidConfigException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Legacy\EcwidLegacyClient.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Legacy\EcwidLegacyClientProducts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Legacy\EcwidLegacyClientOrders.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Legacy\EcwidLegacySettings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Legacy\Interfaces.cs" />

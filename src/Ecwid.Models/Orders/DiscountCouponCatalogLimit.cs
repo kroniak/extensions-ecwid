@@ -5,6 +5,9 @@ using Newtonsoft.Json;
 
 namespace Ecwid.Models
 {
+    /// <summary>
+    /// Limit for catalog element coupon.
+    /// </summary>
     public class DiscountCouponCatalogLimit
     {
         /// <summary>

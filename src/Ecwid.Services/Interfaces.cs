@@ -10,7 +10,7 @@ namespace Ecwid
     /// <summary>
     /// Public client API.
     /// </summary>
-    public interface IEcwidClient : IEcwidOrdersClient
+    public interface IEcwidClient : IEcwidOrdersClient, IEcwidProfileClient
     {
         /// <summary>
         /// Gets and sets the credentials. Default value is <see langword="null" />.
@@ -58,6 +58,44 @@ namespace Ecwid
         /// </summary>
         /// <param name="credentials">The credentials.</param>
         IEcwidClient Configure(EcwidCredentials credentials);
+    }
+
+    /// <summary>
+    /// Ecwid profile public API.
+    /// </summary>
+    public interface IEcwidProfileClient
+    {
+        /// <summary>
+        /// Gets the store profile asynchronous.
+        /// </summary>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        Task<Profile> GetProfileAsync();
+
+        /// <summary>
+        /// Gets the store profile asynchronous.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        Task<Profile> GetProfileAsync(CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Update the store profile asynchronous.
+        /// </summary>
+        /// <param name="profile">The store profile.</param>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        Task<UpdateStatus> UpdateProfileAsync(Profile profile);
+
+        /// <summary>
+        /// Update the store profile asynchronous.
+        /// </summary>
+        /// <param name="profile">The store profile.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        Task<UpdateStatus> UpdateProfileAsync(Profile profile, CancellationToken cancellationToken);
     }
 
     /// <summary>
@@ -206,19 +244,5 @@ namespace Ecwid
         /// Gets the shipped and not delivered orders asynchronous.
         /// </summary>
         Task<List<TOrder>> GetShippedOrdersAsync(CancellationToken cancellationToken);
-
-        /// <summary>
-        /// Update the orders asynchronous.
-        /// </summary>
-        /// <param name="query">The orders query builder</param>
-        Task<TUpdateResponse> UpdateOrdersAsync(OrdersQueryBuilder<TOrder, TUpdateResponse> query);
-
-        /// <summary>
-        /// Update the orders asynchronous.
-        /// </summary>
-        /// <param name="query">The orders query builder</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        Task<TUpdateResponse> UpdateOrdersAsync(OrdersQueryBuilder<TOrder, TUpdateResponse> query,
-            CancellationToken cancellationToken);
     }
 }

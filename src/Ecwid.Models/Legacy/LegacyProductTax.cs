@@ -4,6 +4,9 @@ using Newtonsoft.Json;
 
 namespace Ecwid.Models.Legacy
 {
+    /// <summary>
+    /// Products tax.
+    /// </summary>
     public class LegacyProductTax
     {
         /// <summary>

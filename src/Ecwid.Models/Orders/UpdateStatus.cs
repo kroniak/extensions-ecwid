@@ -17,5 +17,14 @@ namespace Ecwid.Models
         /// </value>
         [JsonProperty("updateCount")]
         public int UpdateCount { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="UpdateStatus"/> is success.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if success; otherwise, <c>false</c>.
+        /// </value>
+        [JsonProperty("success")]
+        public bool Success { get; set; }
     }
 }

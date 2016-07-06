@@ -4,6 +4,9 @@ using Newtonsoft.Json;
 
 namespace Ecwid.Models.Legacy
 {
+    /// <summary>
+    /// The shop's legacy settings.
+    /// </summary>
     public class LegacySettings
     {
         /// <summary>

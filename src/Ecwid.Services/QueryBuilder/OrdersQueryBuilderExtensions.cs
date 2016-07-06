@@ -751,7 +751,7 @@ namespace Ecwid
             this OrdersQueryBuilder<TOrder, TUpdateResponse> query)
             where TOrder : BaseOrder
             where TUpdateResponse : class
-            => await query.Client.GetOrdersAsync(query.Query);
+            => await query.GetAsync(CancellationToken.None);
 
         /// <summary>
         /// Gets the orders asynchronous.

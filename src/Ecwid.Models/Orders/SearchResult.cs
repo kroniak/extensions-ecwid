@@ -8,7 +8,7 @@ namespace Ecwid.Models
     /// <summary>
     /// The root object that is returned by the Order API.
     /// </summary>
-    internal class SearchResult
+    public class SearchResult
     {
         /// <summary>
         /// Gets or sets the total number of found items (might be more than the number of returned items).

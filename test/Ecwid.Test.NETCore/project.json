@@ -1,0 +1,35 @@
+{
+  "buildOptions": {
+    "compile": {
+      "exclude": [ "../**/*RealTest.cs" ],
+      "include": [ "../Ecwid.Test.Shared/**/*.cs" ],
+      "optimize": true,
+      "warningsAsErrors": true
+    }
+  },
+
+  "testRunner": "xunit",
+
+  "dependencies": {
+    "dotnet-test-xunit": "2.2.0-preview2-build1029",
+    "Ecwid": {
+      "target": "project",
+      "version": "1.0.0-beta2"
+    },
+    "Moq": "4.6.25-alpha",
+    "xunit": "2.1.0"
+  },
+
+  "frameworks": {
+    "netcoreapp1.0": {
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "type": "platform",
+          "version": "1.0.0"
+        },
+        "System.Diagnostics.TraceSource": "4.0.0"
+      },
+      "imports": [ "dotnet54" ]
+    }
+  }
+}

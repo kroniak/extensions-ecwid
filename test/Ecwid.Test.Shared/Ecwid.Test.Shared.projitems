@@ -10,7 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Services\CredentialsTest.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Services\EcwidClientTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\ClientTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Legacy\LegacyQueryBuilderExtensionsTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Legacy\LimitsServiceTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Legacy\Moqs.cs" />
@@ -19,6 +19,5 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\QueryBuilderExtensionsTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Tools.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Tools\ExtensionsTest.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Tools\ValidatorsTest.cs" />
   </ItemGroup>
 </Project>

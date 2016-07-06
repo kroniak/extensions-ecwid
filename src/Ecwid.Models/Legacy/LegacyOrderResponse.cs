@@ -9,7 +9,7 @@ namespace Ecwid.Models.Legacy
     /// The root object that is returned by the LegacyOrder API.
     /// </summary>
     /// <typeparam name="TOrder">The type of the order.</typeparam>
-    internal class LegacyOrderResponse<TOrder>
+    public class LegacyOrderResponse<TOrder>
         where TOrder : LegacyBaseOrder
     {
         /// <summary>

@@ -1,0 +1,15 @@
+version: 1.0.0-{branch}-{build}
+pull_requests:
+  do_not_increment_build_number: true
+branches:
+  only:
+  - master
+  - dev
+install:
+  - ps: .\build\install.ps1
+build_script:
+- ps: .\build\build.ps1 $env:APPVEYOR_BUILD_VERSION $env:APPVEYOR_REPO_TAG_NAME
+test_script:
+- ps: .\build\test.ps1
+artifacts:
+- path: '**\*.nupkg'

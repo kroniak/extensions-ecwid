@@ -6,15 +6,16 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Authentication.OAuth;
-using Microsoft.AspNet.Http;
+using Microsoft.AspNetCore.Authentication.OAuth;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json.Linq;
 
 namespace Ecwid.OAuth
 {
     /// <summary>
     /// Configuration Ecwid options for <see cref="!:OAuthMiddleware" />. Based on
-    /// <seealso cref="Microsoft.AspNet.Authentication.OAuth.OAuthOptions" />.
+    /// <seealso cref="OAuthOptions" />.
     /// This class sets default option to OAuth2.
     /// </summary>
     public class EcwidOptions : OAuthOptions
@@ -30,7 +31,6 @@ namespace Ecwid.OAuth
             AuthorizationEndpoint = EcwidDefaults.AuthorizationEndpoint;
             TokenEndpoint = EcwidDefaults.TokenEndpoint;
             UserInformationEndpoint = EcwidDefaults.UserInformationEndpoint;
-            SaveTokensAsClaims = false;
             ClaimsIssuer = "OAuth2-Ecwid";
 
             SetEvents();
@@ -95,7 +95,6 @@ namespace Ecwid.OAuth
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="storeId">The store identifier.</param>
-        /// <returns></returns>
         /// <exception cref="ArgumentException"><paramref name="storeId" /> is null or empty</exception>
         /// <exception cref="ArgumentNullException"><paramref name="context" /> is null or empty</exception>
         private string GenerateRequestUrl(OAuthCreatingTicketContext context, string storeId)
@@ -111,8 +110,8 @@ namespace Ecwid.OAuth
                 requestUrl = $"{requestUrl}/";
 
             requestUrl = $"{requestUrl}{storeId}/";
-            requestUrl = $"{requestUrl}{"profile"}?";
-            requestUrl = $"{requestUrl}{"token"}={context.AccessToken}";
+            requestUrl = $"{requestUrl}profile?";
+            requestUrl = $"{requestUrl}token={context.AccessToken}";
 
             return requestUrl;
         }

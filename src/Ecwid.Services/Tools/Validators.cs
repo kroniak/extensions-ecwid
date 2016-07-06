@@ -91,7 +91,7 @@ namespace Ecwid.Tools
         /// <param name="statuses">The statuses.</param>
         /// <param name="statusesAvailable">The statuses available.</param>
         /// <exception cref="ArgumentException">Statuses string is invalid.</exception>
-        public static bool StatusesValidate(string statuses, ICollection<string> statusesAvailable)
+        public static void StatusesValidate(string statuses, ICollection<string> statusesAvailable)
         {
             if (IsNullOrEmpty(statuses))
                 throw new ArgumentException("Statuses string is invalid.", nameof(statuses));
@@ -111,8 +111,6 @@ namespace Ecwid.Tools
             {
                 throw new ArgumentException("Statuses string is invalid.", argumentException);
             }
-
-            return true;
         }
 
         /// <summary>

@@ -4,8 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Ecwid.Models.Legacy;
-using Ecwid.Legacy;
-using Moq;
 
 namespace Ecwid.Test.Services.Legacy
 {
@@ -111,16 +109,16 @@ namespace Ecwid.Test.Services.Legacy
             return orders;
         }
 
-        /// <summary>
-        /// Mocks the time.
-        /// </summary>
-        public static Mock<ITimeProvider> MockTime()
-        {
-            // Mock current time
-            var mockTime = new Mock<ITimeProvider>();
-            // Init time
-            mockTime.SetupGet(t => t.Now).Returns(DateTime.Now);
-            return mockTime;
-        }
+        ///// <summary>
+        ///// Mocks the time.
+        ///// </summary>
+        //public static Mock<ITimeProvider> MockTime()
+        //{
+        //    // Mock current time
+        //    var mockTime = new Mock<ITimeProvider>();
+        //    // Init time
+        //    mockTime.SetupGet(t => t.Now).Returns(DateTime.Now);
+        //    return mockTime;
+        //}
     }
 }

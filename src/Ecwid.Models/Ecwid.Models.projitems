@@ -11,6 +11,7 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)BaseEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)BaseOrder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HandlingFeeInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Legacy\LegacyAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Legacy\LegacyCategoryEntry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Legacy\LegacyCategory.cs" />
@@ -41,7 +42,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Orders\DiscountInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Orders\OrderItemOrderFile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Orders\OrderItemProductFile.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Orders\HandlingFeeInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Orders\OrderEntry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Orders\OrderItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Orders\OrderItemTax.cs" />
@@ -50,5 +50,19 @@
     <Compile Include="$(MSBuildThisFileDirectory)Orders\ShippingOptionInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Orders\PersonInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Orders\UpdateStatus.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Profile\Account.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Profile\BusinessRegistrationId.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Profile\Company.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Profile\FormatsAndUnits.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Profile\GeneralInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Profile\Languages.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Profile\MailNotifications.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Profile\Profile.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Profile\Rule.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Profile\Settings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Profile\Shipping.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Profile\StarterSite.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Profile\Tax.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Profile\Zone.cs" />
   </ItemGroup>
 </Project>

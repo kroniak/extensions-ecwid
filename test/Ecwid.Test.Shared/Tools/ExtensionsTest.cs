@@ -7,32 +7,33 @@ using Xunit;
 
 namespace Ecwid.Test.Tools
 {
-    [SuppressMessage("ReSharper", "ExceptionNotDocumented")]
-    [SuppressMessage("ReSharper", "ExceptionNotDocumentedOptional")]
-    public class ExtensionsTest
-    {
-        [Theory]
-        [InlineData("A B C   D, E  ")]
-        [InlineData("A B,, , C   D, E   ")]
-        public void TrimReplaceSplit(string str)
-        {
-            var result = str.TrimUpperReplaceSplit();
+	//TODO Convert tests
+	[SuppressMessage("ReSharper", "ExceptionNotDocumented")]
+	[SuppressMessage("ReSharper", "ExceptionNotDocumentedOptional")]
+	public class ExtensionsTest
+	{
+		//[Theory]
+		//[InlineData("A B C   D, E  ")]
+		//[InlineData("A B,, , C   D, E   ")]
+		//public void TrimReplaceSplit(string str)
+		//{
+		//	var result = str.TrimUpperReplaceSplit();
 
-            Assert.Contains("A", result);
-            Assert.Contains("B", result);
-            Assert.Contains("C", result);
-            Assert.Contains("D", result);
-            Assert.Contains("E", result);
-            Assert.DoesNotContain(" ", result);
-            Assert.DoesNotContain(",", result);
-            Assert.DoesNotContain(";", result);
-        }
+		//	Assert.Contains("A", result);
+		//	Assert.Contains("B", result);
+		//	Assert.Contains("C", result);
+		//	Assert.Contains("D", result);
+		//	Assert.Contains("E", result);
+		//	Assert.DoesNotContain(" ", result);
+		//	Assert.DoesNotContain(",", result);
+		//	Assert.DoesNotContain(";", result);
+		//}
 
-        [Fact]
-        public void TrimReplaceSplitFail()
-        {
-            string str = null;
-            Assert.Throws<ArgumentException>(() => str.TrimUpperReplaceSplit());
-        }
-    }
+		//[Fact]
+		//public void TrimReplaceSplitFail()
+		//{
+		//	string str = null;
+		//	Assert.Throws<ArgumentException>(() => str.TrimUpperReplaceSplit());
+		//}
+	}
 }

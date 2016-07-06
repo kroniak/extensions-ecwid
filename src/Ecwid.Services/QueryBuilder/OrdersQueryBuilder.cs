@@ -36,7 +36,7 @@ namespace Ecwid
         /// <param name="name">The name.</param>
         /// <param name="values">The values.</param>
         /// <exception cref="ArgumentException">Can not add or update statuses. Look inner exception.</exception>
-        internal void AddOrUpdateStatuses(string name, IEnumerable<string> values)
+        public void AddOrUpdateStatuses(string name, IEnumerable<string> values)
         {
             try
             {

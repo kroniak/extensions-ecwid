@@ -8,164 +8,158 @@ using Flurl.Http;
 
 namespace Ecwid
 {
-    /// <summary>
-    /// Abstract client class contains shared methods.
-    /// </summary>
-    public abstract class BaseEcwidClient
-    {
-        /// <summary>
-        /// Checks the shop authentication asynchronous.
-        /// </summary>
-        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
-        protected async Task<bool> CheckTokenAsync<T>(Url url)
-            where T : class
-        {
-            try
-            {
-                await GetApiResponseAsync<T>(url, new {limit = 1});
-                return true;
-            }
-            catch (EcwidHttpException exception)
-            {
-                var status = exception.StatusCode;
-                if (status == HttpStatusCode.Forbidden)
-                    return false;
+	/// <summary>
+	/// Abstract client class contains shared methods.
+	/// </summary>
+	public abstract class BaseEcwidClient
+	{
+		/// <summary>
+		/// Checks the shop authentication asynchronous.
+		/// </summary>
+		/// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+		protected static async Task<bool> CheckTokenAsync<T>(Url url, CancellationToken cancellationToken)
+			where T : class
+		{
+			try
+			{
+				await GetApiAsync<T>(url, new {limit = 1}, cancellationToken);
+				return true;
+			}
+			catch (EcwidHttpException exception)
+			{
+				var status = exception.StatusCode;
+				if (status == HttpStatusCode.Forbidden)
+					return false;
 
-                throw;
-            }
-        }
+				throw;
+			}
+		}
 
-        /// <summary>
-        /// Checks the shop authentication asynchronous.
-        /// </summary>
-        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
-        protected async Task<bool> CheckTokenAsync<T>(Url url, CancellationToken cancellationToken)
-            where T : class
-        {
-            try
-            {
-                await GetApiResponseAsync<T>(url, new {limit = 1}, cancellationToken);
-                return true;
-            }
-            catch (EcwidHttpException exception)
-            {
-                var status = exception.StatusCode;
-                if (status == HttpStatusCode.Forbidden)
-                    return false;
+		/// <summary>
+		/// GET from API asynchronous.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="baseUrl">The base URL.</param>
+		/// <param name="cancellationToken">The cancellation token.</param>
+		/// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+		protected static async Task<T> GetApiAsync<T>(Url baseUrl, CancellationToken cancellationToken)
+			where T : class
+		{
+			T poco;
+			try
+			{
+				poco = await baseUrl.GetJsonAsync<T>(cancellationToken);
+			}
+			catch (FlurlHttpException exception)
+			{
+				var call = exception.Call;
+				var status = call.Response?.StatusCode;
 
-                throw;
-            }
-        }
+				// if entity not found return null
+				if (status == HttpStatusCode.NotFound)
+					return null;
 
-        /// <summary>
-        /// Gets the API responce asynchronous.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="baseUrl">The base URL.</param>
-        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
-        protected async Task<T> GetApiResponseAsync<T>(Url baseUrl) where T : class
-        {
-            T poco;
-            try
-            {
-                poco = await baseUrl.GetJsonAsync<T>();
-            }
-            catch (FlurlHttpException exception)
-            {
-                var call = exception.Call;
-                var status = call.Response?.StatusCode;
-                var error = call.ErrorResponseBody ?? call.Exception?.Message ?? "Something happened to the HTTP call.";
+				var error = call.ErrorResponseBody ?? call.Exception?.Message ?? "Something happened to the HTTP call.";
 
-                throw new EcwidHttpException(error, status, exception);
-            }
+				throw new EcwidHttpException(error, status, exception);
+			}
 
-            return poco;
-        }
+			return poco;
+		}
 
-        /// <summary>
-        /// Gets the API responce asynchronous.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="baseUrl">The base URL.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
-        protected async Task<T> GetApiResponseAsync<T>(Url baseUrl, CancellationToken cancellationToken)
-            where T : class
-        {
-            T poco;
-            try
-            {
-                poco = await baseUrl.GetJsonAsync<T>(cancellationToken);
-            }
-            catch (FlurlHttpException exception)
-            {
-                var call = exception.Call;
-                var status = call.Response?.StatusCode;
-                var error = call.ErrorResponseBody ?? call.Exception?.Message ?? "Something happened to the HTTP call.";
+		/// <summary>
+		/// GET from API asynchronous.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="baseUrl">The base URL.</param>
+		/// <param name="query">The query.</param>
+		/// <param name="cancellationToken">The cancellation token.</param>
+		/// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+		protected static async Task<T> GetApiAsync<T>(Url baseUrl, object query,
+			CancellationToken cancellationToken)
+			where T : class
+			=> await GetApiAsync<T>(baseUrl.SetQueryParams(query), cancellationToken);
 
-                throw new EcwidHttpException(error, status, exception);
-            }
+		/// <summary>
+		/// POST the API asynchronous and return response.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="baseUrl">The base URL.</param>
+		/// <param name="query">The query.</param>
+		/// <param name="cancellationToken">The cancellation token.</param>
+		/// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+		protected static async Task<T> PostApiAsync<T>(Url baseUrl, object query, CancellationToken cancellationToken)
+			where T : class
+		{
+			T poco;
+			try
+			{
+				poco = await baseUrl.SetQueryParams(query).PostAsync(cancellationToken).ReceiveJson<T>();
+			}
+			catch (FlurlHttpException exception)
+			{
+				var call = exception.Call;
+				var status = call.Response?.StatusCode;
+				var error = call.ErrorResponseBody ?? call.Exception?.Message ?? "Something happened to the HTTP call.";
 
-            return poco;
-        }
+				throw new EcwidHttpException(error, status, exception);
+			}
 
-        /// <summary>
-        /// Gets the API responce asynchronous.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="baseUrl">The base URL.</param>
-        /// <param name="query">The query.</param>
-        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
-        protected async Task<T> GetApiResponseAsync<T>(Url baseUrl, object query) where T : class
-            => await GetApiResponseAsync<T>(baseUrl.SetQueryParams(query));
+			return poco;
+		}
 
-        /// <summary>
-        /// Gets the API responce asynchronous.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="baseUrl">The base URL.</param>
-        /// <param name="query">The query.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
-        protected async Task<T> GetApiResponseAsync<T>(Url baseUrl, object query, CancellationToken cancellationToken)
-            where T : class
-            => await GetApiResponseAsync<T>(baseUrl.SetQueryParams(query), cancellationToken);
+		/// <summary>
+		/// PUT the API asynchronous and return response.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="baseUrl">The base URL.</param>
+		/// <param name="data">The new object.</param>
+		/// <param name="cancellationToken">The cancellation token.</param>
+		/// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+		protected static async Task<T> PutApiAsync<T>(Url baseUrl, object data, CancellationToken cancellationToken)
+			where T : class
+		{
+			T poco;
+			try
+			{
+				poco = await baseUrl.PutJsonAsync(data, cancellationToken).ReceiveJson<T>();
+			}
+			catch (FlurlHttpException exception)
+			{
+				var call = exception.Call;
+				var status = call.Response?.StatusCode;
+				var error = call.ErrorResponseBody ?? call.Exception?.Message ?? "Something happened to the HTTP call.";
 
-        /// <summary>
-        /// Updates the API asynchronous.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="baseUrl">The base URL.</param>
-        private async Task<T> UpdateApiAsync<T>(Url baseUrl) where T : class
-            => await baseUrl.PostAsync().ReceiveJson<T>();
+				throw new EcwidHttpException(error, status, exception);
+			}
 
-        /// <summary>
-        /// Updates the API asynchronous.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="baseUrl">The base URL.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        private async Task<T> UpdateApiAsync<T>(Url baseUrl, CancellationToken cancellationToken)
-            where T : class
-            => await baseUrl.PostAsync(cancellationToken).ReceiveJson<T>();
+			return poco;
+		}
 
-        /// <summary>
-        /// Updates the API asynchronous.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="baseUrl">The base URL.</param>
-        /// <param name="query">The query.</param>
-        protected async Task<T> UpdateApiAsync<T>(Url baseUrl, object query) where T : class
-            => await UpdateApiAsync<T>(baseUrl.SetQueryParams(query));
+		/// <summary>
+		/// PUT the API asynchronous and return response.
+		/// </summary>
+		/// <param name="baseUrl">The base URL.</param>
+		/// <param name="query">The query.</param>
+		/// <param name="data">The new object.</param>
+		/// <param name="cancellationToken">The cancellation token.</param>
+		/// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+		protected static async Task<bool> PutApiAsync(Url baseUrl, object query, object data, CancellationToken cancellationToken)
+		{
+			try
+			{
+				await baseUrl.SetQueryParams(query).PutJsonAsync(data, cancellationToken).ReceiveJson();
+			}
+			catch (FlurlHttpException exception)
+			{
+				var call = exception.Call;
+				var status = call.Response?.StatusCode;
+				var error = call.ErrorResponseBody ?? call.Exception?.Message ?? "Something happened to the HTTP call.";
 
-        /// <summary>
-        /// Updates the API asynchronous.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="baseUrl">The base URL.</param>
-        /// <param name="query">The query.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        protected async Task<T> UpdateApiAsync<T>(Url baseUrl, object query, CancellationToken cancellationToken)
-            where T : class => await UpdateApiAsync<T>(baseUrl.SetQueryParams(query), cancellationToken);
-    }
+				throw new EcwidHttpException(error, status, exception);
+			}
+
+			return true;
+		}
+	}
 }

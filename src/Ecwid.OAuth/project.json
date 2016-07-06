@@ -1,41 +1,37 @@
 ﻿{
-  "version": "1.0.0-beta",
+  "version": "1.0.0-beta2-update2",
   "title": "Ecwid.OAuth",
   "description": "ASP.NET Core OAuth2 middleware for Ecwid API v3",
-  "summary": "ASP.NET Core OAuth2 middleware for Ecwid API v3",
-  "authors": [ "me@kroniak.net" ],
-  "copyright": "Copyright ©2016 by me@kroniak.net",
-  "tags": [ "ecwid oauth middleware" ],
-  "license": "GPL-3.0",
-  "licenseUrl": "https://raw.githubusercontent.com/kroniak/extensions-ecwid/master/LICENSE",
-  "requireLicenseAcceptance": false,
-  "iconUrl": "https://dj925myfyz5v.cloudfront.net/favicon_v2.ico",
-  "projectUrl": "https://github.com/kroniak/extensions-ecwid",
-  "releaseNotes": "",
 
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/kroniak/extensions-ecwid.git"
+  "packOptions": {
+    "iconUrl": "https://dj925myfyz5v.cloudfront.net/favicon_v2.ico",
+    "licenseUrl": "https://raw.githubusercontent.com/kroniak/extensions-ecwid/master/LICENSE",
+    "projectUrl": "https://github.com/kroniak/extensions-ecwid",
+    "releaseNotes": "1.0.0-beta2 - update package to NET Core 1.0.0",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/kroniak/extensions-ecwid.git"
+    },
+    "requireLicenseAcceptance": false,
+    "summary": "ASP.NET Core OAuth2 middleware for Ecwid API v3",
+    "tags": [ "ecwid oauth middleware" ]
   },
 
-  "compilationOptions": {
+  "authors": [ "me@kroniak.net" ],
+  "copyright": "Copyright ©2016 by me@kroniak.net",
+  "license": "GPL-3.0",
+
+  "buildOptions": {
+    "optimize": true,
+    "xmlDoc": true,
     "warningsAsErrors": true
   },
 
-  "configurations": {
-    "Release": {
-      "compilationOptions": {
-        "optimize": true
-      }
-    }
-  },
-
   "dependencies": {
-    "Microsoft.AspNet.Authentication.OAuth": "1.0.0-rc1-final"
+    "Microsoft.AspNetCore.Authentication.OAuth": "1.0.0"
   },
 
   "frameworks": {
-    "net451": { },
-    "dotnet55": { }
+    "netstandard1.6": { }
   }
 }

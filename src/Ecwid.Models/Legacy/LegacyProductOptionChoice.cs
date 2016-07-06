@@ -4,6 +4,9 @@ using Newtonsoft.Json;
 
 namespace Ecwid.Models.Legacy
 {
+    /// <summary>
+    /// Legacy product option choice.
+    /// </summary>
     public class LegacyProductOptionChoice
     {
         /// <summary>

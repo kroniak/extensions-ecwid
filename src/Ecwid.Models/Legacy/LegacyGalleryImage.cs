@@ -4,6 +4,9 @@ using Newtonsoft.Json;
 
 namespace Ecwid.Models.Legacy
 {
+    /// <summary>
+    /// The image class.
+    /// </summary>
     public class LegacyGalleryImage
     {
         /// <summary>

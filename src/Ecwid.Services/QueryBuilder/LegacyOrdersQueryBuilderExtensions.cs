@@ -305,31 +305,13 @@ namespace Ecwid.Legacy
         /// the order's fulfillment status to SHIPPED.
         /// </param>
         /// <exception cref="EcwidConfigException">Can not add or update statuses. Look inner exception.</exception>
+        /// <exception cref="EcwidLimitException">Limit overheat exception.</exception>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
         public static async Task<LegacyUpdatedOrders> UpdateAsync(
             this OrdersQueryBuilder<LegacyOrder, LegacyUpdatedOrders> query, string newPaymentStatus,
-            string newFulfillmentStatus, string newShippingTrackingCode)
-        {
-            try
-            {
-                Validators.ValidateNewLegacyStatuses(query.Query, newPaymentStatus, newFulfillmentStatus,
-                    newShippingTrackingCode);
-
-                if (!Validators.IsNullOrEmpty(newPaymentStatus))
-                    query.AddOrUpdate("new_payment_status",
-                        Validators.StatusValidate(newPaymentStatus, Validators.AvailableLegacyPaymentStatuses));
-                if (!Validators.IsNullOrEmpty(newFulfillmentStatus))
-                    query.AddOrUpdate("new_fulfillment_status",
-                        Validators.StatusValidate(newFulfillmentStatus, Validators.AvailableLegacyFulfillmentStatuses));
-                if (!Validators.IsNullOrEmpty(newShippingTrackingCode))
-                    query.AddOrUpdate("new_shipping_tracking_code", newShippingTrackingCode);
-            }
-            catch (ArgumentException exception)
-            {
-                throw new EcwidConfigException("Can not add or update statuses. Look inner exception.", exception);
-            }
-
-            return await query.Client.UpdateOrdersAsync(query);
-        }
+            string newFulfillmentStatus, string newShippingTrackingCode) 
+            => 
+            await query.UpdateAsync(newPaymentStatus, newFulfillmentStatus, newShippingTrackingCode, CancellationToken.None);
 
         /// <summary>
         /// Update the orders asynchronous.
@@ -349,6 +331,8 @@ namespace Ecwid.Legacy
         /// </param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <exception cref="EcwidConfigException">Can not add or update statuses. Look inner exception.</exception>
+        /// <exception cref="EcwidLimitException">Limit overheat exception.</exception>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
         public static async Task<LegacyUpdatedOrders> UpdateAsync(
             this OrdersQueryBuilder<LegacyOrder, LegacyUpdatedOrders> query, string newPaymentStatus,
             string newFulfillmentStatus, string newShippingTrackingCode, CancellationToken cancellationToken)
@@ -372,7 +356,9 @@ namespace Ecwid.Legacy
                 throw new EcwidConfigException("Can not add or update statuses. Look inner exception.", exception);
             }
 
-            return await query.Client.UpdateOrdersAsync(query, cancellationToken);
+            var client = (EcwidLegacyClient)query.Client;
+
+            return await client.UpdateOrdersAsync(query, cancellationToken);
         }
     }
 }

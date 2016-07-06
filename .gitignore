@@ -37,3 +37,4 @@ publish/
 
 # Misc files
 *.log
+/build/1
