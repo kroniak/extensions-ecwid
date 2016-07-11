@@ -35,7 +35,11 @@
   },
 
   "frameworks": {
-    "net45": {},
+    "net45": {
+      "frameworkAssemblies": {
+        "System.Net.Http": "4.0.0.0"
+      }
+    },
     "netstandard1.4": {
       "dependencies": {
         "System.Collections.Concurrent": "4.0.12"
