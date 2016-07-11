@@ -1,5 +1,5 @@
 ﻿{
-  "version": "1.0.0-beta2",
+  "version": "1.0.0-beta2-update1",
   "title": "Ecwid",
   "description": "C# services and models classes to Ecwid API v1 and v3",
 
@@ -35,6 +35,7 @@
   },
 
   "frameworks": {
+    "net45": {},
     "netstandard1.4": {
       "dependencies": {
         "System.Collections.Concurrent": "4.0.12"
