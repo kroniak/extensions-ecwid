@@ -94,7 +94,7 @@ namespace Ecwid
 			T poco;
 			try
 			{
-				poco = await baseUrl.SetQueryParams(query).PostAsync(cancellationToken).ReceiveJson<T>();
+				poco = await baseUrl.SetQueryParams(query).PostAsync(null, cancellationToken).ReceiveJson<T>();
 			}
 			catch (FlurlHttpException exception)
 			{

@@ -22,9 +22,16 @@
   "license": "GPL-3.0",
 
   "buildOptions": {
-    "optimize": true,
     "xmlDoc": true,
     "warningsAsErrors": true
+  },
+
+  "configurations": {
+    "Release": {
+      "buildOptions": {
+        "optimize": true
+      }
+    }
   },
 
   "dependencies": {

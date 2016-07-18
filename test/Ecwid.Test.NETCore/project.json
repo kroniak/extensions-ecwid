@@ -3,8 +3,15 @@
     "compile": {
       "exclude": [ "../**/*RealTest.cs" ],
       "include": [ "../Ecwid.Test.Shared/**/*.cs" ],
-      "optimize": true,
       "warningsAsErrors": true
+    }
+  },
+
+  "configurations": {
+    "Release": {
+      "buildOptions": {
+        "optimize": true
+      }
     }
   },
 
@@ -12,9 +19,7 @@
 
   "dependencies": {
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
-    "Ecwid": {
-      "target": "project"
-    },
+    "Ecwid": { "target": "project" },
     "Moq": "4.6.25-alpha",
     "xunit": "2.1.0"
   },
