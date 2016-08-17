@@ -1,7 +1,7 @@
 {
   "buildOptions": {
     "compile": {
-      "include": [ "../Ecwid.Test.Shared/**/*.cs" ],
+      "include": [ "../Ecwid.Test.Real.Shared/**/*.cs" ],
       "warningsAsErrors": true
     }
   },
@@ -19,7 +19,6 @@
   "dependencies": {
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
     "Ecwid": { "target": "project" },
-    "Moq": "4.6.36-alpha",
     "xunit": "2.1.0"
   },
 

@@ -6,8 +6,8 @@
   </PropertyGroup>
   <Import Project="$(VSToolsPath)\DotNet\Microsoft.DotNet.Props" Condition="'$(VSToolsPath)' != ''" />
   <PropertyGroup Label="Globals">
-    <ProjectGuid>9fe41644-b31f-49fa-8e6b-ad827d6eab19</ProjectGuid>
-    <RootNamespace>Ecwid.Test</RootNamespace>
+    <ProjectGuid>AF507F19-63C4-4522-8DC3-A638FA8808FF</ProjectGuid>
+    <RootNamespace>Ecwid.Test.Real</RootNamespace>
     <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)'=='' ">.\obj</BaseIntermediateOutputPath>
     <OutputPath Condition="'$(OutputPath)'=='' ">.\bin\</OutputPath>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>

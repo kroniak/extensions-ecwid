@@ -64,13 +64,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClientProfileRealTest.cs" />
-    <Compile Include="ClientOrdersRealTest.cs" />
-    <Compile Include="LegacyClientProductsRealTest.cs" />
-    <Compile Include="LegacyClientProductsEcwidRealTest.cs" />
-    <Compile Include="LegacyClientOrdersRealTest.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
@@ -83,6 +76,7 @@
   </ItemGroup>
   <Import Project="..\..\src\Ecwid.Models\Ecwid.Models.projitems" Label="Shared" />
   <Import Project="..\..\src\Ecwid.Services\Ecwid.Services.projitems" Label="Shared" />
+  <Import Project="..\Ecwid.Test.Real.Shared\Ecwid.Test.Real.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
