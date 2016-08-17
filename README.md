@@ -14,7 +14,7 @@ var result = await client.Configure(someShopId, someToken).Orders
                 .GetAsync();
 ```
 ### Install
-> The package is compiled for NET45 and .NET Platform Standard 5.4 which include .NET Core and other targets. [Read about it](https://github.com/dotnet/corefx/blob/master/Documentation/architecture/net-platform-standard.md#mapping-the-net-platform-standard-to-platforms). 
+> The package is compiled for NET45 and .NET Platform Standard 1.4 which include .NET Core and other targets. [Read about it](https://github.com/dotnet/corefx/blob/master/Documentation/architecture/net-platform-standard.md#mapping-the-net-platform-standard-to-platforms). 
 
 `PM> Install-Package Ecwid -Pre` - services and models
 

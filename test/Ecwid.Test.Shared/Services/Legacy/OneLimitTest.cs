@@ -1,10 +1,6 @@
 ﻿// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
 
-using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using Ecwid.Legacy;
-using Xunit;
 
 namespace Ecwid.Test.Services.Legacy
 {

@@ -12,7 +12,7 @@ namespace Ecwid.Test.Services
 {
 	[SuppressMessage("ReSharper", "ExceptionNotDocumented")]
 	[SuppressMessage("ReSharper", "ExceptionNotDocumentedOptional")]
-	public class ClientTest
+	public class ClientTest : IDisposable
 	{
 		// Tests params
 		private const int ShopId = 123;
@@ -682,6 +682,13 @@ namespace Ecwid.Test.Services
 				.Times(1);
 		}
 
+		#endregion
+
+		#region Implementation of IDisposable
+		public void Dispose()
+		{
+			_httpTest.Dispose();
+		}
 		#endregion
 	}
 }

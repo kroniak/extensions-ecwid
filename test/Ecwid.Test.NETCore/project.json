@@ -20,7 +20,7 @@
   "dependencies": {
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
     "Ecwid": { "target": "project" },
-    "Moq": "4.6.25-alpha",
+    "Moq": "4.6.36-alpha",
     "xunit": "2.1.0"
   },
 
