@@ -1,7 +1,6 @@
 {
   "buildOptions": {
     "compile": {
-      "include": [ "../Ecwid.Test.Real.Shared/**/*.cs" ],
       "warningsAsErrors": true
     }
   },
@@ -19,17 +18,18 @@
   "dependencies": {
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
     "Ecwid": { "target": "project" },
-    "xunit": "2.1.0"
+    "Moq": "4.6.38-alpha",
+    "xunit": "2.1.0",
+    "System.Diagnostics.TraceSource": "4.3.0"
   },
 
   "frameworks": {
-    "netcoreapp1.0": {
+    "netcoreapp1.1": {
       "dependencies": {
         "Microsoft.NETCore.App": {
           "type": "platform",
-          "version": "1.0.0"
-        },
-        "System.Diagnostics.TraceSource": "4.0.0"
+          "version": "1.1.0"
+        }
       },
       "imports": [ "dotnet54" ]
     }

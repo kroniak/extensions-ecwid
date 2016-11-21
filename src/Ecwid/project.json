@@ -22,9 +22,6 @@
   "license": "GPL-3.0",
 
   "buildOptions": {
-    "compile": {
-      "include": [ "../Ecwid.Models/**/*.cs", "../Ecwid.Services/**/*.cs" ]
-    },
     "warningsAsErrors": true,
     "xmlDoc": true
   },
@@ -38,7 +35,7 @@
   },
 
   "dependencies": {
-    "Flurl.Http": "1.0.1"
+    "Flurl.Http": "1.1.0-pre"
   },
 
   "frameworks": {
@@ -49,7 +46,7 @@
     },
     "netstandard1.4": {
       "dependencies": {
-        "System.Collections.Concurrent": "4.0.12"
+        "System.Collections.Concurrent": "4.3.0"
       }
     }
   }

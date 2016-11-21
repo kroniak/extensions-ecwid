@@ -25,7 +25,7 @@ namespace Ecwid.Test.Real
 		{
 			var result = await _client.GetCategoriesAsync();
 			Assert.NotEmpty(result);
-			Assert.Equal(8, result.Count);
+			Assert.Equal(7, result.Count);
 		}
 
 		[Fact]
@@ -34,7 +34,7 @@ namespace Ecwid.Test.Real
 			var result = await _client.GetCategoriesAsync(0);
 
 			Assert.NotEmpty(result);
-			Assert.Equal(4, result.Count);
+			Assert.Equal(3, result.Count);
 		}
 
 		[Fact]
@@ -47,7 +47,7 @@ namespace Ecwid.Test.Real
 		[Fact]
 		public async void GetCategoryAsync()
 		{
-			var result = await _client.GetCategoryAsync(1002);
+			var result = await _client.GetCategoryAsync(20671017);
 
 			Assert.NotNull(result);
 			Assert.NotNull(result.Subcategories);
@@ -71,17 +71,9 @@ namespace Ecwid.Test.Real
 		}
 
 		[Fact]
-		public async void GetProductsWithputCategoryAsync()
-		{
-			var result = await _client.GetProductsAsync(0);
-
-			Assert.Empty(result);
-		}
-
-		[Fact]
 		public async void GetProductsAsync()
 		{
-			var result = await _client.GetProductsAsync(1002);
+			var result = await _client.GetProductsAsync(20671017);
 
 			Assert.NotEmpty(result);
 		}
@@ -108,7 +100,7 @@ namespace Ecwid.Test.Real
 		[Fact]
 		public async void GetProductAsync()
 		{
-			var result = await _client.GetProductAsync(24027);
+			var result = await _client.GetProductAsync(70178253);
 
 			Assert.NotNull(result);
 		}

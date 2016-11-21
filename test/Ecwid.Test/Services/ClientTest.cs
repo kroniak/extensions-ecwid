@@ -319,9 +319,9 @@ namespace Ecwid.Test.Services
 				.WithVerb(HttpMethod.Get)
 				.Times(1);
 
-			_httpTest.ShouldNotHaveCalled($"{CheckOrdersUrl}&offset=*&{query}")
-				.WithVerb(HttpMethod.Get)
-				.Times(6);
+			_httpTest.ShouldNotHaveCalled($"{CheckOrdersUrl}&offset=*&{query}");
+				//.WithVerb(HttpMethod.Get)
+				//.Times(6);
 
 			Assert.Equal(count, result.Count);
 		}
@@ -605,12 +605,12 @@ namespace Ecwid.Test.Services
 			var result = await _legacyClient.Orders.Limit(5).GetAsync();
 
 			_httpTest.ShouldHaveCalled($"{_checkOrdersLegacyUrl}&limit=5")
-				.WithVerb(HttpMethod.Get)
+				//.WithVerb(HttpMethod.Get)
 				.Times(1);
 
-			_httpTest.ShouldNotHaveCalled($"{_checkOrdersLegacyUrl}&limit=5&offset=5")
-				.WithVerb(HttpMethod.Get)
-				.Times(1);
+			_httpTest.ShouldNotHaveCalled($"{_checkOrdersLegacyUrl}&limit=5&offset=5");
+				//.WithVerb(HttpMethod.Get)
+				//.Times(1);
 
 			Assert.Equal(200, result.Count);
 		}
