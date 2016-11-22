@@ -5,6 +5,8 @@ branches:
   only:
   - master
   - dev
+init:
+  - dotnet --version
 build_script:
 - ps: .\build\build.ps1 $env:APPVEYOR_BUILD_VERSION $env:APPVEYOR_REPO_TAG_NAME
 test_script:
