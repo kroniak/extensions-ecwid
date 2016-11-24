@@ -5,6 +5,7 @@ branches:
   only:
   - master
   - dev
+image: Visual Studio 2015  
 init:
   - dotnet --version
 build_script:
