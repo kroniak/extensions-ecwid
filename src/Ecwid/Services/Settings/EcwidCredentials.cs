@@ -53,9 +53,10 @@ namespace Ecwid
                 if (Validators.IsNullOrEmpty(value))
                     throw new EcwidConfigException("The authorization token is invalid.");
 
-                var regex = new Regex("^[0-9a-zA-Z]{32,}");
-                if (!regex.IsMatch(value))
-                    throw new EcwidConfigException("The authorization token is invalid.");
+                // https://github.com/kroniak/extensions-ecwid/issues/34
+                //var regex = new Regex("^[0-9a-zA-Z]{32,}");
+                //if (!regex.IsMatch(value))
+                //    throw new EcwidConfigException("The authorization token is invalid.");
 
                 _token = value;
             }

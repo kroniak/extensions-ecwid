@@ -53,9 +53,10 @@ namespace Ecwid.Legacy
                 if (Validators.IsNullOrEmpty(value))
                     throw new EcwidConfigException("The order authorization token is invalid.");
 
-                var regex = new Regex("^[0-9a-zA-Z]{12,}");
-                if (!regex.IsMatch(value))
-                    throw new EcwidConfigException("The order authorization token is invalid.");
+                // https://github.com/kroniak/extensions-ecwid/issues/34
+                //var regex = new Regex("^[0-9a-zA-Z]{12,}");
+                //if (!regex.IsMatch(value))
+                //    throw new EcwidConfigException("The order authorization token is invalid.");
 
                 _orderToken = value;
             }
