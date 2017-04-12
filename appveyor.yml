@@ -5,11 +5,11 @@ branches:
   only:
   - master
   - dev
-image: Visual Studio 2015  
+image: Visual Studio 2017 
 init:
   - dotnet --version
 build_script:
-- ps: .\build\build.ps1 $env:APPVEYOR_BUILD_VERSION $env:APPVEYOR_REPO_TAG_NAME
+- ps: .\build\build.ps1
 test_script:
 - ps: .\build\test.ps1
 artifacts:

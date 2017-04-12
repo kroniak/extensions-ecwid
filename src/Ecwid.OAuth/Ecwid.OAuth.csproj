@@ -17,7 +17,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\netstandard1.6\Ecwid.OAuth.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\netstandard1.3\Ecwid.OAuth.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
