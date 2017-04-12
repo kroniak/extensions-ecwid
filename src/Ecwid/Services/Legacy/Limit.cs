@@ -33,7 +33,7 @@ namespace Ecwid.Legacy
         }
 
         /// <summary>
-        /// Get info about current value of limit value. <time in seconds, value>
+        /// Get info about current value of limit value. Key is time in seconds, Value is value (int)
         /// </summary>
         public KeyValuePair<int, int> GetInfo() => new KeyValuePair<int, int>(_timeInterval, _value);
 
