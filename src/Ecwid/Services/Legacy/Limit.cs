@@ -1,7 +1,9 @@
 // Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
 
 using System;
+using System.Collections.Generic;
 
+// ReSharper disable once CheckNamespace
 namespace Ecwid.Legacy
 {
     /// <summary>
@@ -29,6 +31,11 @@ namespace Ecwid.Legacy
             _limitValue = limitValue;
             _start = TimeProvider.Now;
         }
+
+        /// <summary>
+        /// Get info about current value of limit value. <time in seconds, value>
+        /// </summary>
+        public KeyValuePair<int, int> GetInfo() => new KeyValuePair<int, int>(_timeInterval, _value);
 
         /// <summary>
         /// Gets or sets the time provider

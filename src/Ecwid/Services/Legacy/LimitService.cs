@@ -4,6 +4,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
+// ReSharper disable once CheckNamespace
 namespace Ecwid.Legacy
 {
     /// <summary>
@@ -53,6 +54,21 @@ namespace Ecwid.Legacy
         {
             var result = GetAgreement();
             return result && _limits.Aggregate(true, (current, limit) => current & limit.Tick());
+        }
+
+        /// <summary>
+        /// Get info about current value of limit value
+        /// </summary>
+        public IDictionary<int, int> GetInfo()
+        {
+            IDictionary<int, int> result = new Dictionary<int, int>(3);
+
+            foreach (var limit in _limits)
+            {
+                result.Add(limit.GetInfo());
+            }
+
+            return result;
         }
 
         /// <summary>

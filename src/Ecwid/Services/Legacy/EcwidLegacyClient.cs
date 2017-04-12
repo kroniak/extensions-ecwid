@@ -4,6 +4,7 @@ using System;
 using System.Threading.Tasks;
 using Flurl;
 
+// ReSharper disable once CheckNamespace
 namespace Ecwid.Legacy
 {
     /// <summary>
@@ -144,14 +145,13 @@ namespace Ecwid.Legacy
                 {
                     // If time limit is over
                     if (start.AddSeconds(Settings.MaxSecondsToWait) < DateTime.Now)
-                        // TODO tests
-                        throw new EcwidLimitException("Limit overheat exception");
+                        throw new EcwidLimitException("Limit overheat exception", LimitsService.Value.GetInfo());
 
                     Task.Delay(Settings.RetryInterval*1000).Wait();
                     agreement = LimitsService.Value.Tick();
                 }
             }
-                // ReSharper disable once CatchAllClause
+            // ReSharper disable once CatchAllClause
             catch (Exception exception)
             {
                 throw new EcwidLimitException("Internal error in limits sevices. Look inner exception.", exception);
