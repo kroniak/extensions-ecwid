@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.4</TargetFramework>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Version>1.0.0-rc</Version>
+    <Authors>me@kroniak.net</Authors>
+    <Description>C# services and models classes to Ecwid API v1 and v3</Description>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/kroniak/extensions-ecwid/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/kroniak/extensions-ecwid</PackageProjectUrl>
+    <PackageIconUrl>https://dj925myfyz5v.cloudfront.net/favicon_v2.ico</PackageIconUrl>
+    <RepositoryUrl>https://github.com/kroniak/extensions-ecwid.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>ecwid api client rest async</PackageTags>
+    <Company>kroniak</Company>
+    <Copyright>Copyright ©2016 by me@kroniak.net</Copyright>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\netcoreapp1.1\Ecwid.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <WarningLevel>0</WarningLevel>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Flurl.Http" Version="1.1.2" />
+  </ItemGroup>
+
+</Project>
