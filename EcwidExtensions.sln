@@ -1,81 +1,34 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{960DCBBF-AEC7-4640-9D13-CA91A0F8A5DD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ecwid", "src\Ecwid\Ecwid.csproj", "{1919BDF2-F8DD-409C-A94C-C508F1DEE7CB}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "solution items", "solution items", "{5014D278-E9DD-4623-A51F-5AF0B16866B0}"
-	ProjectSection(SolutionItems) = preProject
-		global.json = global.json
-	EndProjectSection
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ecwid.Test", "test\Ecwid.Test\Ecwid.Test.csproj", "{0658D4DB-3E51-4605-A7FC-BAF79D15BFC8}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ecwid", "src\Ecwid\Ecwid.xproj", "{924D346B-90FA-4251-AAB2-0CF860540D2D}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{B392B7CF-2234-4280-AAE5-BD90CA59169C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ecwid.Test", "test\Ecwid.Test\Ecwid.Test.csproj", "{6DF473B9-E40A-464C-ADE6-D8555356460E}"
-EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Ecwid.Models", "src\Ecwid.Models\Ecwid.Models.shproj", "{33582A65-4571-4CE7-83B0-61D58EBE1FA9}"
-EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Ecwid.Services", "src\Ecwid.Services\Ecwid.Services.shproj", "{66067E25-20A2-4028-BD2C-318CEEBD4E6F}"
-EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Ecwid.Test.Shared", "test\Ecwid.Test.Shared\Ecwid.Test.Shared.shproj", "{0CDF00D8-4242-4375-B9CE-CE0AF65F6EBD}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ecwid.Test.NETCore", "test\Ecwid.Test.NETCore\Ecwid.Test.NETCore.xproj", "{9FE41644-B31F-49FA-8E6B-AD827D6EAB19}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ecwid.Test.Real", "test\Ecwid.Test.Real\Ecwid.Test.Real.csproj", "{AF23C859-C9B7-4497-AB61-D978D58F81D8}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Ecwid.OAuth", "src\Ecwid.OAuth\Ecwid.OAuth.xproj", "{7BA2525A-8454-49C2-993E-C6F3DAF1F555}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ecwid.OAuth", "src\Ecwid.OAuth\Ecwid.OAuth.csproj", "{4E0DE738-6299-41BC-8B78-2507B404764A}"
 EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		test\Ecwid.Test.Shared\Ecwid.Test.Shared.projitems*{0cdf00d8-4242-4375-b9ce-ce0af65f6ebd}*SharedItemsImports = 13
-		src\Ecwid.Models\Ecwid.Models.projitems*{33582a65-4571-4ce7-83b0-61d58ebe1fa9}*SharedItemsImports = 13
-		src\Ecwid.Services\Ecwid.Services.projitems*{66067e25-20a2-4028-bd2c-318ceebd4e6f}*SharedItemsImports = 13
-		src\Ecwid.Models\Ecwid.Models.projitems*{6df473b9-e40a-464c-ade6-d8555356460e}*SharedItemsImports = 4
-		src\Ecwid.Services\Ecwid.Services.projitems*{6df473b9-e40a-464c-ade6-d8555356460e}*SharedItemsImports = 4
-		test\Ecwid.Test.Shared\Ecwid.Test.Shared.projitems*{6df473b9-e40a-464c-ade6-d8555356460e}*SharedItemsImports = 4
-		src\Ecwid.Models\Ecwid.Models.projitems*{af23c859-c9b7-4497-ab61-d978d58f81d8}*SharedItemsImports = 4
-		src\Ecwid.Services\Ecwid.Services.projitems*{af23c859-c9b7-4497-ab61-d978d58f81d8}*SharedItemsImports = 4
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{924D346B-90FA-4251-AAB2-0CF860540D2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{924D346B-90FA-4251-AAB2-0CF860540D2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{924D346B-90FA-4251-AAB2-0CF860540D2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{924D346B-90FA-4251-AAB2-0CF860540D2D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6DF473B9-E40A-464C-ADE6-D8555356460E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6DF473B9-E40A-464C-ADE6-D8555356460E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6DF473B9-E40A-464C-ADE6-D8555356460E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6DF473B9-E40A-464C-ADE6-D8555356460E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9FE41644-B31F-49FA-8E6B-AD827D6EAB19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9FE41644-B31F-49FA-8E6B-AD827D6EAB19}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9FE41644-B31F-49FA-8E6B-AD827D6EAB19}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9FE41644-B31F-49FA-8E6B-AD827D6EAB19}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AF23C859-C9B7-4497-AB61-D978D58F81D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AF23C859-C9B7-4497-AB61-D978D58F81D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AF23C859-C9B7-4497-AB61-D978D58F81D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AF23C859-C9B7-4497-AB61-D978D58F81D8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7BA2525A-8454-49C2-993E-C6F3DAF1F555}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7BA2525A-8454-49C2-993E-C6F3DAF1F555}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7BA2525A-8454-49C2-993E-C6F3DAF1F555}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7BA2525A-8454-49C2-993E-C6F3DAF1F555}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1919BDF2-F8DD-409C-A94C-C508F1DEE7CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1919BDF2-F8DD-409C-A94C-C508F1DEE7CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1919BDF2-F8DD-409C-A94C-C508F1DEE7CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1919BDF2-F8DD-409C-A94C-C508F1DEE7CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0658D4DB-3E51-4605-A7FC-BAF79D15BFC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0658D4DB-3E51-4605-A7FC-BAF79D15BFC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0658D4DB-3E51-4605-A7FC-BAF79D15BFC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0658D4DB-3E51-4605-A7FC-BAF79D15BFC8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E0DE738-6299-41BC-8B78-2507B404764A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E0DE738-6299-41BC-8B78-2507B404764A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E0DE738-6299-41BC-8B78-2507B404764A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E0DE738-6299-41BC-8B78-2507B404764A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{924D346B-90FA-4251-AAB2-0CF860540D2D} = {960DCBBF-AEC7-4640-9D13-CA91A0F8A5DD}
-		{6DF473B9-E40A-464C-ADE6-D8555356460E} = {B392B7CF-2234-4280-AAE5-BD90CA59169C}
-		{33582A65-4571-4CE7-83B0-61D58EBE1FA9} = {960DCBBF-AEC7-4640-9D13-CA91A0F8A5DD}
-		{66067E25-20A2-4028-BD2C-318CEEBD4E6F} = {960DCBBF-AEC7-4640-9D13-CA91A0F8A5DD}
-		{0CDF00D8-4242-4375-B9CE-CE0AF65F6EBD} = {B392B7CF-2234-4280-AAE5-BD90CA59169C}
-		{9FE41644-B31F-49FA-8E6B-AD827D6EAB19} = {B392B7CF-2234-4280-AAE5-BD90CA59169C}
-		{AF23C859-C9B7-4497-AB61-D978D58F81D8} = {B392B7CF-2234-4280-AAE5-BD90CA59169C}
-		{7BA2525A-8454-49C2-993E-C6F3DAF1F555} = {960DCBBF-AEC7-4640-9D13-CA91A0F8A5DD}
 	EndGlobalSection
 EndGlobal

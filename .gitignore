@@ -38,3 +38,4 @@ publish/
 # Misc files
 *.log
 /build/1
+/.idea

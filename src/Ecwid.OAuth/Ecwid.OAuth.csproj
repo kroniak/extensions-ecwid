@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.3</TargetFramework>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Version>1.0.0-rc</Version>
+    <Authors>me@kroniak.net</Authors>
+    <Company>Kroniak</Company>
+    <Description>ASP.NET Core OAuth2 middleware for Ecwid API v3</Description>
+    <Copyright>Copyright ©2017 by me@kroniak.net</Copyright>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/kroniak/extensions-ecwid/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/kroniak/extensions-ecwid</PackageProjectUrl>
+    <PackageIconUrl>https://dj925myfyz5v.cloudfront.net/favicon_v2.ico</PackageIconUrl>
+    <RepositoryUrl>https://github.com/kroniak/extensions-ecwid.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>ecwid oauth2 middleware</PackageTags>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\netstandard1.3\Ecwid.OAuth.xml</DocumentationFile>
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OAuth" Version="1.1.1" />
+  </ItemGroup>
+
+</Project>
