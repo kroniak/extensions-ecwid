@@ -136,15 +136,42 @@ namespace Ecwid
 			return poco;
 		}
 
-		/// <summary>
-		/// PUT the API asynchronous and return response.
-		/// </summary>
-		/// <param name="baseUrl">The base URL.</param>
-		/// <param name="query">The query.</param>
-		/// <param name="data">The new object.</param>
-		/// <param name="cancellationToken">The cancellation token.</param>
-		/// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
-		protected static async Task<bool> PutApiAsync(Url baseUrl, object query, object data, CancellationToken cancellationToken)
+	    /// <summary>
+	    /// DELETE the API asynchronous and return response.
+	    /// </summary>
+	    /// <typeparam name="T"></typeparam>
+	    /// <param name="baseUrl">The base URL.</param>
+	    /// <param name="cancellationToken">The cancellation token.</param>
+	    /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+	    protected static async Task<T> DeleteApiAsync<T>(Url baseUrl, CancellationToken cancellationToken)
+	        where T : class
+	    {
+	        T poco;
+	        try
+	        {
+	            poco = await baseUrl.DeleteAsync(cancellationToken).ReceiveJson<T>();
+	        }
+	        catch (FlurlHttpException exception)
+	        {
+	            var call = exception.Call;
+	            var status = call.Response?.StatusCode;
+	            var error = call.ErrorResponseBody ?? call.Exception?.Message ?? "Something happened to the HTTP call.";
+
+	            throw new EcwidHttpException(error, status, exception);
+	        }
+
+	        return poco;
+	    }
+
+        /// <summary>
+        /// PUT the API asynchronous and return response.
+        /// </summary>
+        /// <param name="baseUrl">The base URL.</param>
+        /// <param name="query">The query.</param>
+        /// <param name="data">The new object.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        protected static async Task<bool> PutApiAsync(Url baseUrl, object query, object data, CancellationToken cancellationToken)
 		{
 			try
 			{

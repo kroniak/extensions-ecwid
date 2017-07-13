@@ -151,6 +151,36 @@ namespace Ecwid
         /// <param name="order">The order to update.</param>
         /// <exception cref="EcwidConfigException">Order number is 0.</exception>
         Task<UpdateStatus> UpdateOrderAsync(OrderEntry order);
+
+        /// <summary>
+        /// Delete one order asynchronously.
+        /// </summary>
+        /// <param name="order">The order to delete.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <exception cref="EcwidConfigException">Order number is 0.</exception>
+        Task<DeleteStatus> DeleteOrderAsync(OrderEntry order, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Delete one order asynchronously.
+        /// </summary>
+        /// <param name="order">The order to delete.</param>
+        /// <exception cref="EcwidConfigException">Order number is 0.</exception>
+        Task<DeleteStatus> DeleteOrderAsync(OrderEntry order);
+
+        /// <summary>
+        /// Delete one order asynchronously.
+        /// </summary>
+        /// <param name="orderNumber">The order number to delete.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <exception cref="EcwidConfigException">Order number is 0.</exception>
+        Task<DeleteStatus> DeleteOrderAsync(int orderNumber, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Delete one order asynchronously.
+        /// </summary>
+        /// <param name="orderNumber">The order number to delete.</param>
+        /// <exception cref="EcwidConfigException">Order number is 0.</exception>
+        Task<DeleteStatus> DeleteOrderAsync(int orderNumber);
     }
 
     /// <summary>

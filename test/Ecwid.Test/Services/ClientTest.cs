@@ -2,6 +2,7 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Net;
 using System.Net.Http;
 using Ecwid.Legacy;
 using Ecwid.Models;
@@ -343,11 +344,53 @@ namespace Ecwid.Test.Services
         public async void UpdateOrderAsyncFail()
         {
             _httpTest
-                .RespondWithJson(new UpdateStatus { UpdateCount = 1 });
+                .RespondWithJson("Status QUEUED is deprecated, use AWAITING_PAYMENT instead", 400);
 
             await Assert.ThrowsAsync<EcwidConfigException>(() => _client.UpdateOrderAsync(new OrderEntry { Email = "test@test.com" }));
 
             _httpTest.ShouldNotHaveMadeACall();
+        }
+
+        [Fact]
+        public async void DeleteOrderAsync()
+        {
+            _httpTest
+                .RespondWithJson(new DeleteStatus { DeleteCount = 1 });
+
+            var result = await _client.DeleteOrderAsync(new OrderEntry { Email = "test@test.com", OrderNumber = 123 });
+
+            _httpTest.ShouldHaveCalled($"https://app.ecwid.com/api/v3/{ShopId}/orders/123?token={Token}")
+                .WithVerb(HttpMethod.Delete)
+                .Times(1);
+
+            Assert.Equal(1, result.DeleteCount);
+        }
+
+        [Fact]
+        public async void DeleteOrderAsyncFail()
+        {
+            _httpTest
+                .RespondWithJson("The order with given number is not found", 404);
+
+            await Assert.ThrowsAsync<EcwidConfigException>(() => _client.DeleteOrderAsync(new OrderEntry { Email = "test@test.com" }));
+
+            _httpTest.ShouldNotHaveMadeACall();
+        }
+
+        [Fact]
+        public async void DeleteOrderAsyncFail404()
+        {
+            _httpTest
+                .RespondWithJson("The order with given number is not found", 404);
+
+            var exception = await Assert.ThrowsAsync<EcwidHttpException>(() => _client.DeleteOrderAsync(new OrderEntry { Email = "test@test.com", OrderNumber = 123 }));
+
+            _httpTest.ShouldHaveCalled($"https://app.ecwid.com/api/v3/{ShopId}/orders/123?token={Token}")
+                .WithVerb(HttpMethod.Delete)
+                .Times(1);
+
+            Assert.Equal(HttpStatusCode.NotFound, exception.StatusCode);
+            Assert.Equal("\"The order with given number is not found\"", exception.Message);
         }
 
         #endregion

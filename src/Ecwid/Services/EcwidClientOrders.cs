@@ -247,6 +247,44 @@ namespace Ecwid
         /// <exception cref="EcwidConfigException">Order number is 0.</exception>
         public async Task<UpdateStatus> UpdateOrderAsync(OrderEntry order)
             => await UpdateOrderAsync(order, CancellationToken.None);
+
+        /// <summary>
+        /// Delete one order asynchronously.
+        /// </summary>
+        /// <param name="order">The order to delete.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <exception cref="EcwidConfigException">Order number is 0.</exception>
+        public async Task<DeleteStatus> DeleteOrderAsync(OrderEntry order, CancellationToken cancellationToken)
+            => await DeleteOrderAsync(order.OrderNumber, cancellationToken);
+
+        /// <summary>
+        /// Delete one order asynchronously.
+        /// </summary>
+        /// <param name="order">The order to delete.</param>
+        /// <exception cref="EcwidConfigException">Order number is 0.</exception>
+        public async Task<DeleteStatus> DeleteOrderAsync(OrderEntry order)
+            => await DeleteOrderAsync(order.OrderNumber);
+
+        /// <summary>
+        /// Delete one order asynchronously.
+        /// </summary>
+        /// <param name="orderNumber">The order number to delete.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <exception cref="EcwidConfigException">Order number is 0.</exception>
+        public async Task<DeleteStatus> DeleteOrderAsync(int orderNumber, CancellationToken cancellationToken)
+        {
+            if (orderNumber == 0) throw new EcwidConfigException("Order number is 0.");
+            return await DeleteApiAsync<DeleteStatus>(GetUrl($"orders/{orderNumber}"), cancellationToken);
+        }
+
+        /// <summary>
+        /// Delete one order asynchronously.
+        /// </summary>
+        /// <param name="orderNumber">The order number to delete.</param>
+        /// <exception cref="EcwidConfigException">Order number is 0.</exception>
+        public async Task<DeleteStatus> DeleteOrderAsync(int orderNumber)
+            => await DeleteOrderAsync(orderNumber, CancellationToken.None);
+
         #endregion
     }
 }

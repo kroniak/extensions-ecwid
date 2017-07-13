@@ -19,7 +19,7 @@ namespace Ecwid.Models
         public int UpdateCount { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="UpdateStatus"/> is success.
+        /// Gets or sets a value indicating whether this <see cref="UpdateStatus"/> is success. DEPRECATED
         /// </summary>
         /// <value>
         ///   <c>true</c> if success; otherwise, <c>false</c>.
