@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard1.4;net45</TargetFrameworks>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Version>1.0.0-rc</Version>
+    <Version>1.0.0-rc2</Version>
     <Authors>me@kroniak.net</Authors>
     <Description>C# services and models classes to Ecwid API v1 and v3</Description>
     <PackageLicenseUrl>https://raw.githubusercontent.com/kroniak/extensions-ecwid/master/LICENSE</PackageLicenseUrl>
@@ -18,10 +18,9 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DocumentationFile>bin\Release\netstandard1.4\Ecwid.xml</DocumentationFile>
-    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+  <PropertyGroup>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
   </PropertyGroup>
 

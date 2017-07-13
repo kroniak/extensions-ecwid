@@ -56,7 +56,7 @@ namespace Ecwid
         /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
         /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
         public async Task<List<OrderEntry>> GetNewOrdersAsync(CancellationToken cancellationToken)
-            => await GetOrdersAsync(new {fulfillmentStatus = "AWAITING_PROCESSING"}, cancellationToken);
+            => await GetOrdersAsync(new { fulfillmentStatus = "AWAITING_PROCESSING" }, cancellationToken);
 
         /// <summary>
         /// Gets the non paid orders asynchronous.
@@ -73,7 +73,7 @@ namespace Ecwid
         /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
         /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
         public async Task<List<OrderEntry>> GetNonPaidOrdersAsync(CancellationToken cancellationToken)
-            => await GetOrdersAsync(new {paymentStatus = "AWAITING_PAYMENT"}, cancellationToken);
+            => await GetOrdersAsync(new { paymentStatus = "AWAITING_PAYMENT" }, cancellationToken);
 
         /// <summary>
         /// Gets the orders count asynchronous.
@@ -90,7 +90,7 @@ namespace Ecwid
         /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
         /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
         public async Task<int> GetOrdersCountAsync(CancellationToken cancellationToken)
-            => (await GetApiAsync<SearchResult>(GetUrl("orders"), new {limit = 1}, cancellationToken)).Total;
+            => (await GetApiAsync<SearchResult>(GetUrl("orders"), new { limit = 1 }, cancellationToken)).Total;
 
         /// <summary>
         /// Gets the paid and not shipped orders asynchronous.
@@ -109,7 +109,7 @@ namespace Ecwid
         public async Task<List<OrderEntry>> GetPaidNotShippedOrdersAsync(CancellationToken cancellationToken)
             =>
                 await
-                    GetOrdersAsync(new {paymentStatus = "PAID", fulfillmentStatus = "AWAITING_PROCESSING,PROCESSING"},
+                    GetOrdersAsync(new { paymentStatus = "PAID", fulfillmentStatus = "AWAITING_PROCESSING,PROCESSING" },
                         cancellationToken);
 
         /// <summary>
@@ -126,7 +126,7 @@ namespace Ecwid
         /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
         /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
         public async Task<List<OrderEntry>> GetShippedOrdersAsync(CancellationToken cancellationToken)
-            => await GetOrdersAsync(new {fulfillmentStatus = "SHIPPED"}, cancellationToken);
+            => await GetOrdersAsync(new { fulfillmentStatus = "SHIPPED" }, cancellationToken);
 
         /// <summary>
         /// Gets the orders asynchronous. If <paramref name="query" /> contains limit or offset parameters gets only one page.
@@ -170,7 +170,7 @@ namespace Ecwid
                     await
                         GetApiAsync<SearchResult>(
                             GetUrl("orders").SetQueryParams(
-                                new {offset = response.Offset + response.Limit}), query, cancellationToken);
+                                new { offset = response.Offset + response.Limit }), query, cancellationToken);
 
                 // ReSharper disable once ExceptionNotDocumentedOptional
                 if (response.Orders != null)
@@ -196,7 +196,7 @@ namespace Ecwid
         /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
         /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
         public async Task<List<OrderEntry>> GetIncompleteOrdersAsync(CancellationToken cancellationToken)
-            => await GetOrdersAsync(new {paymentStatus = "INCOMPLETE"}, cancellationToken);
+            => await GetOrdersAsync(new { paymentStatus = "INCOMPLETE" }, cancellationToken);
 
         /// <summary>
         /// Gets the one order asynchronous.
@@ -222,11 +222,31 @@ namespace Ecwid
                 throw new ArgumentOutOfRangeException(nameof(orderNumber));
 
             // ReSharper disable once RedundantAnonymousTypePropertyName
-            var orders = await GetOrdersAsync(new {orderNumber = orderNumber}, cancellationToken);
+            var orders = await GetOrdersAsync(new { orderNumber = orderNumber }, cancellationToken);
 
             return orders.Count == 0 ? null : orders.FirstOrDefault();
         }
 
+
+        /// <summary>
+        /// Update one order asynchronously.
+        /// </summary>
+        /// <param name="order">The order to update.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <exception cref="EcwidConfigException">Order number is 0.</exception>
+        public async Task<UpdateStatus> UpdateOrderAsync(OrderEntry order, CancellationToken cancellationToken)
+        {
+            if (order.OrderNumber == 0) throw new EcwidConfigException("Order number is 0.");
+            return await PutApiAsync<UpdateStatus>(GetUrl($"orders/{order.OrderNumber}"), order, cancellationToken);
+        }
+
+        /// <summary>
+        /// Update one order asynchronously.
+        /// </summary>
+        /// <param name="order">The order to update.</param>
+        /// <exception cref="EcwidConfigException">Order number is 0.</exception>
+        public async Task<UpdateStatus> UpdateOrderAsync(OrderEntry order)
+            => await UpdateOrderAsync(order, CancellationToken.None);
         #endregion
     }
 }

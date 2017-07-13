@@ -136,6 +136,21 @@ namespace Ecwid
         /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
         /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
         Task<OrderEntry> GetOrderAsync(int orderNumber, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Update one order asynchronously.
+        /// </summary>
+        /// <param name="order">The order to update.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <exception cref="EcwidConfigException">Order number is 0.</exception>
+        Task<UpdateStatus> UpdateOrderAsync(OrderEntry order, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Update one order asynchronously.
+        /// </summary>
+        /// <param name="order">The order to update.</param>
+        /// <exception cref="EcwidConfigException">Order number is 0.</exception>
+        Task<UpdateStatus> UpdateOrderAsync(OrderEntry order);
     }
 
     /// <summary>
