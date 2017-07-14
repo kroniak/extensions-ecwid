@@ -1,6 +1,8 @@
 ﻿// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
 
 using System.Diagnostics.CodeAnalysis;
+using System.Net;
+using Ecwid.Models;
 using Xunit;
 
 namespace Ecwid.Test.Real
@@ -82,6 +84,39 @@ namespace Ecwid.Test.Real
             var result = await client.GetOrdersCountAsync();
 
             Assert.Equal(1021, result);
+        }
+
+        [Fact]
+        public async void UpdateOrderAsync()
+        {
+            IEcwidOrdersClient client = new EcwidClient(_credentials)
+            {
+                Settings =
+                {
+                    ApiUrl = "http://www.mocky.io/v2/5967f962110000b9006149e5"
+                }
+            };
+
+            var result = await client.UpdateOrderAsync(new OrderEntry { Email = "test@test.com", OrderNumber = 123 });
+
+            Assert.Equal(1, result.UpdateCount);
+        }
+
+        [Fact]
+        public async void UpdateOrderAsyncFail()
+        {
+            IEcwidOrdersClient client = new EcwidClient(_credentials)
+            {
+                Settings =
+                {
+                    ApiUrl = "http://www.mocky.io/v2/5967f9f8110000b8006149e6"
+                }
+            };
+
+            var exception = await Assert.ThrowsAsync<EcwidHttpException>(() => client.UpdateOrderAsync(new OrderEntry { Email = "test@test.com", OrderNumber = 123 }));
+
+            Assert.Equal(HttpStatusCode.BadRequest, exception.StatusCode);
+            Assert.Equal("Status QUEUED is deprecated, use AWAITING_PAYMENT instead", exception.Message);
         }
     }
 }
