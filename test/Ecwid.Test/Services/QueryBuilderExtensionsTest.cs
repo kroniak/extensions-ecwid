@@ -1,4 +1,4 @@
-﻿// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
+﻿// Licensed under the MIT License. See LICENSE in the git repository root for license information.
 
 using System;
 using System.Diagnostics.CodeAnalysis;
@@ -20,7 +20,7 @@ namespace Ecwid.Test.Services
 		{
 			var result =
 				_defaultClient.Orders.FulfillmentStatuses("AWAITING_PROCESSING").FulfillmentStatuses("PROCESSING").GetParam("fulfillmentStatus");
-			Assert.Equal(result, "AWAITING_PROCESSING,PROCESSING");
+			Assert.Equal("AWAITING_PROCESSING,PROCESSING", result);
 		}
 
 		[Fact]
@@ -29,7 +29,7 @@ namespace Ecwid.Test.Services
 			var result =
 				_defaultClient.Orders.PaymentStatuses("PAID").PaymentStatuses("CANCELLED").GetParam(
 					"paymentStatus");
-			Assert.Equal(result, "PAID,CANCELLED");
+			Assert.Equal("PAID,CANCELLED", result);
 		}
 
 		[Fact]
@@ -54,7 +54,7 @@ namespace Ecwid.Test.Services
 		{
 			var result = _defaultClient.Orders.Customer("test").GetParam("customer");
 
-			Assert.Equal(result, "test");
+			Assert.Equal("test", result);
 			Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Customer(""));
 		}
 
@@ -150,7 +150,7 @@ namespace Ecwid.Test.Services
 		{
 			var result =
 				_defaultClient.Orders.FulfillmentStatuses("AWAITING_PROCESSING PROCESSING").GetParam("fulfillmentStatus");
-			Assert.Equal(result, "AWAITING_PROCESSING,PROCESSING");
+			Assert.Equal("AWAITING_PROCESSING,PROCESSING", result);
 		}
 
 		[Theory]
@@ -215,7 +215,7 @@ namespace Ecwid.Test.Services
 		public void PaymentStatuses()
 		{
 			var result = _defaultClient.Orders.PaymentStatuses("PAID, CANCELLED").GetParam("paymentStatus");
-			Assert.Equal(result, "PAID,CANCELLED");
+			Assert.Equal("PAID,CANCELLED", result);
 		}
 
 		[Theory]

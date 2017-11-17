@@ -1,4 +1,4 @@
-﻿// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
+﻿// Licensed under the MIT License. See LICENSE in the git repository root for license information.
 
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -78,7 +78,7 @@ namespace Ecwid.Test.Real
 
             var result = await client.GetNewOrdersAsync();
 
-            Assert.Equal(1, result.Count);
+            Assert.Single(result);
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace Ecwid.Test.Real
 
             var result = await client.GetNonPaidOrdersAsync();
 
-            Assert.Equal(1, result.Count);
+            Assert.Single(result);
         }
 
         /// <summary>
@@ -240,7 +240,7 @@ namespace Ecwid.Test.Real
 
             var result = await client.GetPaidNotShippedOrdersAsync();
 
-            Assert.Equal(1, result.Count);
+            Assert.Single(result);
         }
 
         /// <summary>
@@ -260,7 +260,7 @@ namespace Ecwid.Test.Real
 
             var result = await client.GetShippedOrdersAsync();
 
-            Assert.Equal(1, result.Count);
+            Assert.Single(result);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
+﻿// Licensed under the MIT License. See LICENSE in the git repository root for license information.
 
 using System;
 using System.Collections.Generic;
@@ -180,14 +180,12 @@ namespace Ecwid.Tools
 
             if (new Regex(@"^\d{4}-\d{2}-\d{2}").IsMatch(date))
             {
-                DateTime dt;
-                if (!DateTime.TryParse(date, out dt))
+                if (!DateTime.TryParse(date, out var dt))
                     throw new ArgumentException("Date string is invalid.", nameof(date));
             }
             else
             {
-                long dt;
-                if (!long.TryParse(date, out dt))
+                if (!long.TryParse(date, out var dt))
                     throw new ArgumentException("Date string is invalid.", nameof(date));
                 if (dt <= 0)
                     throw new ArgumentException("Date string is invalid.", nameof(date));

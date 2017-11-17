@@ -1,4 +1,4 @@
-// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
+// Licensed under the MIT License. See LICENSE in the git repository root for license information.
 
 using System.Text.RegularExpressions;
 using Ecwid.Tools;
@@ -47,7 +47,7 @@ namespace Ecwid.Legacy
         /// <exception cref="EcwidConfigException" accessor="set">The order authorization token is invalid.</exception>
         public string OrderToken
         {
-            get { return _orderToken; }
+            get => _orderToken;
             set
             {
                 if (Validators.IsNullOrEmpty(value))
@@ -72,7 +72,7 @@ namespace Ecwid.Legacy
         /// <exception cref="EcwidConfigException" accessor="set">The product authorization token is invalid.</exception>
         public string ProductToken
         {
-            get { return _productToken; }
+            get => _productToken;
             set
             {
                 if (Validators.IsNullOrEmpty(value))

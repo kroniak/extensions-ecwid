@@ -1,4 +1,4 @@
-﻿// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
+﻿// Licensed under the MIT License. See LICENSE in the git repository root for license information.
 
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
@@ -33,7 +33,7 @@ namespace Ecwid.Test.Real
 
             var result = await client.CheckOrdersTokenAsync();
 
-            Assert.Equal(false, result);
+            Assert.False(result);
         }
 
         [Fact]
@@ -49,7 +49,7 @@ namespace Ecwid.Test.Real
 
             var result = await client.CheckOrdersTokenAsync();
 
-            Assert.Equal(true, result);
+            Assert.True(result);
         }
 
         [Fact]
