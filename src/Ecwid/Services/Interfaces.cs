@@ -379,5 +379,20 @@ namespace Ecwid
         /// </summary>
         /// <param name="couponIdentifier">The discount coupon code to delete.</param>
         Task<DeleteStatus> DeleteDiscountCouponAsync(string couponIdentifier);
+
+        /// <summary>
+        /// Checks the shop authentication asynchronous.
+        /// </summary>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
+        Task<bool> CheckDiscountCouponsTokenAsync();
+
+        /// <summary>
+        /// Checks the shop authentication asynchronous.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
+        Task<bool> CheckDiscountCouponsTokenAsync(CancellationToken cancellationToken);
     }
 }

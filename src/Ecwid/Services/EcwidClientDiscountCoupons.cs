@@ -11,8 +11,27 @@ namespace Ecwid
 {
     public partial class EcwidClient
     {
+        private const string DiscountCouponsUrl = "discount_coupons";
+
         #region Implementation of IEcwidDiscountCouponsClient
 
+        /// <summary>
+        /// Checks the shop authentication asynchronous.
+        /// </summary>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
+        public async Task<bool> CheckDiscountCouponsTokenAsync()
+            => await CheckDiscountCouponsTokenAsync(CancellationToken.None);
+
+        /// <summary>
+        /// Checks the shop authentication asynchronous.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
+        public async Task<bool> CheckDiscountCouponsTokenAsync(CancellationToken cancellationToken)
+            => await CheckTokenAsync<DiscountCouponSearchResults>(GetUrl(DiscountCouponsUrl), cancellationToken);
+        
         /// <summary>
         /// Gets the discount coupon with the specified <paramref name="couponIdentifier"/>.
         /// </summary>
@@ -64,7 +83,7 @@ namespace Ecwid
         /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
         public async Task<List<DiscountCouponInfo>> GetDiscountCouponsAsync(object query, CancellationToken cancellationToken)
         {
-            var response = await GetApiAsync<DiscountCouponSearchResults>(GetUrl("discount_coupons"), query, cancellationToken);
+            var response = await GetApiAsync<DiscountCouponSearchResults>(GetUrl(DiscountCouponsUrl), query, cancellationToken);
 
             var result = response.DiscountCoupons?.ToList() ?? new List<DiscountCouponInfo>();
 
@@ -80,7 +99,7 @@ namespace Ecwid
                 response =
                     await
                         GetApiAsync<DiscountCouponSearchResults>(
-                            GetUrl("discount-coupons").SetQueryParams(new { offset = response.Offset + response.Limit }),
+                            GetUrl(DiscountCouponsUrl).SetQueryParams(new { offset = response.Offset + response.Limit }),
                             query,
                             cancellationToken);
 
@@ -123,7 +142,17 @@ namespace Ecwid
         /// <param name="cancellationToken">The cancellationToken</param>
         public async Task<UpdateStatus> UpdateDiscountCouponAsync(DiscountCouponInfo coupon, CancellationToken cancellationToken)
         {
-            return await PutApiAsync<UpdateStatus>(GetUrl($"discount_coupons/{coupon.Code}"), coupon, cancellationToken);
+            if (coupon == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            if (string.IsNullOrWhiteSpace(coupon.Code))
+            {
+                throw new ArgumentException("Coupon code must have a value", nameof(coupon.Code));
+            }
+
+            return await PutApiAsync<UpdateStatus>(GetUrl($"{DiscountCouponsUrl}/{coupon.Code}"), coupon, cancellationToken);
         }
 
         /// <summary>
@@ -140,7 +169,7 @@ namespace Ecwid
         /// <param name="cancellationToken">The cancellation token.</param>
         public async Task<DeleteStatus> DeleteDiscountCouponAsync(string couponIdentifier, CancellationToken cancellationToken)
         {
-            return await DeleteApiAsync<DeleteStatus>(GetUrl($"discount_coupons/{couponIdentifier}"), cancellationToken);
+            return await DeleteApiAsync<DeleteStatus>(GetUrl($"{DiscountCouponsUrl}/{couponIdentifier}"), cancellationToken);
         }
 
         /// <summary>

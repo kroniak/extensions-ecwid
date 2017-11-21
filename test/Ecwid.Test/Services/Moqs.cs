@@ -58,6 +58,34 @@ namespace Ecwid.Test.Services
             return orders;
         }
 
+        private static IList<DiscountCouponInfo> MockDiscountCoupons(int count)
+        {
+            var discountCoupons = new List<DiscountCouponInfo>();
+
+            if (count == 0) return discountCoupons;
+
+            var coupon = new DiscountCouponInfo
+                         {
+                             Code = "ABC123DEF",
+                             CreationDate = "2016-03-24 05:51:53",
+                             Discount = 18,
+                             DiscountType = "ABS_AND_SHIPPING",
+                             LaunchDate = "2016-03-25 05:51:53",
+                             ExpirationDate = "2017-03-25 05:51:53",
+                             Name = "Test Coupon",
+                             RepeatCustomerOnly = false,
+                             UsesLimit = "UNLIMITED",
+                             Status = "ACTIVE",
+                             Id = 111111,
+                             OrderCount = 0,
+                             TotalLimit = 18
+                         };
+            
+            count.Times(() => discountCoupons.Add(coupon));
+
+            return discountCoupons;
+        }
+
         /// <summary>
         /// Moqs the responce with many order.
         /// </summary>
@@ -72,5 +100,15 @@ namespace Ecwid.Test.Services
         /// <param name="count">The count.</param>
         public static SearchResult MockSearchResultWithManyOrderAndPages(int limit, int offset, int count)
             => new SearchResult {Count = count, Total = 300, Limit = limit, Offset = offset, Orders = MockOrders(count)};
+
+        public static DiscountCouponSearchResults MockSearchResultWithManyDiscountCouponsAndPages(int limit, int offset, int count)
+            => new DiscountCouponSearchResults
+               {
+                   Count = count,
+                   Total = 300,
+                   Limit = limit,
+                   Offset = offset,
+                   DiscountCoupons = MockDiscountCoupons(count)
+               };
     }
 }
