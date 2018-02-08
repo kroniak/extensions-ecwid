@@ -10,6 +10,11 @@ namespace Ecwid.Models
     public class DiscountCouponInfo
     {
         /// <summary>
+        /// Gets or sets the coupon id.
+        /// </summary>
+        public long Id { get; set; }
+        
+        /// <summary>
         /// Gets or sets the coupon title in store control panel.
         /// </summary>
         /// <value>

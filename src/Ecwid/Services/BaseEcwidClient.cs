@@ -107,6 +107,34 @@ namespace Ecwid
 
 			return poco;
 		}
+		
+		/// <summary>
+		/// POST JSON to the API asynchronously and return response.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="baseUrl">The base URL.</param>
+		/// <param name="payload">The payload.</param>
+		/// <param name="cancellationToken">The cancellation token.</param>
+		/// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+		protected static async Task<T> PostJsonApiAsync<T>(Url baseUrl, object payload, CancellationToken cancellationToken)
+			where T : class
+		{
+			T poco;
+			try
+			{
+				poco = await baseUrl.PostJsonAsync(payload, cancellationToken).ReceiveJson<T>();
+			}
+			catch (FlurlHttpException exception)
+			{
+				var call = exception.Call;
+				var status = call.Response?.StatusCode;
+				var error = call.ErrorResponseBody ?? call.Exception?.Message ?? "Something happened to the HTTP call.";
+
+				throw new EcwidHttpException(error, status, exception);
+			}
+
+			return poco;
+		}
 
 		/// <summary>
 		/// PUT the API asynchronous and return response.

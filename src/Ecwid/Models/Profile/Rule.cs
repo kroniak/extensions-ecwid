@@ -15,7 +15,7 @@ namespace Ecwid.Models
         /// The tax.
         /// </value>
         [JsonProperty("tax")]
-        public int Tax { get; set; }
+        public double Tax { get; set; }
 
         /// <summary>
         /// Gets or sets the destination zone identifier.

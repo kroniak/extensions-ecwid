@@ -22,6 +22,7 @@ namespace Ecwid.Test.Services
         // Urls for checking
         private static readonly string CheckOrdersUrl = $"https://app.ecwid.com/api/v3/{ShopId}/orders?token={Token}";
         private static readonly string CheckProfileUrl = $"https://app.ecwid.com/api/v3/{ShopId}/profile?token={Token}";
+        private static readonly string CheckDiscountCouponsUrl = $"https://app.ecwid.com/api/v3/{ShopId}/discount_coupons?token={Token}";
 
         private readonly string _checkCategoryLegacyUrl =
             $"https://app.ecwid.com/api/v1/{ShopId}/category?";
@@ -114,8 +115,8 @@ namespace Ecwid.Test.Services
             Assert.Equal(Token, result.Credentials.Token);
         }
 
-        #endregion
-
+        #endregion     
+        
         #region Orders
 
         [Fact]
@@ -747,6 +748,196 @@ namespace Ecwid.Test.Services
                 .Times(1);
         }
 
+        #endregion
+        
+        #region DiscountCoupons
+        
+        [Fact]
+        public async void DiscountCouponsCheckDiscountCouponsAuthAsync()
+        {
+            _httpTest
+                .RespondWithJson(Moqs.MockSearchResultWithLimit1)
+                .RespondWithJson(Moqs.MockSearchResultWithLimit1, 403);
+
+            var result = await _client.CheckDiscountCouponsTokenAsync();
+            Assert.Equal(true, result);
+
+            result = await _client.CheckDiscountCouponsTokenAsync();
+            Assert.Equal(false, result);
+
+            _httpTest.ShouldHaveCalled($"{CheckDiscountCouponsUrl}&limit=1")
+                     .WithVerb(HttpMethod.Get)
+                     .Times(2);
+        }
+
+        [Fact]
+        public async void GetDiscountCouponAsyncFail() => await
+            Assert.ThrowsAsync<ArgumentNullException>(
+                async () => await _client.GetDiscountCouponAsync(null));
+        
+        
+        [Fact]
+        public async void GetDiscountCouponsAsyncNull()
+        {
+            _httpTest
+                .RespondWithJson(Moqs.MockSearchResultZeroResult)
+                .RespondWithJson(Moqs.MockSearchResultZeroResult);
+            
+            const string couponIdentifier = "abc123";
+            
+            var result = await _client.GetDiscountCouponAsync(couponIdentifier);
+
+            Assert.Null(result);
+            _httpTest.ShouldHaveCalled($"{CheckDiscountCouponsUrl}&couponIdentifier={couponIdentifier}")
+                     .WithVerb(HttpMethod.Get)
+                     .Times(1);
+        }
+        
+        
+        [Fact]
+        public async void DiscountCouponsGetDiscountCouponsAsyncQueryMultiPagesResult()
+        {
+            const int count = 100;
+            const string query = "discount_type=ABS_AND_SHIPPING";
+
+            _httpTest
+                .RespondWithJson(Moqs.MockSearchResultWithManyDiscountCouponsAndPages(count, count * 0, count))
+                .RespondWithJson(Moqs.MockSearchResultWithManyDiscountCouponsAndPages(count, count * 1, count))
+                .RespondWithJson(Moqs.MockSearchResultWithManyDiscountCouponsAndPages(count, count * 2, count))
+                .RespondWithJson(Moqs.MockSearchResultWithManyDiscountCouponsAndPages(count, count * 3, 0));
+
+            var result = await _client.GetDiscountCouponsAsync(new { discount_type = "ABS_AND_SHIPPING" });
+
+            _httpTest.ShouldHaveCalled($"{CheckDiscountCouponsUrl}&{query}")
+                .WithVerb(HttpMethod.Get)
+                .Times(1);
+
+            _httpTest.ShouldHaveCalled($"{CheckDiscountCouponsUrl}&offset=*&{query}")
+                .WithVerb(HttpMethod.Get)
+                .Times(3);
+
+            Assert.Equal(count * 3, result.Count);
+        }
+
+        [Fact]
+        public async void DiscountCouponsGetDiscountCouponsAsyncQueryOnePagesResult()
+        {
+            const int count = 100;
+            const string query = "limit=100&paymentStatus=paid";
+
+            _httpTest
+                .RespondWithJson(Moqs.MockSearchResultWithManyDiscountCouponsAndPages(count, 0, count));
+
+            var result = await _client.GetDiscountCouponsAsync(new { limit = count, paymentStatus = "paid" });
+
+
+            _httpTest.ShouldHaveCalled($"{CheckDiscountCouponsUrl}&{query}")
+                .WithVerb(HttpMethod.Get)
+                .Times(1);
+
+            _httpTest.ShouldNotHaveCalled($"{CheckDiscountCouponsUrl}&offset=*&{query}");
+
+            Assert.Equal(count, result.Count);
+        }
+
+        [Fact]
+        public async void CreateDiscountCouponAsync()
+        {
+            const long expectedId = 1223423459837;
+            _httpTest.RespondWithJson(new DiscountCouponCreateStatus
+                                       {
+                                           Code = "ABC123DEF",
+                                           Id = expectedId
+                                       });
+
+            var result = await _client.CreateDiscountCouponAsync(new DiscountCouponInfo
+                                                           {
+                                                               Discount = 10,
+                                                               DiscountType = "PERCENT"
+                                                           });
+
+            _httpTest.ShouldHaveCalled($"https://app.ecwid.com/api/v3/{ShopId}/discount_coupons?token={Token}")
+                     .WithVerb(HttpMethod.Post)
+                     .Times(1);
+            
+            Assert.Equal(expectedId, result.Id);
+        }
+
+        [Fact]
+        public async void UpdateDiscountCouponAsync()
+        {
+            _httpTest
+                .RespondWithJson(new UpdateStatus { UpdateCount = 1 });
+
+            const string discountCode = "ABC123DEF";
+            var result = await _client.UpdateDiscountCouponAsync(new DiscountCouponInfo
+                                                                 {
+                                                                     Discount = 15, 
+                                                                     Code = discountCode
+                                                                 });
+
+            _httpTest.ShouldHaveCalled($"https://app.ecwid.com/api/v3/{ShopId}/discount_coupons/{discountCode}?token={Token}")
+                .WithVerb(HttpMethod.Put)
+                .Times(1);
+
+            Assert.Equal(1, result.UpdateCount);
+        }
+
+        [Fact]
+        public async void UpdateDiscountCouponAsyncFail()
+        {
+            _httpTest
+                .RespondWithJson("Status QUEUED is deprecated, use AWAITING_PAYMENT instead", 400);
+
+            await Assert.ThrowsAsync<ArgumentException>(() => _client.UpdateDiscountCouponAsync(new DiscountCouponInfo
+                                                                                                   {
+                                                                                                       Code = ""
+                                                                                                   }));
+            _httpTest.ShouldNotHaveMadeACall();
+        }
+
+        [Fact]
+        public async void DeleteDiscountCouponAsync()
+        {
+            _httpTest
+                .RespondWithJson(new DeleteStatus { DeleteCount = 1 });
+
+            const string discountCode = "ABC123DEF";
+            
+            var result = await _client.DeleteDiscountCouponAsync(new DiscountCouponInfo
+                                                                 {
+                                                                     Code = discountCode
+                                                                 });
+
+            _httpTest.ShouldHaveCalled($"https://app.ecwid.com/api/v3/{ShopId}/discount_coupons/{discountCode}?token={Token}")
+                .WithVerb(HttpMethod.Delete)
+                .Times(1);
+
+            Assert.Equal(1, result.DeleteCount);
+        }
+
+        [Fact]
+        public async void DeleteDiscountCouponAsyncFail404()
+        {
+            _httpTest
+                .RespondWithJson("The DiscountCoupon with given number is not found", 404);
+
+            const string discountCode = "ABC123DEF";
+            
+            var exception = await Assert.ThrowsAsync<EcwidHttpException>(() => _client.DeleteDiscountCouponAsync(new DiscountCouponInfo
+                                                                                                                 {
+                                                                                                                     Code = discountCode
+                                                                                                                 }));
+
+            _httpTest.ShouldHaveCalled($"https://app.ecwid.com/api/v3/{ShopId}/discount_coupons/{discountCode}?token={Token}")
+                .WithVerb(HttpMethod.Delete)
+                .Times(1);
+
+            Assert.Equal(HttpStatusCode.NotFound, exception.StatusCode);
+            Assert.Equal("\"The DiscountCoupon with given number is not found\"", exception.Message);
+        }
+
+        
         #endregion
 
         #region Implementation of IDisposable
