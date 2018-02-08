@@ -1,4 +1,4 @@
-﻿// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
+﻿// Licensed under the MIT License. See LICENSE in the git repository root for license information.
 
 using System;
 using System.Diagnostics.CodeAnalysis;
@@ -140,10 +140,10 @@ namespace Ecwid.Test.Services
                 .RespondWithJson(Moqs.MockSearchResultWithLimit1, 403);
 
             var result = await _client.CheckOrdersTokenAsync();
-            Assert.Equal(true, result);
+            Assert.True(result);
 
             result = await _client.CheckOrdersTokenAsync();
-            Assert.Equal(false, result);
+            Assert.False(result);
 
             _httpTest.ShouldHaveCalled($"{CheckOrdersUrl}&limit=1")
                 .WithVerb(HttpMethod.Get)
@@ -410,7 +410,7 @@ namespace Ecwid.Test.Services
             var profile = new Profile { Account = new Account { AccountName = "John", AccountNickname = "John" } };
 
             var result = await _client.UpdateProfileAsync(profile);
-            Assert.Equal(true, result.Success);
+            Assert.True(result.Success);
 
             _httpTest.ShouldHaveCalled($"{CheckProfileUrl}")
                 .WithVerb(HttpMethod.Put)
@@ -535,7 +535,7 @@ namespace Ecwid.Test.Services
                 .WithVerb(HttpMethod.Get)
                 .Times(1);
 
-            Assert.Equal(true, result);
+            Assert.True(result);
         }
 
         [Fact]
@@ -550,7 +550,7 @@ namespace Ecwid.Test.Services
                 .WithVerb(HttpMethod.Get)
                 .Times(1);
 
-            Assert.Equal(false, result);
+            Assert.False(result);
         }
 
         [Fact]
@@ -582,7 +582,7 @@ namespace Ecwid.Test.Services
                 .WithVerb(HttpMethod.Get)
                 .Times(1);
 
-            Assert.Equal(1, result.Count);
+            Assert.Single(result);
         }
 
         [Fact]
@@ -599,7 +599,7 @@ namespace Ecwid.Test.Services
                 .WithVerb(HttpMethod.Get)
                 .Times(1);
 
-            Assert.Equal(1, result.Count);
+            Assert.Single(result);
         }
 
         [Fact]
@@ -616,7 +616,7 @@ namespace Ecwid.Test.Services
                 .WithVerb(HttpMethod.Get)
                 .Times(1);
 
-            Assert.Equal(1, result.Count);
+            Assert.Single(result);
         }
 
         [Fact]
@@ -633,7 +633,7 @@ namespace Ecwid.Test.Services
                 .WithVerb(HttpMethod.Get)
                 .Times(1);
 
-            Assert.Equal(1, result.Count);
+            Assert.Single(result);
         }
 
         [Fact]
@@ -728,7 +728,7 @@ namespace Ecwid.Test.Services
                 .WithVerb(HttpMethod.Post)
                 .Times(1);
 
-            Assert.Equal(1, result.Count);
+            Assert.Single(result);
         }
 
         [Fact]
