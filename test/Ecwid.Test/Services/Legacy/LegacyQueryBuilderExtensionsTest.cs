@@ -1,4 +1,4 @@
-﻿// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
+﻿// Licensed under the MIT License. See LICENSE in the git repository root for license information.
 
 using System;
 using System.Diagnostics.CodeAnalysis;
@@ -35,11 +35,11 @@ namespace Ecwid.Test.Services.Legacy
 			var result5 =
 				_defaultLegacyClient.Orders.ToUpdateDate(Convert.ToDateTime("2000-01-01")).GetParam("to_update_date");
 
-			Assert.Equal(result, "2000-01-01");
-			Assert.Equal(result2, "2000-01-01");
-			Assert.Equal(result3, "2000-01-01");
-			Assert.Equal(result4, "2000-01-01");
-			Assert.Equal(result5, "2000-01-01");
+			Assert.Equal("2000-01-01", result);
+			Assert.Equal("2000-01-01", result2);
+			Assert.Equal("2000-01-01", result3);
+			Assert.Equal("2000-01-01", result4);
+			Assert.Equal("2000-01-01", result5);
 		}
 
 		[Fact]
@@ -50,10 +50,10 @@ namespace Ecwid.Test.Services.Legacy
 			var result3 = _defaultLegacyClient.Orders.Order("1").GetParam("order");
 			var result4 = _defaultLegacyClient.Orders.FromOrder("1").GetParam("from_order");
 
-			Assert.Equal(result, 1);
-			Assert.Equal(result2, 1);
-			Assert.Equal(result3, "1");
-			Assert.Equal(result4, "1");
+			Assert.Equal(1, result);
+			Assert.Equal(1, result2);
+			Assert.Equal("1", result3);
+			Assert.Equal("1", result4);
 		}
 
 		[Fact]
@@ -65,18 +65,18 @@ namespace Ecwid.Test.Services.Legacy
 			var result4 = _defaultLegacyClient.Orders.CustomerEmail(null).GetParam("customer_email");
 			var result5 = _defaultLegacyClient.Orders.CustomerEmail("").GetParam("customer_email");
 
-			Assert.Equal(result, 1);
-			Assert.Equal(result2, "null");
-			Assert.Equal(result3, "test");
-			Assert.Equal(result4, "");
-			Assert.Equal(result5, "");
+			Assert.Equal(1, result);
+			Assert.Equal("null", result2);
+			Assert.Equal("test", result3);
+			Assert.Equal("", result4);
+			Assert.Equal("", result5);
 		}
 
 		[Fact]
 		public void Statuses()
 		{
 			var result = _defaultLegacyClient.Orders.Statuses("PAID, DECLINED", "NEW PROCESSING").GetParam("statuses");
-			Assert.Equal(result, "PAID,DECLINED,NEW,PROCESSING");
+			Assert.Equal("PAID,DECLINED,NEW,PROCESSING", result);
 		}
 
 		[Theory]
@@ -96,7 +96,7 @@ namespace Ecwid.Test.Services.Legacy
 		public void PaymentStatuses(string statuses)
 		{
 			var result = _defaultLegacyClient.Orders.PaymentStatuses(statuses).GetParam("statuses");
-			Assert.Equal(result, "DECLINED,CANCELLED");
+			Assert.Equal("DECLINED,CANCELLED", result);
 		}
 
 		[Theory]
@@ -117,14 +117,14 @@ namespace Ecwid.Test.Services.Legacy
 			var result =
 				_defaultLegacyClient.Orders.PaymentStatuses("PAID, DECLINED").PaymentStatuses("Cancelled").GetParam(
 					"statuses");
-			Assert.Equal(result, "PAID,DECLINED,CANCELLED");
+			Assert.Equal("PAID,DECLINED,CANCELLED", result);
 		}
 
 		[Fact]
 		public void FulfillmentStatuses()
 		{
 			var result = _defaultLegacyClient.Orders.FulfillmentStatuses("NEW PROCESSING").GetParam("statuses");
-			Assert.Equal(result, "NEW,PROCESSING");
+			Assert.Equal("NEW,PROCESSING", result);
 		}
 
 		[Fact]
@@ -133,7 +133,7 @@ namespace Ecwid.Test.Services.Legacy
 			var result =
 				_defaultLegacyClient.Orders.FulfillmentStatuses("NEW").FulfillmentStatuses("PROCESSING").GetParam(
 					"statuses");
-			Assert.Equal(result, "NEW,PROCESSING");
+			Assert.Equal("NEW,PROCESSING", result);
 		}
 
 		[Theory]
@@ -151,7 +151,7 @@ namespace Ecwid.Test.Services.Legacy
 				_defaultLegacyClient.Orders.PaymentStatuses("PAID, DECLINED")
 					.FulfillmentStatuses("NEW PROCESSING")
 					.GetParam("statuses");
-			Assert.Equal(result, "PAID,DECLINED,NEW,PROCESSING");
+			Assert.Equal("PAID,DECLINED,NEW,PROCESSING", result);
 		}
 
 		[Fact]
@@ -160,8 +160,8 @@ namespace Ecwid.Test.Services.Legacy
 			var result = _defaultLegacyClient.Orders.Limit(120).GetParam("limit");
 			var result2 = _defaultLegacyClient.Orders.Limit(201).GetParam("limit");
 
-			Assert.Equal(result, 120);
-			Assert.Equal(result2, 200);
+			Assert.Equal(120, result);
+			Assert.Equal(200, result2);
 		}
 	}
 }

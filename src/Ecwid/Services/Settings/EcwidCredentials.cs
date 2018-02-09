@@ -1,6 +1,5 @@
-﻿// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
+﻿// Licensed under the MIT License. See LICENSE in the git repository root for license information.
 
-using System.Text.RegularExpressions;
 using Ecwid.Tools;
 
 namespace Ecwid
@@ -47,7 +46,7 @@ namespace Ecwid
         /// <exception cref="EcwidConfigException" accessor="set">The authorization token is invalid.</exception>
         public string Token
         {
-            get { return _token; }
+            get => _token;
             set
             {
                 if (Validators.IsNullOrEmpty(value))

@@ -1,14 +1,13 @@
-﻿// Licensed under the MIT License. See LICENSE in the git repository root for license information.
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Ecwid.Models;
 using Newtonsoft.Json;
 
-namespace Ecwid.Models
+namespace Ecwid
 {
     /// <summary>
-    /// The root object that is returned by the Order API.
+    /// The root object that is returned by the Discount Coupon search API.
     /// </summary>
-    public class SearchResult
+    public class DiscountCouponSearchResults
     {
         /// <summary>
         /// Gets or sets the total number of found items (might be more than the number of returned items).
@@ -53,6 +52,6 @@ namespace Ecwid.Models
         /// The items.
         /// </value>
         [JsonProperty("items")]
-        public IList<OrderEntry> Orders { get; set; }
+        public IList<DiscountCouponInfo> DiscountCoupons { get; set; }
     }
 }

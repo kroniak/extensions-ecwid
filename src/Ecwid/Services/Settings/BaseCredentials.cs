@@ -1,4 +1,4 @@
-﻿// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
+﻿// Licensed under the MIT License. See LICENSE in the git repository root for license information.
 
 namespace Ecwid
 {
@@ -18,7 +18,7 @@ namespace Ecwid
         /// <exception cref="EcwidConfigException" accessor="set">The shop identifier is invalid.</exception>
         public int ShopId
         {
-            get { return _shopId; }
+            get => _shopId;
             set
             {
                 if (value <= 0)

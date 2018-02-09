@@ -1,4 +1,4 @@
-﻿// Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
+﻿// Licensed under the MIT License. See LICENSE in the git repository root for license information.
 
 using Newtonsoft.Json;
 
@@ -15,7 +15,7 @@ namespace Ecwid.Models
         /// The tax.
         /// </value>
         [JsonProperty("tax")]
-        public int Tax { get; set; }
+        public double Tax { get; set; }
 
         /// <summary>
         /// Gets or sets the destination zone identifier.
