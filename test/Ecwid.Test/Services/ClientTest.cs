@@ -760,10 +760,10 @@ namespace Ecwid.Test.Services
                 .RespondWithJson(Moqs.MockSearchResultWithLimit1, 403);
 
             var result = await _client.CheckDiscountCouponsTokenAsync();
-            Assert.Equal(true, result);
+            Assert.True(result);
 
             result = await _client.CheckDiscountCouponsTokenAsync();
-            Assert.Equal(false, result);
+            Assert.False(result);
 
             _httpTest.ShouldHaveCalled($"{CheckDiscountCouponsUrl}&limit=1")
                      .WithVerb(HttpMethod.Get)
