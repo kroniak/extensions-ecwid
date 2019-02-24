@@ -13,8 +13,6 @@ command -v dotnet >/dev/null 2>&1 || {
 echo "!!WARNING!! This script only builds netstandard and netcoreapp targets"
 echo "!!WARNING!! Do not publish nupkgs generated from this script"
 
-dotnet --info
-
 dotnet restore -v m "${NETSTANDARD_SLN}"
 
 dotnet build -c Release "${SCRIPT_ROOT}/../src/Ecwid/"

@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 set -euo pipefail
 
 command -v dotnet >/dev/null 2>&1 || {
@@ -8,8 +8,9 @@ command -v dotnet >/dev/null 2>&1 || {
 
 SCRIPT_ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-echo "!!WARNING!! This script for pipeline test running and checking code coverage for netstandard and netcoreapp targets"
+echo "!!WARNING!! This script runs tests and checks code coverage for netstandard and netcoreapp targets"
 
-dotnet test -c Release /p:CollectCoverage=true /p:Threshold=50 \
+dotnet test -c Release /p:CollectCoverage=true \
 /p:Exclude="[xunit.*]*" \
+/p:CoverletOutputFormat=lcov /p:CoverletOutput=../../lcov \
 "${SCRIPT_ROOT}/../test/Ecwid.Test/"
