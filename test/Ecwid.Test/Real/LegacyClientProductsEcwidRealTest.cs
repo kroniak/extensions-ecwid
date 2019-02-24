@@ -25,7 +25,7 @@ namespace Ecwid.Test.Real
 		{
 			var result = await _client.GetCategoriesAsync();
 			Assert.NotEmpty(result);
-			Assert.Equal(7, result.Count);
+			Assert.Equal(3, result.Count);
 		}
 
 		[Fact]

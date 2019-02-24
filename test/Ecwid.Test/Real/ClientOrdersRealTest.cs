@@ -97,7 +97,7 @@ namespace Ecwid.Test.Real
                 }
             };
 
-            var result = await client.UpdateOrderAsync(new OrderEntry { Email = "test@test.com", OrderNumber = 123 });
+            var result = await client.UpdateOrderAsync(new OrderEntry {Email = "test@test.com", OrderNumber = 123});
 
             Assert.Equal(1, result.UpdateCount);
         }
@@ -113,10 +113,10 @@ namespace Ecwid.Test.Real
                 }
             };
 
-            var exception = await Assert.ThrowsAsync<EcwidHttpException>(() => client.UpdateOrderAsync(new OrderEntry { Email = "test@test.com", OrderNumber = 123 }));
+            var exception = await Assert.ThrowsAsync<EcwidHttpException>(() =>
+                client.UpdateOrderAsync(new OrderEntry {Email = "test@test.com", OrderNumber = 123}));
 
             Assert.Equal(HttpStatusCode.BadRequest, exception.StatusCode);
-            Assert.Equal("Status QUEUED is deprecated, use AWAITING_PAYMENT instead", exception.Message);
         }
     }
 }

@@ -22,7 +22,9 @@ namespace Ecwid.Test.Services
         // Urls for checking
         private static readonly string CheckOrdersUrl = $"https://app.ecwid.com/api/v3/{ShopId}/orders?token={Token}";
         private static readonly string CheckProfileUrl = $"https://app.ecwid.com/api/v3/{ShopId}/profile?token={Token}";
-        private static readonly string CheckDiscountCouponsUrl = $"https://app.ecwid.com/api/v3/{ShopId}/discount_coupons?token={Token}";
+
+        private static readonly string CheckDiscountCouponsUrl =
+            $"https://app.ecwid.com/api/v3/{ShopId}/discount_coupons?token={Token}";
 
         private readonly string _checkCategoryLegacyUrl =
             $"https://app.ecwid.com/api/v1/{ShopId}/category?";
@@ -42,10 +44,11 @@ namespace Ecwid.Test.Services
         #region ApiExceptions
 
         [Fact]
-        public async void GetApiResponceAsync400Exception()
+        public async void GetApiResponseAsync400Exception()
         {
             _httpTest
-                .RespondWithJson("{\"errorMessage\":\"\nStatus QUEUED is deprecated, use AWAITING_PAYMENT instead.\"}", 400)
+                .RespondWithJson("{\"errorMessage\":\"\nStatus QUEUED is deprecated, use AWAITING_PAYMENT instead.\"}",
+                    400)
                 .RespondWith("Wrong numeric parameter 'orderNumber' value: not a number or a number out of range", 400);
 
             await Assert.ThrowsAsync<EcwidHttpException>(async () => await _client.CheckOrdersTokenAsync());
@@ -96,7 +99,7 @@ namespace Ecwid.Test.Services
         [Fact]
         public void DefaultChangeApiUrl()
         {
-            var settings = new EcwidSettings { ApiUrl = "https://app.ecwid.com/api/v1/" };
+            var settings = new EcwidSettings {ApiUrl = "https://app.ecwid.com/api/v1/"};
             _defaultClient.Settings = settings;
             var client = _defaultClient.Configure(settings);
 
@@ -115,8 +118,8 @@ namespace Ecwid.Test.Services
             Assert.Equal(Token, result.Credentials.Token);
         }
 
-        #endregion     
-        
+        #endregion
+
         #region Orders
 
         [Fact]
@@ -292,7 +295,7 @@ namespace Ecwid.Test.Services
                 .RespondWithJson(Moqs.MockSearchResultWithManyOrderAndPages(count, count * 2, count))
                 .RespondWithJson(Moqs.MockSearchResultWithManyOrderAndPages(count, count * 3, 0));
 
-            var result = await _client.GetOrdersAsync(new { paymentStatus = "paid" });
+            var result = await _client.GetOrdersAsync(new {paymentStatus = "paid"});
 
             _httpTest.ShouldHaveCalled($"{CheckOrdersUrl}&{query}")
                 .WithVerb(HttpMethod.Get)
@@ -314,7 +317,7 @@ namespace Ecwid.Test.Services
             _httpTest
                 .RespondWithJson(Moqs.MockSearchResultWithManyOrderAndPages(count, 0, count));
 
-            var result = await _client.GetOrdersAsync(new { limit = count, paymentStatus = "paid" });
+            var result = await _client.GetOrdersAsync(new {limit = count, paymentStatus = "paid"});
 
 
             _httpTest.ShouldHaveCalled($"{CheckOrdersUrl}&{query}")
@@ -330,9 +333,9 @@ namespace Ecwid.Test.Services
         public async void UpdateOrderAsync()
         {
             _httpTest
-                .RespondWithJson(new UpdateStatus { UpdateCount = 1 });
+                .RespondWithJson(new UpdateStatus {UpdateCount = 1});
 
-            var result = await _client.UpdateOrderAsync(new OrderEntry { Email = "test@test.com", OrderNumber = 123 });
+            var result = await _client.UpdateOrderAsync(new OrderEntry {Email = "test@test.com", OrderNumber = 123});
 
             _httpTest.ShouldHaveCalled($"https://app.ecwid.com/api/v3/{ShopId}/orders/123?token={Token}")
                 .WithVerb(HttpMethod.Put)
@@ -347,7 +350,8 @@ namespace Ecwid.Test.Services
             _httpTest
                 .RespondWithJson("Status QUEUED is deprecated, use AWAITING_PAYMENT instead", 400);
 
-            await Assert.ThrowsAsync<EcwidConfigException>(() => _client.UpdateOrderAsync(new OrderEntry { Email = "test@test.com" }));
+            await Assert.ThrowsAsync<EcwidConfigException>(() =>
+                _client.UpdateOrderAsync(new OrderEntry {Email = "test@test.com"}));
 
             _httpTest.ShouldNotHaveMadeACall();
         }
@@ -356,9 +360,9 @@ namespace Ecwid.Test.Services
         public async void DeleteOrderAsync()
         {
             _httpTest
-                .RespondWithJson(new DeleteStatus { DeleteCount = 1 });
+                .RespondWithJson(new DeleteStatus {DeleteCount = 1});
 
-            var result = await _client.DeleteOrderAsync(new OrderEntry { Email = "test@test.com", OrderNumber = 123 });
+            var result = await _client.DeleteOrderAsync(new OrderEntry {Email = "test@test.com", OrderNumber = 123});
 
             _httpTest.ShouldHaveCalled($"https://app.ecwid.com/api/v3/{ShopId}/orders/123?token={Token}")
                 .WithVerb(HttpMethod.Delete)
@@ -373,7 +377,8 @@ namespace Ecwid.Test.Services
             _httpTest
                 .RespondWithJson("The order with given number is not found", 404);
 
-            await Assert.ThrowsAsync<EcwidConfigException>(() => _client.DeleteOrderAsync(new OrderEntry { Email = "test@test.com" }));
+            await Assert.ThrowsAsync<EcwidConfigException>(() =>
+                _client.DeleteOrderAsync(new OrderEntry {Email = "test@test.com"}));
 
             _httpTest.ShouldNotHaveMadeACall();
         }
@@ -384,14 +389,14 @@ namespace Ecwid.Test.Services
             _httpTest
                 .RespondWithJson("The order with given number is not found", 404);
 
-            var exception = await Assert.ThrowsAsync<EcwidHttpException>(() => _client.DeleteOrderAsync(new OrderEntry { Email = "test@test.com", OrderNumber = 123 }));
+            var exception = await Assert.ThrowsAsync<EcwidHttpException>(() =>
+                _client.DeleteOrderAsync(new OrderEntry {Email = "test@test.com", OrderNumber = 123}));
 
             _httpTest.ShouldHaveCalled($"https://app.ecwid.com/api/v3/{ShopId}/orders/123?token={Token}")
                 .WithVerb(HttpMethod.Delete)
                 .Times(1);
 
             Assert.Equal(HttpStatusCode.NotFound, exception.StatusCode);
-            Assert.Equal("\"The order with given number is not found\"", exception.Message);
         }
 
         #endregion
@@ -406,9 +411,9 @@ namespace Ecwid.Test.Services
         public async void UpdateProfileAsync()
         {
             _httpTest
-                .RespondWithJson(new UpdateStatus { Success = true, UpdateCount = 1 });
+                .RespondWithJson(new UpdateStatus {Success = true, UpdateCount = 1});
 
-            var profile = new Profile { Account = new Account { AccountName = "John", AccountNickname = "John" } };
+            var profile = new Profile {Account = new Account {AccountName = "John", AccountNickname = "John"}};
 
             var result = await _client.UpdateProfileAsync(profile);
             Assert.True(result.Success);
@@ -426,9 +431,9 @@ namespace Ecwid.Test.Services
         public async void UpdateProfileAsyncHttpExceptions()
         {
             _httpTest
-                .RespondWithJson(new UpdateStatus { Success = false, UpdateCount = 0 }, 400);
+                .RespondWithJson(new UpdateStatus {Success = false, UpdateCount = 0}, 400);
 
-            var profile = new Profile { Account = new Account { AccountName = "John", AccountNickname = "John" } };
+            var profile = new Profile {Account = new Account {AccountName = "John", AccountNickname = "John"}};
 
             await Assert.ThrowsAsync<EcwidHttpException>(async () => await _client.UpdateProfileAsync(profile));
 
@@ -456,7 +461,7 @@ namespace Ecwid.Test.Services
         [Fact]
         public void DefaultLegacyChangeApiUrl()
         {
-            var settings = new EcwidLegacySettings { ApiUrl = "https://app.ecwid.com/api/v1/" };
+            var settings = new EcwidLegacySettings {ApiUrl = "https://app.ecwid.com/api/v1/"};
             _defaultLegacyClient.Settings = settings;
             var client = _defaultLegacyClient.Configure(settings);
 
@@ -528,7 +533,7 @@ namespace Ecwid.Test.Services
         public async void LegacyOrdersCheckOrdersTokenAsync()
         {
             _httpTest
-                .RespondWithJson(new { count = 0, total = 0, order = "[]" });
+                .RespondWithJson(new {count = 0, total = 0, order = "[]"});
 
             var result = await _legacyClient.CheckOrdersTokenAsync();
 
@@ -543,7 +548,7 @@ namespace Ecwid.Test.Services
         public async void LegacyOrdersCheckOrdersAuthAsyncFail()
         {
             _httpTest
-                .RespondWithJson(new { count = 0, total = 0, order = "[]" }, 403);
+                .RespondWithJson(new {count = 0, total = 0, order = "[]"}, 403);
 
             var result = await _legacyClient.CheckOrdersTokenAsync();
 
@@ -558,7 +563,7 @@ namespace Ecwid.Test.Services
         public async void LegacyOrdersGetOrdersCountAsync()
         {
             _httpTest
-                .RespondWithJson(new { count = 0, total = 10, order = "[]" });
+                .RespondWithJson(new {count = 0, total = 10, order = "[]"});
 
             var result = await _legacyClient.GetOrdersCountAsync();
 
@@ -649,7 +654,7 @@ namespace Ecwid.Test.Services
                         $"{_checkOrdersLegacyUrl}&{query}&offset={count}"))
                 .RespondWithJson(Legacy.Moqs.MockLegacyOrderResponseWithManyOrder(count));
 
-            var result = await _legacyClient.GetOrdersAsync(new { statuses = "paid" });
+            var result = await _legacyClient.GetOrdersAsync(new {statuses = "paid"});
 
             _httpTest.ShouldHaveCalled($"{_checkOrdersLegacyUrl}&{query}")
                 .WithVerb(HttpMethod.Get)
@@ -704,12 +709,12 @@ namespace Ecwid.Test.Services
         public async void LegacyOrdersUpdateAsyncNullResult()
         {
             _httpTest
-                .RespondWithJson(new { count = 0, total = 10, order = "[]" });
+                .RespondWithJson(new {count = 0, total = 10, order = "[]"});
 
             var result = await _legacyClient.Orders.Order(1).UpdateAsync("PAID", "PROCESSING", "");
 
             _httpTest.ShouldHaveCalled(
-                $"{_checkOrdersLegacyUrl}&order=1&new_payment_status=PAID&new_fulfillment_status=PROCESSING")
+                    $"{_checkOrdersLegacyUrl}&order=1&new_payment_status=PAID&new_fulfillment_status=PROCESSING")
                 .WithVerb(HttpMethod.Post)
                 .Times(1);
 
@@ -725,7 +730,7 @@ namespace Ecwid.Test.Services
             var result = await _legacyClient.Orders.Order(1).UpdateAsync("PAID", "PROCESSING", "test_code");
 
             _httpTest.ShouldHaveCalled(
-                $"{_checkOrdersLegacyUrl}&order=1&new_payment_status=PAID&new_fulfillment_status=PROCESSING&new_shipping_tracking_code=test_code")
+                    $"{_checkOrdersLegacyUrl}&order=1&new_payment_status=PAID&new_fulfillment_status=PROCESSING&new_shipping_tracking_code=test_code")
                 .WithVerb(HttpMethod.Post)
                 .Times(1);
 
@@ -743,15 +748,15 @@ namespace Ecwid.Test.Services
                     () => _legacyClient.Orders.Order(1).UpdateAsync("PAID", "PROCESSING", "test_code"));
 
             _httpTest.ShouldHaveCalled(
-                $"{_checkOrdersLegacyUrl}&order=1&new_payment_status=PAID&new_fulfillment_status=PROCESSING&new_shipping_tracking_code=test_code")
+                    $"{_checkOrdersLegacyUrl}&order=1&new_payment_status=PAID&new_fulfillment_status=PROCESSING&new_shipping_tracking_code=test_code")
                 .WithVerb(HttpMethod.Post)
                 .Times(1);
         }
 
         #endregion
-        
+
         #region DiscountCoupons
-        
+
         [Fact]
         public async void DiscountCouponsCheckDiscountCouponsAuthAsync()
         {
@@ -766,34 +771,34 @@ namespace Ecwid.Test.Services
             Assert.False(result);
 
             _httpTest.ShouldHaveCalled($"{CheckDiscountCouponsUrl}&limit=1")
-                     .WithVerb(HttpMethod.Get)
-                     .Times(2);
+                .WithVerb(HttpMethod.Get)
+                .Times(2);
         }
 
         [Fact]
         public async void GetDiscountCouponAsyncFail() => await
             Assert.ThrowsAsync<ArgumentNullException>(
                 async () => await _client.GetDiscountCouponAsync(null));
-        
-        
+
+
         [Fact]
         public async void GetDiscountCouponsAsyncNull()
         {
             _httpTest
                 .RespondWithJson(Moqs.MockSearchResultZeroResult)
                 .RespondWithJson(Moqs.MockSearchResultZeroResult);
-            
+
             const string couponIdentifier = "abc123";
-            
+
             var result = await _client.GetDiscountCouponAsync(couponIdentifier);
 
             Assert.Null(result);
             _httpTest.ShouldHaveCalled($"{CheckDiscountCouponsUrl}&couponIdentifier={couponIdentifier}")
-                     .WithVerb(HttpMethod.Get)
-                     .Times(1);
+                .WithVerb(HttpMethod.Get)
+                .Times(1);
         }
-        
-        
+
+
         [Fact]
         public async void DiscountCouponsGetDiscountCouponsAsyncQueryMultiPagesResult()
         {
@@ -806,7 +811,7 @@ namespace Ecwid.Test.Services
                 .RespondWithJson(Moqs.MockSearchResultWithManyDiscountCouponsAndPages(count, count * 2, count))
                 .RespondWithJson(Moqs.MockSearchResultWithManyDiscountCouponsAndPages(count, count * 3, 0));
 
-            var result = await _client.GetDiscountCouponsAsync(new { discount_type = "ABS_AND_SHIPPING" });
+            var result = await _client.GetDiscountCouponsAsync(new {discount_type = "ABS_AND_SHIPPING"});
 
             _httpTest.ShouldHaveCalled($"{CheckDiscountCouponsUrl}&{query}")
                 .WithVerb(HttpMethod.Get)
@@ -828,7 +833,7 @@ namespace Ecwid.Test.Services
             _httpTest
                 .RespondWithJson(Moqs.MockSearchResultWithManyDiscountCouponsAndPages(count, 0, count));
 
-            var result = await _client.GetDiscountCouponsAsync(new { limit = count, paymentStatus = "paid" });
+            var result = await _client.GetDiscountCouponsAsync(new {limit = count, paymentStatus = "paid"});
 
 
             _httpTest.ShouldHaveCalled($"{CheckDiscountCouponsUrl}&{query}")
@@ -845,21 +850,21 @@ namespace Ecwid.Test.Services
         {
             const long expectedId = 1223423459837;
             _httpTest.RespondWithJson(new DiscountCouponCreateStatus
-                                       {
-                                           Code = "ABC123DEF",
-                                           Id = expectedId
-                                       });
+            {
+                Code = "ABC123DEF",
+                Id = expectedId
+            });
 
             var result = await _client.CreateDiscountCouponAsync(new DiscountCouponInfo
-                                                           {
-                                                               Discount = 10,
-                                                               DiscountType = "PERCENT"
-                                                           });
+            {
+                Discount = 10,
+                DiscountType = "PERCENT"
+            });
 
             _httpTest.ShouldHaveCalled($"https://app.ecwid.com/api/v3/{ShopId}/discount_coupons?token={Token}")
-                     .WithVerb(HttpMethod.Post)
-                     .Times(1);
-            
+                .WithVerb(HttpMethod.Post)
+                .Times(1);
+
             Assert.Equal(expectedId, result.Id);
         }
 
@@ -867,16 +872,17 @@ namespace Ecwid.Test.Services
         public async void UpdateDiscountCouponAsync()
         {
             _httpTest
-                .RespondWithJson(new UpdateStatus { UpdateCount = 1 });
+                .RespondWithJson(new UpdateStatus {UpdateCount = 1});
 
             const string discountCode = "ABC123DEF";
             var result = await _client.UpdateDiscountCouponAsync(new DiscountCouponInfo
-                                                                 {
-                                                                     Discount = 15, 
-                                                                     Code = discountCode
-                                                                 });
+            {
+                Discount = 15,
+                Code = discountCode
+            });
 
-            _httpTest.ShouldHaveCalled($"https://app.ecwid.com/api/v3/{ShopId}/discount_coupons/{discountCode}?token={Token}")
+            _httpTest.ShouldHaveCalled(
+                    $"https://app.ecwid.com/api/v3/{ShopId}/discount_coupons/{discountCode}?token={Token}")
                 .WithVerb(HttpMethod.Put)
                 .Times(1);
 
@@ -890,9 +896,9 @@ namespace Ecwid.Test.Services
                 .RespondWithJson("Status QUEUED is deprecated, use AWAITING_PAYMENT instead", 400);
 
             await Assert.ThrowsAsync<ArgumentException>(() => _client.UpdateDiscountCouponAsync(new DiscountCouponInfo
-                                                                                                   {
-                                                                                                       Code = ""
-                                                                                                   }));
+            {
+                Code = ""
+            }));
             _httpTest.ShouldNotHaveMadeACall();
         }
 
@@ -900,16 +906,17 @@ namespace Ecwid.Test.Services
         public async void DeleteDiscountCouponAsync()
         {
             _httpTest
-                .RespondWithJson(new DeleteStatus { DeleteCount = 1 });
+                .RespondWithJson(new DeleteStatus {DeleteCount = 1});
 
             const string discountCode = "ABC123DEF";
-            
-            var result = await _client.DeleteDiscountCouponAsync(new DiscountCouponInfo
-                                                                 {
-                                                                     Code = discountCode
-                                                                 });
 
-            _httpTest.ShouldHaveCalled($"https://app.ecwid.com/api/v3/{ShopId}/discount_coupons/{discountCode}?token={Token}")
+            var result = await _client.DeleteDiscountCouponAsync(new DiscountCouponInfo
+            {
+                Code = discountCode
+            });
+
+            _httpTest.ShouldHaveCalled(
+                    $"https://app.ecwid.com/api/v3/{ShopId}/discount_coupons/{discountCode}?token={Token}")
                 .WithVerb(HttpMethod.Delete)
                 .Times(1);
 
@@ -923,28 +930,30 @@ namespace Ecwid.Test.Services
                 .RespondWithJson("The DiscountCoupon with given number is not found", 404);
 
             const string discountCode = "ABC123DEF";
-            
-            var exception = await Assert.ThrowsAsync<EcwidHttpException>(() => _client.DeleteDiscountCouponAsync(new DiscountCouponInfo
-                                                                                                                 {
-                                                                                                                     Code = discountCode
-                                                                                                                 }));
 
-            _httpTest.ShouldHaveCalled($"https://app.ecwid.com/api/v3/{ShopId}/discount_coupons/{discountCode}?token={Token}")
+            var exception = await Assert.ThrowsAsync<EcwidHttpException>(() => _client.DeleteDiscountCouponAsync(
+                new DiscountCouponInfo
+                {
+                    Code = discountCode
+                }));
+
+            _httpTest.ShouldHaveCalled(
+                    $"https://app.ecwid.com/api/v3/{ShopId}/discount_coupons/{discountCode}?token={Token}")
                 .WithVerb(HttpMethod.Delete)
                 .Times(1);
 
             Assert.Equal(HttpStatusCode.NotFound, exception.StatusCode);
-            Assert.Equal("\"The DiscountCoupon with given number is not found\"", exception.Message);
         }
 
-        
         #endregion
 
         #region Implementation of IDisposable
+
         public void Dispose()
         {
             _httpTest.Dispose();
         }
+
         #endregion
     }
 }

@@ -228,23 +228,25 @@ namespace Ecwid
         }
 
 
+        /// <inheritdoc />
         /// <summary>
         /// Update one order asynchronously.
         /// </summary>
         /// <param name="order">The order to update.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <exception cref="EcwidConfigException">Order number is 0.</exception>
+        /// <exception cref="T:Ecwid.EcwidConfigException">Order number is 0.</exception>
         public async Task<UpdateStatus> UpdateOrderAsync(OrderEntry order, CancellationToken cancellationToken)
         {
             if (order.OrderNumber == 0) throw new EcwidConfigException("Order number is 0.");
             return await PutApiAsync<UpdateStatus>(GetUrl($"orders/{order.OrderNumber}"), order, cancellationToken);
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Update one order asynchronously.
         /// </summary>
         /// <param name="order">The order to update.</param>
-        /// <exception cref="EcwidConfigException">Order number is 0.</exception>
+        /// <exception cref="T:Ecwid.EcwidConfigException">Order number is 0.</exception>
         public async Task<UpdateStatus> UpdateOrderAsync(OrderEntry order)
             => await UpdateOrderAsync(order, CancellationToken.None);
 
