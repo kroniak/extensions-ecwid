@@ -1,5 +1,6 @@
 // Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
 // Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
+
 namespace Ecwid.Legacy
 {
     /// <summary>
@@ -27,6 +28,8 @@ namespace Ecwid.Legacy
         /// Configures with specified settings.
         /// </summary>
         /// <param name="settings">The settings.</param>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
         IEcwidLegacyClient Configure(EcwidLegacySettings settings);
 
         /// <summary>
@@ -45,6 +48,8 @@ namespace Ecwid.Legacy
         /// Configures with specified credentials.
         /// </summary>
         /// <param name="credentials">The credentials.</param>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
         IEcwidLegacyClient Configure(EcwidLegacyCredentials credentials);
     }
 }

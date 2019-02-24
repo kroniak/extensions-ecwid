@@ -89,7 +89,7 @@ namespace Ecwid.Models
         /// The taxes.
         /// </value>
         [JsonProperty("taxes")]
-        public IList<OrderItemTax> Taxes { get; set; }
+        public List<OrderItemTax> Taxes { get; set; }
 
         /// <summary>
         /// Gets or sets the order item shipping cost.
@@ -215,7 +215,7 @@ namespace Ecwid.Models
         /// The selected options.
         /// </value>
         [JsonProperty("selectedOptions")]
-        public IList<OrderItemOption> SelectedOptions { get; set; }
+        public List<OrderItemOption> SelectedOptions { get; set; }
 
         /// <summary>
         /// Gets or sets the files attached to the order item.
@@ -224,6 +224,6 @@ namespace Ecwid.Models
         /// The files.
         /// </value>
         [JsonProperty("files")]
-        public IList<OrderItemProductFile> Files { get; set; }
+        public List<OrderItemProductFile> Files { get; set; }
     }
 }

@@ -205,7 +205,7 @@ namespace Ecwid.Models.Legacy
         /// The items.
         /// </value>
         [JsonProperty("items")]
-        public IList<LegacyOrderItem> Items { get; set; }
+        public List<LegacyOrderItem> Items { get; set; }
 
         /// <summary>
         /// Gets or sets the last change date.

@@ -71,7 +71,7 @@ namespace Ecwid.Models.Legacy
         /// The options.
         /// </value>
         [JsonProperty("options")]
-        public IList<LegacyOrderItemOption> Options { get; set; }
+        public List<LegacyOrderItemOption> Options { get; set; }
 
         /// <summary>
         /// Gets or sets the default category ID for this product (0, if no default category has been set for the product).
@@ -89,7 +89,7 @@ namespace Ecwid.Models.Legacy
         /// The taxes.
         /// </value>
         [JsonProperty("taxes")]
-        public IList<LegacyOrderItemTax> Taxes { get; set; }
+        public List<LegacyOrderItemTax> Taxes { get; set; }
 
         /// <summary>
         /// Gets or sets the Egoods.
@@ -98,6 +98,6 @@ namespace Ecwid.Models.Legacy
         /// The files.
         /// </value>
         [JsonProperty("files")]
-        public IList<LegacyOrderItemProductFile> Files { get; set; }
+        public List<LegacyOrderItemProductFile> Files { get; set; }
     }
 }

@@ -24,7 +24,7 @@ namespace Ecwid.Models.Legacy
         /// The options.
         /// </value>
         [JsonProperty("options")]
-        public IList<LegacyProductOption> Options { get; set; }
+        public List<LegacyProductOption> Options { get; set; }
 
         /// <summary>
         /// Gets or sets a list of included taxes.
@@ -33,7 +33,7 @@ namespace Ecwid.Models.Legacy
         /// The taxes.
         /// </value>
         [JsonProperty("taxes")]
-        public IList<LegacyProductTax> Taxes { get; set; }
+        public List<LegacyProductTax> Taxes { get; set; }
 
         /// <summary>
         /// Gets or sets a list of gallery images.
@@ -42,7 +42,7 @@ namespace Ecwid.Models.Legacy
         /// The gallery images.
         /// </value>
         [JsonProperty("galleryImages")]
-        public IList<LegacyGalleryImage> GalleryImages { get; set; }
+        public List<LegacyGalleryImage> GalleryImages { get; set; }
 
         /// <summary>
         /// Gets or sets a list of categories which this product belongs to.
@@ -53,7 +53,7 @@ namespace Ecwid.Models.Legacy
         /// The categories.
         /// </value>
         [JsonProperty("categories")]
-        public IList<LegacyCategoryEntry> Categories { get; set; }
+        public List<LegacyCategoryEntry> Categories { get; set; }
 
         /// <summary>
         /// If present, unique ID for default product combination.
@@ -71,7 +71,7 @@ namespace Ecwid.Models.Legacy
         /// The combinations.
         /// </value>
         [JsonProperty("combinations")]
-        public IList<LegacyProductCombination> Combinations { get; set; }
+        public List<LegacyProductCombination> Combinations { get; set; }
 
         /// <summary>
         /// Gets or sets the creation date (UNIX timestamp).
@@ -112,7 +112,7 @@ namespace Ecwid.Models.Legacy
         /// The attributes.
         /// </value>
         [JsonProperty("attributes")]
-        public IList<LegacyAttribute> Attributes { get; set; }
+        public List<LegacyAttribute> Attributes { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [in stock].

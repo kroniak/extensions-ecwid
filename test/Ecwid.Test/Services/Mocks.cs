@@ -13,13 +13,15 @@ namespace Ecwid.Test.Services
         /// Mocks the response with one order.
         /// </summary>
         public static SearchResult MockSearchResultWithLimit1
-            => new SearchResult {Count = 1, Total = 100, Limit = 1, Offset = 0, Orders = MockOrders(1)};
+            => new SearchResult
+                {Count = 1, Total = 100, Limit = 1, Offset = 0, Orders = new List<OrderEntry>(MockOrders(1))};
 
         /// <summary>
         /// Mocks the response with one order.
         /// </summary>
         public static SearchResult MockSearchResultWithOneOrder
-            => new SearchResult {Count = 1, Total = 1, Limit = 100, Offset = 0, Orders = MockOrders(1)};
+            => new SearchResult
+                {Count = 1, Total = 1, Limit = 100, Offset = 0, Orders = new List<OrderEntry>(MockOrders(1))};
 
         /// <summary>
         /// Gets the mock search result zero result.
@@ -36,7 +38,7 @@ namespace Ecwid.Test.Services
         /// <param name="count">The count.</param>
         [SuppressMessage("ReSharper", "ExceptionNotDocumentedOptional")]
         [SuppressMessage("ReSharper", "ExceptionNotDocumented")]
-        private static IList<OrderEntry> MockOrders(int count)
+        private static IEnumerable<OrderEntry> MockOrders(int count)
         {
             var orders = new List<OrderEntry>();
 
@@ -58,7 +60,7 @@ namespace Ecwid.Test.Services
             return orders;
         }
 
-        private static IList<DiscountCouponInfo> MockDiscountCoupons(int count)
+        private static IEnumerable<DiscountCouponInfo> MockDiscountCoupons(int count)
         {
             var discountCoupons = new List<DiscountCouponInfo>();
 
@@ -90,7 +92,11 @@ namespace Ecwid.Test.Services
         /// Mocks the response with many order.
         /// </summary>
         public static SearchResult MockSearchResultWithManyOrder(int count = 10, int limit = 10)
-            => new SearchResult {Count = count, Total = count, Limit = limit, Offset = 0, Orders = MockOrders(count)};
+            => new SearchResult
+            {
+                Count = count, Total = count, Limit = limit, Offset = 0,
+                Orders = new List<OrderEntry>(MockOrders(count))
+            };
 
         /// <summary>
         /// Mocks the legacy order response with many order and pages.
@@ -100,7 +106,10 @@ namespace Ecwid.Test.Services
         /// <param name="count">The count.</param>
         public static SearchResult MockSearchResultWithManyOrderAndPages(int limit, int offset, int count)
             => new SearchResult
-                {Count = count, Total = 300, Limit = limit, Offset = offset, Orders = MockOrders(count)};
+            {
+                Count = count, Total = 300, Limit = limit, Offset = offset,
+                Orders = new List<OrderEntry>(MockOrders(count))
+            };
 
         public static DiscountCouponSearchResults MockSearchResultWithManyDiscountCouponsAndPages(int limit, int offset,
             int count)
@@ -110,7 +119,7 @@ namespace Ecwid.Test.Services
                 Total = 300,
                 Limit = limit,
                 Offset = offset,
-                DiscountCoupons = MockDiscountCoupons(count)
+                DiscountCoupons = new List<DiscountCouponInfo>(MockDiscountCoupons(count))
             };
     }
 }

@@ -35,10 +35,10 @@ namespace Ecwid.OAuth
         /// <inheritdoc />
         public EcwidOptions(string clientId, string clientSecret) : this()
         {
-            if (string.IsNullOrEmpty(clientId))
+            if (string.IsNullOrWhiteSpace(clientId))
                 throw new ArgumentException("Argument is null or empty", nameof(clientId));
 
-            if (string.IsNullOrEmpty(clientSecret))
+            if (string.IsNullOrWhiteSpace(clientSecret))
                 throw new ArgumentException("Argument is null or empty", nameof(clientSecret));
 
             ClientId = clientId;
@@ -50,10 +50,10 @@ namespace Ecwid.OAuth
         {
             if (scopes == null) throw new ArgumentNullException(nameof(scopes));
 
-            if (string.IsNullOrEmpty(clientId))
+            if (string.IsNullOrWhiteSpace(clientId))
                 throw new ArgumentException("Argument is null or empty", nameof(clientId));
 
-            if (string.IsNullOrEmpty(clientSecret))
+            if (string.IsNullOrWhiteSpace(clientSecret))
                 throw new ArgumentException("Argument is null or empty", nameof(clientSecret));
 
             ClientId = clientId;
@@ -83,7 +83,7 @@ namespace Ecwid.OAuth
         {
             if (context == null) throw new ArgumentNullException(nameof(context));
 
-            if (string.IsNullOrEmpty(storeId))
+            if (string.IsNullOrWhiteSpace(storeId))
                 throw new ArgumentException("Argument is null or empty", nameof(storeId));
 
             var requestUrl = context.Options.UserInformationEndpoint;
@@ -109,7 +109,7 @@ namespace Ecwid.OAuth
         {
             if (context == null) throw new ArgumentNullException(nameof(context));
 
-            if (string.IsNullOrEmpty(requestUrl))
+            if (string.IsNullOrWhiteSpace(requestUrl))
                 throw new ArgumentException("Argument is null or empty", nameof(requestUrl));
 
             var request = new HttpRequestMessage(HttpMethod.Get, requestUrl);
@@ -145,20 +145,20 @@ namespace Ecwid.OAuth
                         var accountEmail = await RequestAccountEmail(requestUrl, context);
 
                         // save email to the claim
-                        if (!string.IsNullOrEmpty(accountEmail))
+                        if (!string.IsNullOrWhiteSpace(accountEmail))
                             context.Identity.AddClaim(new Claim(
                                 ClaimTypes.Email, accountEmail,
                                 ClaimValueTypes.String, context.Options.ClaimsIssuer));
                     }
 
                     // save token to the claim
-                    if (!string.IsNullOrEmpty(context.AccessToken))
+                    if (!string.IsNullOrWhiteSpace(context.AccessToken))
                         context.Identity.AddClaim(new Claim(
                             EcwidClaimTypes.Token, context.AccessToken,
                             ClaimValueTypes.String, context.Options.ClaimsIssuer));
 
                     // save store-id to the claim
-                    if (!string.IsNullOrEmpty(storeId))
+                    if (!string.IsNullOrWhiteSpace(storeId))
                         context.Identity.AddClaim(new Claim(
                             ClaimTypes.NameIdentifier, storeId,
                             ClaimValueTypes.String, context.Options.ClaimsIssuer));
@@ -166,7 +166,7 @@ namespace Ecwid.OAuth
                     var scope = context.TokenResponse.Response.Value<string>("scope");
 
                     // save scope to the claim
-                    if (!string.IsNullOrEmpty(scope))
+                    if (!string.IsNullOrWhiteSpace(scope))
                         context.Identity.AddClaim(new Claim(
                             EcwidClaimTypes.Scope, scope,
                             ClaimValueTypes.String, context.Options.ClaimsIssuer));

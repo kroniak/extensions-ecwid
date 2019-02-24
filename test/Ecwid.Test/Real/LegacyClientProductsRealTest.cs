@@ -1,6 +1,7 @@
 ﻿// Licensed under the MIT License. See LICENSE in the git repository root for license information.
 
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Ecwid.Legacy;
 using Xunit;
 
@@ -30,10 +31,10 @@ namespace Ecwid.Test.Real
             };
 
             var result = await client.GetCategoriesAsync();
-            Assert.Equal(15, result.Count);
+            Assert.Equal(15, result.Count());
 
             result = await client.GetCategoriesAsync(1);
-            Assert.Equal(15, result.Count);
+            Assert.Equal(15, result.Count());
         }
 
         [Fact]

@@ -28,10 +28,10 @@ namespace Ecwid.Legacy
             if (Validators.AreNullOrEmpty(orderToken, productToken))
                 throw new EcwidConfigException("The authorization tokens are null.");
 
-            if (!Validators.IsNullOrEmpty(orderToken))
+            if (!string.IsNullOrWhiteSpace(orderToken))
                 OrderToken = orderToken;
 
-            if (!Validators.IsNullOrEmpty(productToken))
+            if (!string.IsNullOrWhiteSpace(productToken))
                 ProductToken = productToken;
         }
 
@@ -48,7 +48,7 @@ namespace Ecwid.Legacy
             get => _orderToken;
             set
             {
-                if (Validators.IsNullOrEmpty(value))
+                if (string.IsNullOrWhiteSpace(value))
                     throw new EcwidConfigException("The order authorization token is invalid.");
 
                 // https://github.com/kroniak/extensions-ecwid/issues/34
@@ -73,7 +73,7 @@ namespace Ecwid.Legacy
             get => _productToken;
             set
             {
-                if (Validators.IsNullOrEmpty(value))
+                if (string.IsNullOrWhiteSpace(value))
                     throw new EcwidConfigException("The product authorization token is invalid.");
 
                 var regex = new Regex("^[0-9a-zA-Z]{12,}");

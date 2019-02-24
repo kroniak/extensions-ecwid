@@ -1,10 +1,14 @@
 ﻿// Licensed under the MIT License. See LICENSE in the git repository root for license information.
 
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Ecwid.Models.Legacy;
 using Ecwid.Tools;
+
+// ReSharper disable CheckNamespace
+// ReSharper disable PossibleMultipleEnumeration
 
 namespace Ecwid.Legacy
 {
@@ -18,7 +22,7 @@ namespace Ecwid.Legacy
         /// </summary>
         /// <param name="query">The query.</param>
         /// <param name="date">The date.</param>
-        /// <exception cref="ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentException">
         /// The date and time is outside the range of dates supported by the calendar
         /// used by the current culture.
         /// </exception>
@@ -34,7 +38,7 @@ namespace Ecwid.Legacy
         /// </summary>
         /// <param name="query">The query.</param>
         /// <param name="date">The date.</param>
-        /// <exception cref="ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentException">
         /// The date and time is outside the range of dates supported by the calendar
         /// used by the current culture.
         /// </exception>
@@ -50,7 +54,7 @@ namespace Ecwid.Legacy
         /// </summary>
         /// <param name="query">The query.</param>
         /// <param name="date">The date.</param>
-        /// <exception cref="ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentException">
         /// The date and time is outside the range of dates supported by the calendar
         /// used by the current culture.
         /// </exception>
@@ -66,7 +70,7 @@ namespace Ecwid.Legacy
         /// </summary>
         /// <param name="query">The query.</param>
         /// <param name="date">The date.</param>
-        /// <exception cref="ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentException">
         /// The date and time is outside the range of dates supported by the calendar
         /// used by the current culture.
         /// </exception>
@@ -82,7 +86,7 @@ namespace Ecwid.Legacy
         /// </summary>
         /// <param name="query">The query.</param>
         /// <param name="date">The date.</param>
-        /// <exception cref="ArgumentOutOfRangeException">
+        /// <exception cref="ArgumentException">
         /// The date and time is outside the range of dates supported by the calendar
         /// used by the current culture.
         /// </exception>
@@ -117,7 +121,7 @@ namespace Ecwid.Legacy
         public static OrdersQueryBuilder<LegacyOrder, LegacyUpdatedOrders> Order(
             this OrdersQueryBuilder<LegacyOrder, LegacyUpdatedOrders> query, string vendorNumber)
         {
-            if (string.IsNullOrEmpty(vendorNumber))
+            if (string.IsNullOrWhiteSpace(vendorNumber))
                 throw new ArgumentException("VendorNumber is null or empty.", nameof(vendorNumber));
 
             query.AddOrUpdate("order", vendorNumber);
@@ -148,7 +152,7 @@ namespace Ecwid.Legacy
         public static OrdersQueryBuilder<LegacyOrder, LegacyUpdatedOrders> FromOrder(
             this OrdersQueryBuilder<LegacyOrder, LegacyUpdatedOrders> query, string vendorNumber)
         {
-            if (string.IsNullOrEmpty(vendorNumber))
+            if (string.IsNullOrWhiteSpace(vendorNumber))
                 throw new ArgumentException("VendorNumber is null or empty.", nameof(vendorNumber));
 
             query.AddOrUpdate("from_order", vendorNumber);
@@ -205,9 +209,10 @@ namespace Ecwid.Legacy
                 Validators.StatusesValidate(fulfillmentStatuses, Validators.AvailableLegacyFulfillmentStatuses);
 
                 var resultList = paymentStatuses.TrimUpperReplaceSplit();
-                resultList.AddRange(fulfillmentStatuses.TrimUpperReplaceSplit());
+                var result = new List<string>(resultList);
+                result.AddRange(fulfillmentStatuses.TrimUpperReplaceSplit());
 
-                query.AddOrUpdateStatuses("statuses", resultList);
+                query.AddOrUpdateStatuses("statuses", result);
             }
             catch (ArgumentException exception)
             {
@@ -239,6 +244,7 @@ namespace Ecwid.Legacy
             {
                 throw new EcwidConfigException("Can not add or update statuses. Look inner exception.", exception);
             }
+
             return query;
         }
 
@@ -264,6 +270,7 @@ namespace Ecwid.Legacy
             {
                 throw new EcwidConfigException("Can not add or update statuses. Look inner exception.", exception);
             }
+
             return query;
         }
 
@@ -309,9 +316,10 @@ namespace Ecwid.Legacy
         /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
         public static async Task<LegacyUpdatedOrders> UpdateAsync(
             this OrdersQueryBuilder<LegacyOrder, LegacyUpdatedOrders> query, string newPaymentStatus,
-            string newFulfillmentStatus, string newShippingTrackingCode) 
-            => 
-            await query.UpdateAsync(newPaymentStatus, newFulfillmentStatus, newShippingTrackingCode, CancellationToken.None);
+            string newFulfillmentStatus, string newShippingTrackingCode)
+            =>
+                await query.UpdateAsync(newPaymentStatus, newFulfillmentStatus, newShippingTrackingCode,
+                    CancellationToken.None);
 
         /// <summary>
         /// Update the orders asynchronous.
@@ -342,21 +350,21 @@ namespace Ecwid.Legacy
                 Validators.ValidateNewLegacyStatuses(query.Query, newPaymentStatus, newFulfillmentStatus,
                     newShippingTrackingCode);
 
-                if (!Validators.IsNullOrEmpty(newPaymentStatus))
+                if (!string.IsNullOrWhiteSpace(newPaymentStatus))
                     query.AddOrUpdate("new_payment_status",
-                        Validators.StatusValidate(newPaymentStatus, Validators.AvailableLegacyPaymentStatuses));
-                if (!Validators.IsNullOrEmpty(newFulfillmentStatus))
+                        newPaymentStatus.ExtractFirstStatus(Validators.AvailableLegacyPaymentStatuses));
+                if (!string.IsNullOrWhiteSpace(newFulfillmentStatus))
                     query.AddOrUpdate("new_fulfillment_status",
-                        Validators.StatusValidate(newFulfillmentStatus, Validators.AvailableLegacyFulfillmentStatuses));
-                if (!Validators.IsNullOrEmpty(newShippingTrackingCode))
+                        newFulfillmentStatus.ExtractFirstStatus(Validators.AvailableLegacyFulfillmentStatuses));
+                if (!string.IsNullOrWhiteSpace(newShippingTrackingCode))
                     query.AddOrUpdate("new_shipping_tracking_code", newShippingTrackingCode);
             }
             catch (ArgumentException exception)
             {
-                throw new EcwidConfigException("Can not add or update statuses. Look inner exception.", exception);
+                throw new EcwidException("Can not add or update statuses. Look inner exception.", exception);
             }
 
-            var client = (EcwidLegacyClient)query.Client;
+            var client = (EcwidLegacyClient) query.Client;
 
             return await client.UpdateOrdersAsync(query, cancellationToken);
         }

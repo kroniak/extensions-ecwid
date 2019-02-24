@@ -42,9 +42,11 @@ namespace Ecwid.Test.Services
             Assert.Equal(1, result);
         }
 
-        [Fact]
-        public void CouponCode_Exception() =>
-            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.CouponCode(-1));
+        [Theory]
+        [InlineData(-1)]
+        [InlineData(0)]
+        public void CouponCode_Exception(int i) =>
+            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.CouponCode(i));
 
         [Fact]
         public void Custom_ReturnCorrectResult()
@@ -127,7 +129,7 @@ namespace Ecwid.Test.Services
         [InlineData("2015-04-22 18:48:38")]
         [InlineData("2015-04-22 18:48:38 -0500")]
         [InlineData("1447804800")]
-        public void DateString_ReturnCorrectResult(string date)
+        public void DateString_CorrectString_ReturnCorrectResult(string date)
         {
             var result = _defaultClient.Orders.CreatedFrom(date).GetParam("createdFrom");
             var result2 = _defaultClient.Orders.CreatedTo(date).GetParam("createdTo");
@@ -151,6 +153,30 @@ namespace Ecwid.Test.Services
             Assert.Equal(date, result7);
             Assert.Equal(date, result8);
         }
+
+        [Theory]
+        [InlineData("2015-13-22")]
+        [InlineData("")]
+        public void DateStringCreated_IncorrectFrom_Exception(string date) =>
+            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Created(date, "2015-04-22"));
+
+        [Theory]
+        [InlineData("2015-13-22")]
+        [InlineData("")]
+        public void DateStringCreated_IncorrectTo_Exception(string date) =>
+            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Created("2015-04-22", date));
+
+        [Theory]
+        [InlineData("2015-13-22")]
+        [InlineData("")]
+        public void DateStringUpdated_IncorrectFrom_Exception(string date) =>
+            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Updated(date, "2015-04-22"));
+
+        [Theory]
+        [InlineData("2015-13-22")]
+        [InlineData("")]
+        public void DateStringUpdated_IncorrectTo_Exception(string date) =>
+            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Updated("2015-04-22", date));
 
         [Fact]
         public void FulfillmentStatuses_ReturnCorrectResult()
@@ -194,11 +220,13 @@ namespace Ecwid.Test.Services
             Assert.Equal(100, result3);
         }
 
-        [Fact]
-        public void LimitAndOffset_Exception()
+        [Theory]
+        [InlineData(-1)]
+        [InlineData(0)]
+        public void LimitAndOffset_IncorrectLimit_Exception(int i)
         {
-            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Limit(-1));
-            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Offset(-1));
+            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Limit(i));
+            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Offset(i));
         }
 
         [Fact]
@@ -230,12 +258,15 @@ namespace Ecwid.Test.Services
             Assert.Equal("test", result2);
         }
 
+        [Theory]
+        [InlineData(-1)]
+        [InlineData(0)]
+        public void Order_InvalidInt_Exception(int i) =>
+            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Order(i));
+
         [Fact]
-        public void Order_Exception()
-        {
-            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Order(-1));
+        public void Order_EmptyString_Exception() =>
             Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Order(""));
-        }
 
         [Fact]
         public void PaymentStatuses_ReturnCorrectResult()
@@ -265,14 +296,28 @@ namespace Ecwid.Test.Services
             Assert.Equal(1.0, result4);
         }
 
-        [Fact]
-        public void Totals_Exception()
-        {
-            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Totals(-1, -1));
-            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Totals(-1, 1));
-            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Totals(1, -1));
-            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.TotalFrom(-1));
-            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.TotalTo(-1));
-        }
+        [Theory]
+        [InlineData(-1)]
+        [InlineData(0)]
+        public void Totals_FromIncorrect_Exception(int i) =>
+            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Totals(i, 1));
+
+        [Theory]
+        [InlineData(-1)]
+        [InlineData(0)]
+        public void Totals_ToIncorrect_Exception(int i) =>
+            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Totals(1, i));
+
+        [Theory]
+        [InlineData(-1)]
+        [InlineData(0)]
+        public void TotalFrom_Incorrect_Exception(int i) =>
+            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.TotalFrom(i));
+
+        [Theory]
+        [InlineData(-1)]
+        [InlineData(0)]
+        public void TotalTo_Incorrect_Exception(int i) =>
+            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.TotalTo(i));
     }
 }

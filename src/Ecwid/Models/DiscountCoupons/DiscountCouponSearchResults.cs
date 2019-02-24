@@ -51,6 +51,6 @@ namespace Ecwid.Models
         /// The items.
         /// </value>
         [JsonProperty("items")]
-        public IList<DiscountCouponInfo> DiscountCoupons { get; set; }
+        public List<DiscountCouponInfo> DiscountCoupons { get; set; }
     }
 }

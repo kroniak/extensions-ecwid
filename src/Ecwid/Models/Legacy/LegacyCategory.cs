@@ -15,7 +15,7 @@ namespace Ecwid.Models.Legacy
         /// The subcategories.
         /// </value>
         [JsonProperty("subcategories")]
-        public IList<LegacyCategoryEntry> Subcategories { get; set; }
+        public List<LegacyCategoryEntry> Subcategories { get; set; }
 
         /// <summary>
         /// Gets or sets the products.
@@ -24,6 +24,6 @@ namespace Ecwid.Models.Legacy
         /// The products.
         /// </value>
         [JsonProperty("products")]
-        public IList<LegacyProductEntry> Products { get; set; }
+        public List<LegacyProductEntry> Products { get; set; }
     }
 }

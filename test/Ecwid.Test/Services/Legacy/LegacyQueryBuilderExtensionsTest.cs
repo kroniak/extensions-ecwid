@@ -13,15 +13,26 @@ namespace Ecwid.Test.Services.Legacy
     {
         private readonly IEcwidLegacyClient _defaultLegacyClient = new EcwidLegacyClient();
 
-        [Fact]
-        public void Extension_Exception()
+        [Theory]
+        [InlineData(-1)]
+        [InlineData(0)]
+        public void Extension_IncorrectInt_Exception(int i)
         {
             Assert.Throws<ArgumentException>(() => _defaultLegacyClient.Orders.Order(null));
             Assert.Throws<ArgumentException>(() => _defaultLegacyClient.Orders.FromOrder(null));
-            Assert.Throws<ArgumentException>(() => _defaultLegacyClient.Orders.Order(-1));
-            Assert.Throws<ArgumentException>(() => _defaultLegacyClient.Orders.FromOrder(-1));
-            Assert.Throws<ArgumentException>(() => _defaultLegacyClient.Orders.Limit(-1));
-            Assert.Throws<ArgumentException>(() => _defaultLegacyClient.Orders.Offset(-1));
+            Assert.Throws<ArgumentException>(() => _defaultLegacyClient.Orders.Order(i));
+            Assert.Throws<ArgumentException>(() => _defaultLegacyClient.Orders.FromOrder(i));
+            Assert.Throws<ArgumentException>(() => _defaultLegacyClient.Orders.Limit(i));
+            Assert.Throws<ArgumentException>(() => _defaultLegacyClient.Orders.Offset(i));
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        public void Extension_IncorrectString_Exception(string i)
+        {
+            Assert.Throws<ArgumentException>(() => _defaultLegacyClient.Orders.Order(i));
+            Assert.Throws<ArgumentException>(() => _defaultLegacyClient.Orders.FromOrder(i));
         }
 
         [Fact]

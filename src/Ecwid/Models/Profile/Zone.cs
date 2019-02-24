@@ -26,7 +26,7 @@ namespace Ecwid.Models
         /// The country codes.
         /// </value>
         [JsonProperty("countryCodes")]
-        public IList<string> CountryCodes { get; set; }
+        public List<string> CountryCodes { get; set; }
 
         /// <summary>
         /// Gets or sets the name.
@@ -44,7 +44,7 @@ namespace Ecwid.Models
         /// The post codes.
         /// </value>
         [JsonProperty("postCodes")]
-        public IList<string> PostCodes { get; set; }
+        public List<string> PostCodes { get; set; }
 
         /// <summary>
         /// Gets or sets the state or province codes.
@@ -53,6 +53,6 @@ namespace Ecwid.Models
         /// The state or province codes.
         /// </value>
         [JsonProperty("stateOrProvinceCodes")]
-        public IList<string> StateOrProvinceCodes { get; set; }
+        public List<string> StateOrProvinceCodes { get; set; }
     }
 }

@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Ecwid.Models.Legacy;
 
 namespace Ecwid.Test.Services.Legacy
@@ -21,7 +22,7 @@ namespace Ecwid.Test.Services.Legacy
                     Count = 1,
                     Total = 1,
                     NextUrl = null,
-                    Orders = MockLegacyOrders(1)
+                    Orders = new List<LegacyOrder>(MockLegacyOrders(1))
                 };
 
         /// <summary>
@@ -43,7 +44,7 @@ namespace Ecwid.Test.Services.Legacy
                     Count = count,
                     Total = count * 2,
                     NextUrl = null,
-                    Orders = MockLegacyOrders(count)
+                    Orders = new List<LegacyOrder>(MockLegacyOrders(count))
                 };
 
         /// <summary>
@@ -59,16 +60,15 @@ namespace Ecwid.Test.Services.Legacy
                     Count = count,
                     Total = count * 2,
                     NextUrl = nextUrl,
-                    Orders = MockLegacyOrders(count)
+                    Orders = new List<LegacyOrder>(MockLegacyOrders(count))
                 };
 
         /// <summary>
         /// Mocks the orders.
         /// </summary>
         /// <param name="count">The count.</param>
-        private static IList<LegacyOrder> MockLegacyOrders(int count)
+        private static IEnumerable<LegacyOrder> MockLegacyOrders(int count)
         {
-            var orders = new List<LegacyOrder>();
             var order = new LegacyOrder
             {
                 Number = 111111,
@@ -81,9 +81,8 @@ namespace Ecwid.Test.Services.Legacy
                 PaymentMethod = "PayPal",
                 CustomerEmail = "test@test.test"
             };
-            count.Times(() => orders.Add(order));
 
-            return orders;
+            return Enumerable.Range(0, count).Select(_ => order);
         }
 
         /// <summary>

@@ -13,7 +13,7 @@ namespace Ecwid.Models
         /// Gets or sets the coupon id.
         /// </summary>
         public long Id { get; set; }
-        
+
         /// <summary>
         /// Gets or sets the coupon title in store control panel.
         /// </summary>

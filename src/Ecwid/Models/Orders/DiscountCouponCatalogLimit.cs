@@ -17,7 +17,7 @@ namespace Ecwid.Models
         /// The products.
         /// </value>
         [JsonProperty("products")]
-        public IList<int> Products { get; set; }
+        public List<int> Products { get; set; }
 
         /// <summary>
         /// Gets or sets the categories.
@@ -26,6 +26,6 @@ namespace Ecwid.Models
         /// The categories.
         /// </value>
         [JsonProperty("categories")]
-        public IList<int> Categories { get; set; }
+        public List<int> Categories { get; set; }
     }
 }

@@ -18,6 +18,8 @@ namespace Ecwid
         /// </summary>
         /// <param name="couponIdentifier">The couponIdentifier of the coupon to retrieve</param>
         /// <exception cref="ArgumentNullException">Coupon Identifier is null</exception>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
         Task<DiscountCouponInfo> GetDiscountCouponAsync(string couponIdentifier);
 
         /// <summary>
@@ -26,6 +28,8 @@ namespace Ecwid
         /// <param name="couponIdentifier">The couponIdentifier of the coupon to retrieve</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <exception cref="ArgumentNullException">Coupon Identifier is null</exception>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
         Task<DiscountCouponInfo> GetDiscountCouponAsync(string couponIdentifier, CancellationToken cancellationToken);
 
         /// <summary>
@@ -37,7 +41,7 @@ namespace Ecwid
         /// </param>
         /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
         /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
-        Task<List<DiscountCouponInfo>> GetDiscountCouponsAsync(object query);
+        Task<IEnumerable<DiscountCouponInfo>> GetDiscountCouponsAsync(object query);
 
         /// <summary>
         /// Gets the discount coupons asynchronously. If <paramref name="query" /> contains limit or offset parameters gets only one page.
@@ -49,12 +53,15 @@ namespace Ecwid
         /// <param name="cancellationToken">The cancellation token</param>
         /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
         /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
-        Task<List<DiscountCouponInfo>> GetDiscountCouponsAsync(object query, CancellationToken cancellationToken);
+        Task<IEnumerable<DiscountCouponInfo>>
+            GetDiscountCouponsAsync(object query, CancellationToken cancellationToken);
 
         /// <summary>
         /// Create one discount coupon asynchronously.
         /// </summary>
         /// <param name="coupon">The discount coupon to create.</param>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
         Task<DiscountCouponCreateStatus> CreateDiscountCouponAsync(DiscountCouponInfo coupon);
 
         /// <summary>
@@ -62,12 +69,17 @@ namespace Ecwid
         /// </summary>
         /// <param name="coupon">The discount coupon to create.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        Task<DiscountCouponCreateStatus> CreateDiscountCouponAsync(DiscountCouponInfo coupon, CancellationToken cancellationToken);
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
+        Task<DiscountCouponCreateStatus> CreateDiscountCouponAsync(DiscountCouponInfo coupon,
+            CancellationToken cancellationToken);
 
         /// <summary>
         /// Update one discount coupon asynchronously.
         /// </summary>
         /// <param name="coupon">The discount coupon to update.</param>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
         Task<UpdateStatus> UpdateDiscountCouponAsync(DiscountCouponInfo coupon);
 
         /// <summary>
@@ -75,12 +87,16 @@ namespace Ecwid
         /// </summary>
         /// <param name="coupon">The discount coupon to update.</param>
         /// <param name="cancellationToken">The cancellationToken</param>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
         Task<UpdateStatus> UpdateDiscountCouponAsync(DiscountCouponInfo coupon, CancellationToken cancellationToken);
 
         /// <summary>
         /// Delete one discount coupon asynchronously.
         /// </summary>
         /// <param name="coupon">The discount coupon to delete.</param>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
         Task<DeleteStatus> DeleteDiscountCouponAsync(DiscountCouponInfo coupon);
 
         /// <summary>
@@ -88,17 +104,23 @@ namespace Ecwid
         /// </summary>
         /// <param name="couponIdentifier">The discount coupon code to delete.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
         Task<DeleteStatus> DeleteDiscountCouponAsync(string couponIdentifier, CancellationToken cancellationToken);
 
         /// <summary>
         /// Delete one discount coupon asynchronously.
         /// </summary>
         /// <param name="couponIdentifier">The discount coupon code to delete.</param>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
         Task<DeleteStatus> DeleteDiscountCouponAsync(string couponIdentifier);
 
         /// <summary>
         /// Checks the shop authentication asynchronous.
         /// </summary>
+        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
         /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
         /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
         Task<bool> CheckDiscountCouponsTokenAsync();

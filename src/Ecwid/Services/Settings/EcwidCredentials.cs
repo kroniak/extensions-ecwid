@@ -1,7 +1,5 @@
 ﻿// Licensed under the MIT License. See LICENSE in the git repository root for license information.
 
-using Ecwid.Tools;
-
 namespace Ecwid
 {
     /// <inheritdoc />
@@ -40,7 +38,7 @@ namespace Ecwid
             get => _token;
             set
             {
-                if (Validators.IsNullOrEmpty(value))
+                if (string.IsNullOrWhiteSpace(value))
                     throw new EcwidConfigException("The authorization token is invalid.");
 
                 // https://github.com/kroniak/extensions-ecwid/issues/34
