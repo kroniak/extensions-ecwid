@@ -4,9 +4,7 @@ using Newtonsoft.Json;
 
 namespace Ecwid.Models
 {
-    /// <summary>
-    /// A JSON object of type 'DeleteStatus’ with the following fields.
-    /// </summary>
+    /// <inheritdoc />
     public class DeleteStatus : UpdateStatus
     {
         /// <summary>

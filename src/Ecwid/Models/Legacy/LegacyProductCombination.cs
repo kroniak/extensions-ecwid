@@ -5,9 +5,7 @@ using Newtonsoft.Json;
 
 namespace Ecwid.Models.Legacy
 {
-    /// <summary>
-    /// Legacy product combination.
-    /// </summary>
+    /// <inheritdoc />
     public class LegacyProductCombination : BaseEntity
     {
         /// <summary>

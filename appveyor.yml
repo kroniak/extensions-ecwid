@@ -5,9 +5,9 @@ image: Visual Studio 2017
 init:
   - dotnet --version
 build_script:
-- ps: .\build\build.ps1
+  - cmd: call cmd /C "cd .\build & build.cmd"  
 test_script:
-- ps: .\build\test.ps1
+  - cmd: call cmd /C "cd .\build & test.cmd"
 artifacts:
 - path: '**\*.nupkg'
 deploy:

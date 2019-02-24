@@ -4,22 +4,15 @@ using System.Collections.Generic;
 
 namespace Ecwid.Models.Legacy
 {
-    /// <summary>
-    /// List of updated orders
-    /// </summary>
+    /// <inheritdoc />
     public class LegacyUpdatedOrders : List<LegacyUpdatedOrder>
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LegacyUpdatedOrders" /> class.
-        /// </summary>
+        /// <inheritdoc />
         public LegacyUpdatedOrders()
         {
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LegacyUpdatedOrders" /> class.
-        /// </summary>
-        /// <param name="list">The list.</param>
+        /// <inheritdoc />
         public LegacyUpdatedOrders(ICollection<LegacyUpdatedOrder> list)
         {
             if (list != null && list.Count > 0)

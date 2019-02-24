@@ -7,7 +7,7 @@ namespace Ecwid.Test.Services
     internal static class Tools
     {
         /// <summary>
-        /// Timeses the specified action.
+        /// Times the specified action.
         /// </summary>
         /// <param name="count">The count.</param>
         /// <param name="action">The action.</param>

@@ -2,17 +2,10 @@
 
 namespace Ecwid.Legacy
 {
-    /// <summary>
-    /// Settings for Ecwid Legacy Client <see cref="EcwidLegacyClient" />
-    /// </summary>
+    /// <inheritdoc />
     public class EcwidLegacySettings : EcwidSettings
     {
-        /// <summary>
-        /// Gets or sets the API URL. Default is https://app.ecwid.com/api/v1/.
-        /// </summary>
-        /// <value>
-        /// The API URL.
-        /// </value>
+        /// <inheritdoc />
         public override string ApiUrl { get; set; } = "https://app.ecwid.com/api/v1/";
 
         /// <summary>

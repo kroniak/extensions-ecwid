@@ -18,18 +18,10 @@ namespace Ecwid.Legacy
 		DateTime Now { get; }
 	}
 
-	/// <summary>
-	/// Real provider for non test env.
-	/// </summary>
-	/// <seealso cref="ITimeProvider" />
+	/// <inheritdoc />
 	public class RealTimeProvider : ITimeProvider
 	{
-		/// <summary>
-		/// Gets the now.
-		/// </summary>
-		/// <value>
-		/// The now.
-		/// </value>
+		/// <inheritdoc />
 		public DateTime Now => DateTime.Now;
 	}
 }

@@ -20,7 +20,7 @@ namespace Ecwid.Test.Real
         private readonly EcwidCredentials _credentials = new EcwidCredentials(ShopId, Token);
 
         [Fact]
-        public async void CheckOrdersAuthAsyncFail()
+        public async void CheckOrdersAuthAsync_ReturnFalse()
         {
             IEcwidOrdersClient client = new EcwidClient(_credentials)
             {
@@ -37,7 +37,7 @@ namespace Ecwid.Test.Real
         }
 
         [Fact]
-        public async void CheckOrdersTokenAsync()
+        public async void CheckOrdersTokenAsync_ReturnTrue()
         {
             IEcwidOrdersClient client = new EcwidClient(_credentials)
             {
@@ -53,7 +53,7 @@ namespace Ecwid.Test.Real
         }
 
         [Fact]
-        public async void GetOrderAsync()
+        public async void GetOrderAsync_ReturnCorrectNumbers()
         {
             //http://www.mocky.io/v2/57209cae0f0000a208387242 - one order
 
@@ -71,7 +71,7 @@ namespace Ecwid.Test.Real
         }
 
         [Fact]
-        public async void GetOrdersCountAsync()
+        public async void GetOrdersCountAsync_ReturnCorrectOrdersCount()
         {
             IEcwidOrdersClient client = new EcwidClient(_credentials)
             {
@@ -87,7 +87,7 @@ namespace Ecwid.Test.Real
         }
 
         [Fact]
-        public async void UpdateOrderAsync()
+        public async void UpdateOrderAsync_ReturnCorrectUpdatesCount()
         {
             IEcwidOrdersClient client = new EcwidClient(_credentials)
             {
@@ -97,13 +97,13 @@ namespace Ecwid.Test.Real
                 }
             };
 
-            var result = await client.UpdateOrderAsync(new OrderEntry { Email = "test@test.com", OrderNumber = 123 });
+            var result = await client.UpdateOrderAsync(new OrderEntry {Email = "test@test.com", OrderNumber = 123});
 
             Assert.Equal(1, result.UpdateCount);
         }
 
         [Fact]
-        public async void UpdateOrderAsyncFail()
+        public async void UpdateOrderAsync_ReturnBadRequest()
         {
             IEcwidOrdersClient client = new EcwidClient(_credentials)
             {
@@ -113,10 +113,10 @@ namespace Ecwid.Test.Real
                 }
             };
 
-            var exception = await Assert.ThrowsAsync<EcwidHttpException>(() => client.UpdateOrderAsync(new OrderEntry { Email = "test@test.com", OrderNumber = 123 }));
+            var exception = await Assert.ThrowsAsync<EcwidHttpException>(() =>
+                client.UpdateOrderAsync(new OrderEntry {Email = "test@test.com", OrderNumber = 123}));
 
             Assert.Equal(HttpStatusCode.BadRequest, exception.StatusCode);
-            Assert.Equal("Status QUEUED is deprecated, use AWAITING_PAYMENT instead", exception.Message);
         }
     }
 }

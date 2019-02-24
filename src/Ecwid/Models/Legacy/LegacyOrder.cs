@@ -6,9 +6,7 @@ using Newtonsoft.Json;
 
 namespace Ecwid.Models.Legacy
 {
-    /// <summary>
-    /// This object represents information on a whole order.
-    /// </summary>
+    /// <inheritdoc />
     public class LegacyOrder : LegacyBaseOrder
     {
         /// <summary>

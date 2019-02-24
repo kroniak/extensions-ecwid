@@ -9,10 +9,10 @@ namespace Ecwid.Test.Services.Legacy
 {
     [SuppressMessage("ReSharper", "ExceptionNotDocumented")]
     [SuppressMessage("ReSharper", "ExceptionNotDocumentedOptional")]
-    internal abstract class Moqs
+    internal abstract class Mocks
     {
         /// <summary>
-        /// Moqs the responce with one order.
+        /// Mocks the response with one order.
         /// </summary>
         public static LegacyOrderResponse<LegacyOrder> MockLegacyOrderResponseWithOneOrder
             =>
@@ -34,14 +34,14 @@ namespace Ecwid.Test.Services.Legacy
             => new LegacyOrderResponse<LegacyUpdatedOrder> {Count = 1, Total = 10, Orders = MockBaseOrders(1)};
 
         /// <summary>
-        /// Moqs the responce with many order.
+        /// Mocks the response with many order.
         /// </summary>
         public static LegacyOrderResponse<LegacyOrder> MockLegacyOrderResponseWithManyOrder(int count = 10)
             =>
                 new LegacyOrderResponse<LegacyOrder>
                 {
                     Count = count,
-                    Total = count*2,
+                    Total = count * 2,
                     NextUrl = null,
                     Orders = MockLegacyOrders(count)
                 };
@@ -57,13 +57,13 @@ namespace Ecwid.Test.Services.Legacy
                 new LegacyOrderResponse<LegacyOrder>
                 {
                     Count = count,
-                    Total = count*2,
+                    Total = count * 2,
                     NextUrl = nextUrl,
                     Orders = MockLegacyOrders(count)
                 };
 
         /// <summary>
-        /// Moqs the orders.
+        /// Mocks the orders.
         /// </summary>
         /// <param name="count">The count.</param>
         private static IList<LegacyOrder> MockLegacyOrders(int count)

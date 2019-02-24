@@ -5,10 +5,7 @@ using Newtonsoft.Json;
 
 namespace Ecwid.Models.Legacy
 {
-    /// <summary>
-    /// This object represents purchased egood.
-    /// </summary>
-    /// <seealso cref="LegacyOrderItemOrderFile" />
+    /// <inheritdoc />
     public class LegacyOrderItemProductFile : LegacyOrderItemOrderFile
     {
         /// <summary>

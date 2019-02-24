@@ -19,7 +19,7 @@ namespace Ecwid.Test.Real
         private readonly EcwidLegacyCredentials _credentials = new EcwidLegacyCredentials(ShopId, Token, Token);
 
         [Fact]
-        public async void GetCategoriesAsync()
+        public async void GetCategoriesAsync_ReturnCorrectList()
         {
             var client = new EcwidLegacyClient(_credentials)
             {
@@ -30,16 +30,14 @@ namespace Ecwid.Test.Real
             };
 
             var result = await client.GetCategoriesAsync();
-            Assert.NotEmpty(result);
             Assert.Equal(15, result.Count);
 
             result = await client.GetCategoriesAsync(1);
-            Assert.NotEmpty(result);
             Assert.Equal(15, result.Count);
         }
 
         [Fact]
-        public async void GetCategoriesAsync0()
+        public async void GetCategoriesAsync0_ReturnSingle()
         {
             var client = new EcwidLegacyClient(_credentials)
             {
@@ -51,12 +49,11 @@ namespace Ecwid.Test.Real
 
             var result = await client.GetCategoriesAsync(0);
 
-            Assert.NotEmpty(result);
-            Assert.Equal(1, result.Count);
+            Assert.Single(result);
         }
 
         [Fact]
-        public async void GetCategoryAsync()
+        public async void GetCategoryAsync_ReturnCorrectList()
         {
             var client = new EcwidLegacyClient(_credentials)
             {
@@ -68,7 +65,6 @@ namespace Ecwid.Test.Real
 
             var result = await client.GetCategoryAsync(1);
 
-            Assert.NotNull(result);
             Assert.NotEmpty(result.Subcategories);
             Assert.NotEmpty(result.Products);
         }

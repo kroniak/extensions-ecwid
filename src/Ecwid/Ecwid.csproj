@@ -7,7 +7,6 @@
     <Version>1.0.0-rc3</Version>
     <Authors>me@kroniak.net</Authors>
     <Description>C# services and models classes to Ecwid API v1 and v3</Description>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/kroniak/extensions-ecwid/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/kroniak/extensions-ecwid</PackageProjectUrl>
     <PackageIconUrl>https://dj925myfyz5v.cloudfront.net/favicon_v2.ico</PackageIconUrl>
     <RepositoryUrl>https://github.com/kroniak/extensions-ecwid.git</RepositoryUrl>
@@ -15,6 +14,8 @@
     <PackageTags>ecwid api client rest async</PackageTags>
     <Company>kroniak</Company>
     <Copyright>Copyright ©2016 by me@kroniak.net</Copyright>
+    <Title>Ecwid</Title>
+    <PackageVersion>1.0.0-rc4</PackageVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -26,7 +27,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Flurl.Http" Version="1.1.3" />
+    <PackageReference Include="Flurl.Http" Version="2.4.1" />
   </ItemGroup>
 
 </Project>

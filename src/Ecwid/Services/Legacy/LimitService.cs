@@ -48,7 +48,7 @@ namespace Ecwid.Legacy
         }
 
         /// <summary>
-        /// Gets the areement and tick. Return true if agreement was got and tick was success.
+        /// Gets the agreement and tick. Return true if agreement was got and tick was success.
         /// </summary>
         public bool Tick()
         {
@@ -72,7 +72,7 @@ namespace Ecwid.Legacy
         }
 
         /// <summary>
-        /// Gets the agreement. Return true if all limits is not exseed.
+        /// Gets the agreement. Return true if all limits is not exceed.
         /// </summary>
         private bool GetAgreement()
         {

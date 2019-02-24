@@ -5,17 +5,10 @@ using System.Net;
 
 namespace Ecwid
 {
-    /// <summary>
-    /// Throws when Ecwid API responses with status other than 200.
-    /// </summary>
+    /// <inheritdoc />
     public class EcwidHttpException : EcwidException
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="EcwidHttpException" /> class.
-        /// </summary>
-        /// <param name="message">The message.</param>
-        /// <param name="statusCode">The status code.</param>
-        /// <param name="innerException">The exception.</param>
+        /// <inheritdoc />
         internal EcwidHttpException(string message, HttpStatusCode? statusCode, Exception innerException)
             : base(message, innerException)
         {

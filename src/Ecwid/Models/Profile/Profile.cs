@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 namespace Ecwid.Models
 {
     /// <summary>
-    /// Store settings and informations.
+    /// Store settings and information.
     /// </summary>
     public class Profile
     {

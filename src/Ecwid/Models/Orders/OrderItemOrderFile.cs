@@ -4,9 +4,7 @@ using Newtonsoft.Json;
 
 namespace Ecwid.Models
 {
-    /// <summary>
-    /// This object represents file attached by customer to purchased product on checkout.
-    /// </summary>
+    /// <inheritdoc />
     public class OrderItemOptionFile : BaseEntity
     {
         /// <summary>

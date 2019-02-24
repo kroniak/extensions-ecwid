@@ -7,11 +7,7 @@ using Ecwid.Models;
 
 namespace Ecwid
 {
-    /// <summary>
-    /// Orders query builder for Ecwid client.
-    /// </summary>
-    /// <typeparam name="TOrder">The type of the order.</typeparam>
-    /// <typeparam name="TUpdateResponse">The type of the update response.</typeparam>
+    /// <inheritdoc />
     public class OrdersQueryBuilder<TOrder, TUpdateResponse> : BaseQueryBuilder
         where TOrder : BaseOrder
         where TUpdateResponse : class

@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
-using Ecwid.Models;
 using Newtonsoft.Json;
 
-namespace Ecwid
+namespace Ecwid.Models
 {
     /// <summary>
     /// The root object that is returned by the Discount Coupon search API.

@@ -86,7 +86,7 @@ namespace Ecwid.Tools
         }
 
         /// <summary>
-        /// Statuseses validate.
+        /// Statuses validate.
         /// </summary>
         /// <param name="statuses">The statuses.</param>
         /// <param name="statusesAvailable">The statuses available.</param>
@@ -180,7 +180,7 @@ namespace Ecwid.Tools
 
             if (new Regex(@"^\d{4}-\d{2}-\d{2}").IsMatch(date))
             {
-                if (!DateTime.TryParse(date, out var dt))
+                if (!DateTime.TryParse(date, out _))
                     throw new ArgumentException("Date string is invalid.", nameof(date));
             }
             else

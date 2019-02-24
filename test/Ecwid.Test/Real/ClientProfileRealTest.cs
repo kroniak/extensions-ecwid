@@ -23,7 +23,7 @@ namespace Ecwid.Test.Real
         }
 
         [Fact]
-        public async void GetProfileAsync()
+        public async void GetProfileAsync_ReturnNotNull()
         {
             IEcwidProfileClient client = new EcwidClient(_credentials)
             {
@@ -39,7 +39,7 @@ namespace Ecwid.Test.Real
         }
 
         [Fact]
-        public async void GetProfileRealAsync()
+        public async void GetProfileRealAsync_ReturnNotNull()
         {
             IEcwidProfileClient client = new EcwidClient(_credentials)
             {
