@@ -44,7 +44,7 @@ namespace Ecwid.Test.Services
         #region ApiExceptions
 
         [Fact]
-        public async void GetApiResponseAsync400Exception()
+        public async void GetApiResponseAsync_Return400Exception()
         {
             _httpTest
                 .RespondWithJson("{\"errorMessage\":\"\nStatus QUEUED is deprecated, use AWAITING_PAYMENT instead.\"}",
@@ -64,13 +64,13 @@ namespace Ecwid.Test.Services
         #region Readme and Wiki tests
 
         [Fact]
-        public async void ReadmeTest()
+        public async void ReadmeTest_ReturnCorrectList()
         {
             const int someShopId = 123;
             const string someToken = "4843094390fdskldgsfkldkljKLLKklfdkldsffds";
 
             _httpTest
-                .RespondWithJson(Moqs.MockSearchResultWithManyOrder());
+                .RespondWithJson(Mocks.MockSearchResultWithManyOrder());
 
             var client = new EcwidClient();
             var result = await client.Configure(someShopId, someToken).Orders
@@ -87,7 +87,7 @@ namespace Ecwid.Test.Services
         #region Default
 
         [Fact]
-        public void DefaultCreate()
+        public void DefaultCreate_CorrectSettingCreated()
         {
             var settings = _defaultClient.Settings;
             var credentials = _defaultClient.Credentials;
@@ -97,7 +97,7 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public void DefaultChangeApiUrl()
+        public void DefaultChangeApiUrl_ApiUrlChanged()
         {
             var settings = new EcwidSettings {ApiUrl = "https://app.ecwid.com/api/v1/"};
             _defaultClient.Settings = settings;
@@ -108,7 +108,7 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public void DefaultConfigure()
+        public void DefaultConfigure_CorrectSetSettings()
         {
             var result = _defaultClient.Configure(ShopId, Token);
 
@@ -123,25 +123,25 @@ namespace Ecwid.Test.Services
         #region Orders
 
         [Fact]
-        public async void OrdersUrlException()
+        public async void OrdersUrl_Exception_ThrowsAsync()
             =>
                 await
                     Assert.ThrowsAsync<EcwidConfigException>(
                         () => _defaultClient.CheckOrdersTokenAsync());
 
         [Fact]
-        public void OrdersGetEmpty()
+        public void OrdersGet_ReturnNotNull()
         {
             var queryBuilder = _client.Orders;
             Assert.NotNull(queryBuilder);
         }
 
         [Fact]
-        public async void OrdersCheckOrdersAuthAsync()
+        public async void OrdersCheckOrdersAuthAsync_ReturnFalse()
         {
             _httpTest
-                .RespondWithJson(Moqs.MockSearchResultWithLimit1)
-                .RespondWithJson(Moqs.MockSearchResultWithLimit1, 403);
+                .RespondWithJson(Mocks.MockSearchResultWithLimit1)
+                .RespondWithJson(Mocks.MockSearchResultWithLimit1, 403);
 
             var result = await _client.CheckOrdersTokenAsync();
             Assert.True(result);
@@ -155,7 +155,7 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void OrdersCheckOrdersAuthAsyncException()
+        public async void OrdersCheckOrdersAuthAsync_Exception()
         {
             _httpTest
                 .SimulateTimeout()
@@ -171,16 +171,16 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void GetOrderAsyncFail() => await
+        public async void GetOrderAsync_Exception() => await
             Assert.ThrowsAsync<ArgumentOutOfRangeException>(
                 async () => await _client.GetOrderAsync(0));
 
         [Fact]
-        public async void GetOrderAsyncNull()
+        public async void GetOrderAsync_ReturnNull()
         {
             _httpTest
-                .RespondWithJson(Moqs.MockSearchResultZeroResult)
-                .RespondWithJson(Moqs.MockSearchResultZeroResult);
+                .RespondWithJson(Mocks.MockSearchResultZeroResult)
+                .RespondWithJson(Mocks.MockSearchResultZeroResult);
 
             var result = await _client.GetOrderAsync(1);
 
@@ -191,11 +191,11 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void OrdersGetOrdersCountAsync()
+        public async void GetOrdersCountAsync_ReturnZero()
         {
             _httpTest
-                .RespondWithJson(Moqs.MockSearchResultWithLimit1)
-                .RespondWithJson(Moqs.MockSearchResultZeroResult);
+                .RespondWithJson(Mocks.MockSearchResultWithLimit1)
+                .RespondWithJson(Mocks.MockSearchResultZeroResult);
 
             var result = await _client.GetOrdersCountAsync();
             Assert.Equal(100, result);
@@ -209,11 +209,11 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void OrdersGetNewOrdersAsync()
+        public async void GetNewOrdersAsync_ReturnNotEmpty()
         {
             _httpTest
-                .RespondWithJson(Moqs.MockSearchResultWithOneOrder)
-                .RespondWithJson(Moqs.MockSearchResultWithOneOrder);
+                .RespondWithJson(Mocks.MockSearchResultWithOneOrder)
+                .RespondWithJson(Mocks.MockSearchResultWithOneOrder);
 
             var result = await _client.GetNewOrdersAsync();
             Assert.NotEmpty(result);
@@ -224,11 +224,11 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void OrdersGetIncompleteOrdersAsync()
+        public async void GetIncompleteOrdersAsync_ReturnNotEmpty()
         {
             _httpTest
-                .RespondWithJson(Moqs.MockSearchResultWithOneOrder)
-                .RespondWithJson(Moqs.MockSearchResultWithOneOrder);
+                .RespondWithJson(Mocks.MockSearchResultWithOneOrder)
+                .RespondWithJson(Mocks.MockSearchResultWithOneOrder);
 
             var result = await _client.GetIncompleteOrdersAsync();
             Assert.NotEmpty(result);
@@ -239,11 +239,11 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void OrdersGetNonPaidOrdersAsync()
+        public async void GetNonPaidOrdersAsync_ReturnNotEmpty()
         {
             _httpTest
-                .RespondWithJson(Moqs.MockSearchResultWithOneOrder)
-                .RespondWithJson(Moqs.MockSearchResultWithOneOrder);
+                .RespondWithJson(Mocks.MockSearchResultWithOneOrder)
+                .RespondWithJson(Mocks.MockSearchResultWithOneOrder);
 
             var result = await _client.GetNonPaidOrdersAsync();
             Assert.NotEmpty(result);
@@ -254,11 +254,11 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void OrdersGetPaidNotShippedOrdersAsync()
+        public async void GetPaidNotShippedOrdersAsync_ReturnNotEmpty()
         {
             _httpTest
-                .RespondWithJson(Moqs.MockSearchResultWithOneOrder)
-                .RespondWithJson(Moqs.MockSearchResultWithOneOrder);
+                .RespondWithJson(Mocks.MockSearchResultWithOneOrder)
+                .RespondWithJson(Mocks.MockSearchResultWithOneOrder);
 
             var result = await _client.GetPaidNotShippedOrdersAsync();
             Assert.NotEmpty(result);
@@ -269,11 +269,11 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void OrdersGetShippedOrdersAsync()
+        public async void GetShippedOrdersAsync_ReturnNotEmpty()
         {
             _httpTest
-                .RespondWithJson(Moqs.MockSearchResultWithOneOrder)
-                .RespondWithJson(Moqs.MockSearchResultWithOneOrder);
+                .RespondWithJson(Mocks.MockSearchResultWithOneOrder)
+                .RespondWithJson(Mocks.MockSearchResultWithOneOrder);
 
             var result = await _client.GetShippedOrdersAsync();
             Assert.NotEmpty(result);
@@ -284,16 +284,16 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void OrdersGetOrdersAsyncQueryMultiPagesResult()
+        public async void OrdersGetOrdersAsyncQueryMultiPagesResult_ReturnNotEmpty()
         {
             const int count = 100;
             const string query = "paymentStatus=paid";
 
             _httpTest
-                .RespondWithJson(Moqs.MockSearchResultWithManyOrderAndPages(count, count * 0, count))
-                .RespondWithJson(Moqs.MockSearchResultWithManyOrderAndPages(count, count * 1, count))
-                .RespondWithJson(Moqs.MockSearchResultWithManyOrderAndPages(count, count * 2, count))
-                .RespondWithJson(Moqs.MockSearchResultWithManyOrderAndPages(count, count * 3, 0));
+                .RespondWithJson(Mocks.MockSearchResultWithManyOrderAndPages(count, count * 0, count))
+                .RespondWithJson(Mocks.MockSearchResultWithManyOrderAndPages(count, count * 1, count))
+                .RespondWithJson(Mocks.MockSearchResultWithManyOrderAndPages(count, count * 2, count))
+                .RespondWithJson(Mocks.MockSearchResultWithManyOrderAndPages(count, count * 3, 0));
 
             var result = await _client.GetOrdersAsync(new {paymentStatus = "paid"});
 
@@ -309,13 +309,13 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void OrdersGetOrdersAsyncQueryOnePagesResult()
+        public async void OrdersGetOrdersAsyncQueryOnePagesResult_ReturnNotEmpty()
         {
             const int count = 100;
             const string query = "limit=100&paymentStatus=paid";
 
             _httpTest
-                .RespondWithJson(Moqs.MockSearchResultWithManyOrderAndPages(count, 0, count));
+                .RespondWithJson(Mocks.MockSearchResultWithManyOrderAndPages(count, 0, count));
 
             var result = await _client.GetOrdersAsync(new {limit = count, paymentStatus = "paid"});
 
@@ -330,7 +330,7 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void UpdateOrderAsync()
+        public async void UpdateOrderAsync_ReturnNotEmptyUpdateCount()
         {
             _httpTest
                 .RespondWithJson(new UpdateStatus {UpdateCount = 1});
@@ -345,7 +345,7 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void UpdateOrderAsyncFail()
+        public async void UpdateOrderAsync_Exception()
         {
             _httpTest
                 .RespondWithJson("Status QUEUED is deprecated, use AWAITING_PAYMENT instead", 400);
@@ -357,7 +357,7 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void DeleteOrderAsync()
+        public async void DeleteOrderAsync_ReturnNotEmpty()
         {
             _httpTest
                 .RespondWithJson(new DeleteStatus {DeleteCount = 1});
@@ -372,7 +372,7 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void DeleteOrderAsyncFail()
+        public async void DeleteOrderAsync_Exception()
         {
             _httpTest
                 .RespondWithJson("The order with given number is not found", 404);
@@ -384,7 +384,7 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void DeleteOrderAsyncFail404()
+        public async void DeleteOrderAsync_ReturnBadRequest()
         {
             _httpTest
                 .RespondWithJson("The order with given number is not found", 404);
@@ -404,11 +404,11 @@ namespace Ecwid.Test.Services
         #region Profile
 
         [Fact]
-        public async void GetProfileException()
+        public async void GetProfileAsync_Exception()
             => await Assert.ThrowsAsync<EcwidConfigException>(() => _defaultClient.GetProfileAsync());
 
         [Fact]
-        public async void UpdateProfileAsync()
+        public async void UpdateProfileAsync_ReturnTrue()
         {
             _httpTest
                 .RespondWithJson(new UpdateStatus {Success = true, UpdateCount = 1});
@@ -424,11 +424,11 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void UpdateProfileFail()
+        public async void UpdateProfile_Exception()
             => await Assert.ThrowsAsync<EcwidHttpException>(async () => await _client.UpdateProfileAsync(null));
 
         [Fact]
-        public async void UpdateProfileAsyncHttpExceptions()
+        public async void UpdateProfileAsyncHttp_Exceptions()
         {
             _httpTest
                 .RespondWithJson(new UpdateStatus {Success = false, UpdateCount = 0}, 400);
@@ -447,7 +447,7 @@ namespace Ecwid.Test.Services
         #region DefaultLegacy
 
         [Fact]
-        public void DefaultLegacyCreate()
+        public void DefaultLegacyCreate_CorrectSettings()
         {
             var settings = _defaultLegacyClient.Settings;
             var credentials = _defaultLegacyClient.Credentials;
@@ -459,7 +459,7 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public void DefaultLegacyChangeApiUrl()
+        public void DefaultLegacy_CorrectChangeApiUrl()
         {
             var settings = new EcwidLegacySettings {ApiUrl = "https://app.ecwid.com/api/v1/"};
             _defaultLegacyClient.Settings = settings;
@@ -470,7 +470,7 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public void DefaultLegacyConfigureShop()
+        public void DefaultLegacy_CorrectConfigureShop()
         {
             var client = _defaultLegacyClient.Configure(ShopId, Token, Token);
             var client2 = _defaultLegacyClient.Configure(new EcwidLegacyCredentials(ShopId, Token, Token));
@@ -490,21 +490,21 @@ namespace Ecwid.Test.Services
         #region LegacyProducts
 
         [Fact]
-        public async void LegacyCategoriesUrlException()
+        public async void GetCategoriesAsync_LegacyCategoriesUrl_Exception()
             =>
                 await
                     Assert.ThrowsAsync<EcwidConfigException>(
                         () => _defaultLegacyClient.GetCategoriesAsync());
 
         [Fact]
-        public async void GetCategoryAsyncException()
+        public async void GetCategoryAsync_Exception()
             =>
                 await
                     Assert.ThrowsAsync<ArgumentOutOfRangeException>(
                         () => _legacyClient.GetCategoryAsync(-1));
 
         [Fact]
-        public async void GetCategoryAsync404()
+        public async void GetCategoryAsync_404()
         {
             _httpTest
                 .RespondWith("", 404);
@@ -523,14 +523,14 @@ namespace Ecwid.Test.Services
         #region LegacyOrders
 
         [Fact]
-        public async void LegacyOrdersOrdersUrlException()
+        public async void LegacyOrdersOrdersUrl_Exception()
             =>
                 await
                     Assert.ThrowsAsync<EcwidConfigException>(
                         () => _defaultLegacyClient.CheckOrdersTokenAsync());
 
         [Fact]
-        public async void LegacyOrdersCheckOrdersTokenAsync()
+        public async void LegacyOrdersCheckOrdersTokenAsync_ReturnTrue()
         {
             _httpTest
                 .RespondWithJson(new {count = 0, total = 0, order = "[]"});
@@ -545,7 +545,7 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void LegacyOrdersCheckOrdersAuthAsyncFail()
+        public async void LegacyOrdersCheckOrdersAuthAsync_ReturnFalse()
         {
             _httpTest
                 .RespondWithJson(new {count = 0, total = 0, order = "[]"}, 403);
@@ -560,7 +560,7 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void LegacyOrdersGetOrdersCountAsync()
+        public async void LegacyOrdersGetOrdersCountAsync_ReturnCorrectList()
         {
             _httpTest
                 .RespondWithJson(new {count = 0, total = 10, order = "[]"});
@@ -575,12 +575,12 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void LegacyOrdersGetNewOrdersAsync()
+        public async void LegacyOrdersGetNewOrdersAsync_ReturnSingleList()
         {
-            var responce = Legacy.Moqs.MockLegacyOrderResponseWithOneOrder;
+            var response = Legacy.Mocks.MockLegacyOrderResponseWithOneOrder;
 
             _httpTest
-                .RespondWithJson(responce);
+                .RespondWithJson(response);
 
             var result = await _legacyClient.GetNewOrdersAsync();
 
@@ -592,12 +592,12 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void LegacyOrdersGetNonPaidOrdersAsync()
+        public async void LegacyOrdersGetNonPaidOrdersAsync_ReturnSingleList()
         {
-            var responce = Legacy.Moqs.MockLegacyOrderResponseWithOneOrder;
+            var response = Legacy.Mocks.MockLegacyOrderResponseWithOneOrder;
 
             _httpTest
-                .RespondWithJson(responce);
+                .RespondWithJson(response);
 
             var result = await _legacyClient.GetNonPaidOrdersAsync();
 
@@ -609,12 +609,12 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void LegacyOrdersGetPaidNotShippedOrdersAsync()
+        public async void LegacyOrdersGetPaidNotShippedOrdersAsync_ReturnSingleList()
         {
-            var responce = Legacy.Moqs.MockLegacyOrderResponseWithOneOrder;
+            var response = Legacy.Mocks.MockLegacyOrderResponseWithOneOrder;
 
             _httpTest
-                .RespondWithJson(responce);
+                .RespondWithJson(response);
 
             var result = await _legacyClient.GetPaidNotShippedOrdersAsync();
 
@@ -626,12 +626,12 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void LegacyOrdersGetShippedOrdersAsync()
+        public async void LegacyOrdersGetShippedOrdersAsync_ReturnSingle()
         {
-            var responce = Legacy.Moqs.MockLegacyOrderResponseWithOneOrder;
+            var response = Legacy.Mocks.MockLegacyOrderResponseWithOneOrder;
 
             _httpTest
-                .RespondWithJson(responce);
+                .RespondWithJson(response);
 
             var result = await _legacyClient.GetShippedOrdersAsync();
 
@@ -643,16 +643,16 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void LegacyOrdersGetOrdersAsyncQueryMultiPagesResult()
+        public async void LegacyOrdersGetOrdersAsyncQueryMultiPages_ReturnCorrectResult()
         {
             const int count = 200;
             const string query = "statuses=paid";
 
             _httpTest
                 .RespondWithJson(
-                    Legacy.Moqs.MockLegacyOrderResponseWithManyOrderAndPages(
+                    Legacy.Mocks.MockLegacyOrderResponseWithManyOrderAndPages(
                         $"{_checkOrdersLegacyUrl}&{query}&offset={count}"))
-                .RespondWithJson(Legacy.Moqs.MockLegacyOrderResponseWithManyOrder(count));
+                .RespondWithJson(Legacy.Mocks.MockLegacyOrderResponseWithManyOrder(count));
 
             var result = await _legacyClient.GetOrdersAsync(new {statuses = "paid"});
 
@@ -668,11 +668,11 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void LegacyOrdersGetOrdersAsyncQueryMultiPagesResultOnePage()
+        public async void LegacyOrdersGetOrdersAsyncQueryMultiPagesResultOnePage_ReturnCorrectResult()
         {
             _httpTest
                 .RespondWithJson(
-                    Legacy.Moqs.MockLegacyOrderResponseWithManyOrderAndPages(
+                    Legacy.Mocks.MockLegacyOrderResponseWithManyOrderAndPages(
                         $"{_checkOrdersLegacyUrl}&limit=5&offset=5"));
 
             var result = await _legacyClient.Orders.Limit(5).GetAsync();
@@ -687,7 +687,7 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void LegacyOrdersUpdateAsyncNullBuilderFail()
+        public async void LegacyOrdersUpdateAsyncNullBuilder_Exception()
         {
             await
                 Assert.ThrowsAsync<EcwidConfigException>(
@@ -702,11 +702,11 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void UpdateAsyncNullStringsFail() => await Assert.ThrowsAsync<EcwidConfigException>(async ()
+        public async void UpdateAsyncNullStrings_Exception() => await Assert.ThrowsAsync<EcwidConfigException>(async ()
             => await _legacyClient.Orders.Order(1).UpdateAsync("", "", ""));
 
         [Fact]
-        public async void LegacyOrdersUpdateAsyncNullResult()
+        public async void LegacyOrdersUpdateAsync_ReturnEmptyList()
         {
             _httpTest
                 .RespondWithJson(new {count = 0, total = 10, order = "[]"});
@@ -722,10 +722,10 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void LegacyOrdersUpdateAsyncResult()
+        public async void LegacyOrdersUpdateAsync_ReturnSingle()
         {
             _httpTest
-                .RespondWithJson(Legacy.Moqs.MockLegacyOrderResponseForUpdate);
+                .RespondWithJson(Legacy.Mocks.MockLegacyOrderResponseForUpdate);
 
             var result = await _legacyClient.Orders.Order(1).UpdateAsync("PAID", "PROCESSING", "test_code");
 
@@ -738,10 +738,10 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void LegacyOrdersUpdateAsyncException()
+        public async void LegacyOrdersUpdateAsync_Exception()
         {
             _httpTest
-                .RespondWithJson(Legacy.Moqs.MockLegacyOrderResponseForUpdate, 400);
+                .RespondWithJson(Legacy.Mocks.MockLegacyOrderResponseForUpdate, 400);
 
             await
                 Assert.ThrowsAsync<EcwidHttpException>(
@@ -758,11 +758,11 @@ namespace Ecwid.Test.Services
         #region DiscountCoupons
 
         [Fact]
-        public async void DiscountCouponsCheckDiscountCouponsAuthAsync()
+        public async void DiscountCouponsCheckDiscountCouponsAuthAsync_ReturnCorrectResult()
         {
             _httpTest
-                .RespondWithJson(Moqs.MockSearchResultWithLimit1)
-                .RespondWithJson(Moqs.MockSearchResultWithLimit1, 403);
+                .RespondWithJson(Mocks.MockSearchResultWithLimit1)
+                .RespondWithJson(Mocks.MockSearchResultWithLimit1, 403);
 
             var result = await _client.CheckDiscountCouponsTokenAsync();
             Assert.True(result);
@@ -776,17 +776,17 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void GetDiscountCouponAsyncFail() => await
+        public async void GetDiscountCouponAsync_Exception() => await
             Assert.ThrowsAsync<ArgumentNullException>(
                 async () => await _client.GetDiscountCouponAsync(null));
 
 
         [Fact]
-        public async void GetDiscountCouponsAsyncNull()
+        public async void GetDiscountCouponsAsync_ReturnNull()
         {
             _httpTest
-                .RespondWithJson(Moqs.MockSearchResultZeroResult)
-                .RespondWithJson(Moqs.MockSearchResultZeroResult);
+                .RespondWithJson(Mocks.MockSearchResultZeroResult)
+                .RespondWithJson(Mocks.MockSearchResultZeroResult);
 
             const string couponIdentifier = "abc123";
 
@@ -800,16 +800,16 @@ namespace Ecwid.Test.Services
 
 
         [Fact]
-        public async void DiscountCouponsGetDiscountCouponsAsyncQueryMultiPagesResult()
+        public async void DiscountCouponsGetDiscountCouponsAsyncQueryMultiPages_ReturnCorrectResult()
         {
             const int count = 100;
             const string query = "discount_type=ABS_AND_SHIPPING";
 
             _httpTest
-                .RespondWithJson(Moqs.MockSearchResultWithManyDiscountCouponsAndPages(count, count * 0, count))
-                .RespondWithJson(Moqs.MockSearchResultWithManyDiscountCouponsAndPages(count, count * 1, count))
-                .RespondWithJson(Moqs.MockSearchResultWithManyDiscountCouponsAndPages(count, count * 2, count))
-                .RespondWithJson(Moqs.MockSearchResultWithManyDiscountCouponsAndPages(count, count * 3, 0));
+                .RespondWithJson(Mocks.MockSearchResultWithManyDiscountCouponsAndPages(count, count * 0, count))
+                .RespondWithJson(Mocks.MockSearchResultWithManyDiscountCouponsAndPages(count, count * 1, count))
+                .RespondWithJson(Mocks.MockSearchResultWithManyDiscountCouponsAndPages(count, count * 2, count))
+                .RespondWithJson(Mocks.MockSearchResultWithManyDiscountCouponsAndPages(count, count * 3, 0));
 
             var result = await _client.GetDiscountCouponsAsync(new {discount_type = "ABS_AND_SHIPPING"});
 
@@ -825,13 +825,13 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void DiscountCouponsGetDiscountCouponsAsyncQueryOnePagesResult()
+        public async void DiscountCouponsGetDiscountCouponsAsyncQueryOnePages_ReturnCorrectResult()
         {
             const int count = 100;
             const string query = "limit=100&paymentStatus=paid";
 
             _httpTest
-                .RespondWithJson(Moqs.MockSearchResultWithManyDiscountCouponsAndPages(count, 0, count));
+                .RespondWithJson(Mocks.MockSearchResultWithManyDiscountCouponsAndPages(count, 0, count));
 
             var result = await _client.GetDiscountCouponsAsync(new {limit = count, paymentStatus = "paid"});
 
@@ -846,7 +846,7 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void CreateDiscountCouponAsync()
+        public async void CreateDiscountCouponAsync_ReturnCorrectResult()
         {
             const long expectedId = 1223423459837;
             _httpTest.RespondWithJson(new DiscountCouponCreateStatus
@@ -869,7 +869,7 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void UpdateDiscountCouponAsync()
+        public async void UpdateDiscountCouponAsync_ReturnCorrectResult()
         {
             _httpTest
                 .RespondWithJson(new UpdateStatus {UpdateCount = 1});
@@ -890,7 +890,7 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void UpdateDiscountCouponAsyncFail()
+        public async void UpdateDiscountCouponAsync_Exception()
         {
             _httpTest
                 .RespondWithJson("Status QUEUED is deprecated, use AWAITING_PAYMENT instead", 400);
@@ -903,7 +903,7 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void DeleteDiscountCouponAsync()
+        public async void DeleteDiscountCouponAsync_ReturnCorrectResult()
         {
             _httpTest
                 .RespondWithJson(new DeleteStatus {DeleteCount = 1});
@@ -924,7 +924,7 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void DeleteDiscountCouponAsyncFail404()
+        public async void DeleteDiscountCouponAsync_Return404()
         {
             _httpTest
                 .RespondWithJson("The DiscountCoupon with given number is not found", 404);

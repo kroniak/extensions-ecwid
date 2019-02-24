@@ -26,7 +26,7 @@ namespace Ecwid.Test.Real
         /// Checks the orders authentication asynchronous fail.
         /// </summary>
         [Fact]
-        public async void CheckOrdersAuthAsyncFail()
+        public async void CheckOrdersAuthAsync_ReturnFalse()
         {
             var client = new EcwidLegacyClient(_credentials)
             {
@@ -46,7 +46,7 @@ namespace Ecwid.Test.Real
         /// Checks the orders authentication asynchronous pass.
         /// </summary>
         [Fact]
-        public async void CheckOrdersTokenAsync()
+        public async void CheckOrdersTokenAsync_ReturnTrue()
         {
             var client = new EcwidLegacyClient(_credentials)
             {
@@ -65,7 +65,7 @@ namespace Ecwid.Test.Real
         /// Gets the new orders asynchronous pass.
         /// </summary>
         [Fact]
-        public async void GetNewOrdersAsync()
+        public async void GetNewOrdersAsync__ReturnSingleResult()
         {
             var client = new EcwidLegacyClient(_credentials)
             {
@@ -85,7 +85,7 @@ namespace Ecwid.Test.Real
         /// Gets the non paid orders asynchronous pass.
         /// </summary>
         [Fact]
-        public async void GetNonPaidOrdersAsync()
+        public async void GetNonPaidOrdersAsync_ReturnSingleResult()
         {
             var client = new EcwidLegacyClient(_credentials)
             {
@@ -105,7 +105,7 @@ namespace Ecwid.Test.Real
         /// Gets the orders asynchronous multi threading pass.
         /// </summary>
         [Fact]
-        public void GetOrdersAsyncMultiThreading()
+        public void GetOrdersAsyncMultiThreading_ReturnCorrectList()
         {
             var orders = new List<LegacyOrder>();
             var tasks = new List<Task<List<LegacyOrder>>>();
@@ -130,7 +130,6 @@ namespace Ecwid.Test.Real
             Task.WaitAll(tasks.ToArray());
             tasks.ForEach(t => { orders.AddRange(t.Result); });
 
-            Assert.NotEmpty(orders);
             Assert.Equal(100, orders.Count);
         }
 
@@ -138,7 +137,7 @@ namespace Ecwid.Test.Real
         /// Gets the orders asynchronous query builder multi pages result pass.
         /// </summary>
         [Fact]
-        public async void GetOrdersAsyncQueryBuilderMultiPagesResult()
+        public async void GetOrdersAsyncQueryBuilderMultiPagesResult_ReturnCorrectList()
         {
             var client = new EcwidLegacyClient(_credentials)
             {
@@ -151,7 +150,6 @@ namespace Ecwid.Test.Real
 
             var result = await client.Orders.Order(5).GetAsync();
 
-            Assert.NotEmpty(result);
             Assert.Equal(2, result.Count);
         }
 
@@ -159,7 +157,7 @@ namespace Ecwid.Test.Real
         /// Gets the orders asynchronous query multi pages result pass.
         /// </summary>
         [Fact]
-        public async void GetOrdersAsyncQueryMultiPagesResult()
+        public async void GetOrdersAsyncQueryMultiPagesResult_ReturnCorrectList()
         {
             var client = new EcwidLegacyClient(_credentials)
             {
@@ -172,7 +170,6 @@ namespace Ecwid.Test.Real
 
             var result = await client.GetOrdersAsync(new {statuses = "paid"});
 
-            Assert.NotEmpty(result);
             Assert.Equal(2, result.Count);
         }
 
@@ -180,7 +177,7 @@ namespace Ecwid.Test.Real
         /// Gets the orders asynchronous query multi pages result cancellation pass.
         /// </summary>
         [Fact]
-        public void GetOrdersAsyncQueryMultiPagesResultCancellation()
+        public void GetOrdersAsyncQueryMultiPagesResultCancellation_Exception()
         {
             var client = new EcwidLegacyClient(_credentials)
             {
@@ -208,7 +205,7 @@ namespace Ecwid.Test.Real
         /// Gets the orders count asynchronous pass.
         /// </summary>
         [Fact]
-        public async void GetOrdersCountAsync()
+        public async void GetOrdersCountAsync_ReturnCorrectList()
         {
             var client = new EcwidLegacyClient(_credentials)
             {
@@ -227,7 +224,7 @@ namespace Ecwid.Test.Real
         /// Gets the paid not shipped orders asynchronous pass.
         /// </summary>
         [Fact]
-        public async void GetPaidNotShippedOrdersAsync()
+        public async void GetPaidNotShippedOrdersAsync_ReturnSingleResult()
         {
             var client = new EcwidLegacyClient(_credentials)
             {
@@ -247,7 +244,7 @@ namespace Ecwid.Test.Real
         /// Gets the shipped not delivered orders asynchronous pass.
         /// </summary>
         [Fact]
-        public async void GetShippedOrdersAsync()
+        public async void GetShippedOrdersAsync_ReturnSingleResult()
         {
             var client = new EcwidLegacyClient(_credentials)
             {

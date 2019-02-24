@@ -156,7 +156,7 @@ namespace Ecwid
 
             var result = response.Orders?.ToList() ?? new List<OrderEntry>();
 
-            // return if responce is null or response is full
+            // return if response is null or response is full
             if (result.Count == 0 || response.Total == response.Count)
                 return result;
 

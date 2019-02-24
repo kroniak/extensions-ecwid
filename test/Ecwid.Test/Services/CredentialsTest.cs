@@ -15,7 +15,7 @@ namespace Ecwid.Test.Services
         private const string Token = "nmGjgfnmGjgfnmGjgfnmGjgfnmGjgfsd";
 
         [Fact]
-        public void Credentials()
+        public void Credentials_ReturnNotNull()
         {
             var result = new EcwidCredentials(ShopId, Token);
             var result2 = new EcwidLegacyCredentials(ShopId, Token, Token);
@@ -25,7 +25,7 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public void CredentialsFail()
+        public void Credentials_Exception()
         {
             Assert.Throws<EcwidConfigException>(() => new EcwidCredentials(0, Token));
             Assert.Throws<EcwidConfigException>(() => new EcwidCredentials(ShopId, null));
@@ -34,21 +34,24 @@ namespace Ecwid.Test.Services
 
             // https://github.com/kroniak/extensions-ecwid/issues/34
             //Assert.Throws<EcwidConfigException>(() => new EcwidCredentials(ShopId, "test"));
+
             Assert.Throws<EcwidConfigException>(() => new EcwidLegacyCredentials(0, Token, Token));
             Assert.Throws<EcwidConfigException>(() => new EcwidLegacyCredentials(ShopId));
             Assert.Throws<EcwidConfigException>(() => new EcwidLegacyCredentials(ShopId, " ", " "));
             Assert.Throws<EcwidConfigException>(() => new EcwidLegacyCredentials(ShopId, "", ""));
-            Assert.Throws<EcwidConfigException>(() => new EcwidLegacyCredentials(ShopId, Token, Token).OrderToken = " ");
+            Assert.Throws<EcwidConfigException>(() =>
+                new EcwidLegacyCredentials(ShopId, Token, Token).OrderToken = " ");
 
             // https://github.com/kroniak/extensions-ecwid/issues/34
-            //Assert.Throws<EcwidConfigException>(
-            //    () => new EcwidLegacyCredentials(ShopId, Token, Token).OrderToken = "test");
+//            Assert.Throws<EcwidConfigException>(
+//                () => new EcwidLegacyCredentials(ShopId, Token, Token).OrderToken = "test");
+
             Assert.Throws<EcwidConfigException>(
                 () => new EcwidLegacyCredentials(ShopId, Token, Token).ProductToken = " ");
 
             // https://github.com/kroniak/extensions-ecwid/issues/34
-            //Assert.Throws<EcwidConfigException>(
-            //    () => new EcwidLegacyCredentials(ShopId, Token, Token).ProductToken = "test");
+            Assert.Throws<EcwidConfigException>(
+                () => new EcwidLegacyCredentials(ShopId, Token, Token).ProductToken = "test");
         }
     }
 }

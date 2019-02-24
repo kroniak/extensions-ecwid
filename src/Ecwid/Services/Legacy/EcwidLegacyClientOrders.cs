@@ -99,7 +99,7 @@ namespace Ecwid.Legacy
 
             var result = response.Orders?.ToList() ?? new List<LegacyOrder>();
 
-            // return if responce is null or response is full
+            // return if response is null or response is full
             if (result.Count == 0 || response.Total == response.Count)
                 return result;
 
@@ -202,12 +202,12 @@ namespace Ecwid.Legacy
         internal async Task<LegacyUpdatedOrders> UpdateOrdersAsync(
             OrdersQueryBuilder<LegacyOrder, LegacyUpdatedOrders> query, CancellationToken cancellationToken)
         {
-            var responce =
+            var response =
                 await
                     PostApiAsync<LegacyOrderResponse<LegacyUpdatedOrder>>(GetUrl("orders"), query.Query,
                         cancellationToken);
 
-            return responce != null ? new LegacyUpdatedOrders(responce.Orders) : new LegacyUpdatedOrders();
+            return response != null ? new LegacyUpdatedOrders(response.Orders) : new LegacyUpdatedOrders();
         }
     }
 }
