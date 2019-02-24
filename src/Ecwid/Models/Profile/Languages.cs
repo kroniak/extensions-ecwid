@@ -17,7 +17,7 @@ namespace Ecwid.Models
         /// The enabled languages.
         /// </value>
         [JsonProperty("enabledLanguages")]
-        public IList<string> EnabledLanguages { get; set; }
+        public List<string> EnabledLanguages { get; set; }
 
         /// <summary>
         /// Gets or sets the facebook preferred locale automatically chosen be default in Facebook storefront (if any).

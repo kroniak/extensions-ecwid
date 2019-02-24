@@ -10,16 +10,16 @@ namespace Ecwid.Tools
     /// <summary>
     /// Some string extensions.
     /// </summary>
-    internal static class StringExtensions
+    public static class StringExtensions
     {
         /// <summary>
         /// Trim and replace and split to words.
         /// </summary>
         /// <param name="str">The string.</param>
         /// <exception cref="ArgumentException">Unable replace and split string</exception>
-        public static List<string> TrimUpperReplaceSplit(this string str)
+        public static IEnumerable<string> TrimUpperReplaceSplit(this string str)
         {
-            List<string> returnList;
+            string[] returnList;
 
             try
             {
@@ -27,7 +27,7 @@ namespace Ecwid.Tools
                 result = new Regex("[ ]{2,}", RegexOptions.None).Replace(result, " "); //replace all double spaces
                 result = result.Trim().Replace(" ", ","); //trim and replace " " to ","
                 result = result.ToUpper();
-                returnList = result.Split(',').ToList();
+                returnList = result.Split(',');
             }
             catch (ArgumentException exception)
             {
@@ -35,6 +35,22 @@ namespace Ecwid.Tools
             }
 
             return returnList;
+        }
+
+        /// <summary>
+        /// Validate the status.
+        /// </summary>
+        /// <param name="status">The status.</param>
+        /// <param name="statusesAvailable">The statuses available.</param>
+        /// <exception cref="ArgumentException">Status string is invalid.</exception>
+        /// <exception cref="ArgumentException">Status string is invalid. Support only one status. </exception>
+        public static string ExtractFirstStatus(this string status, IEnumerable<string> statusesAvailable)
+        {
+            Validators.StatusesValidate(status, statusesAvailable);
+
+            var result = status.TrimUpperReplaceSplit();
+
+            return result.First();
         }
     }
 }

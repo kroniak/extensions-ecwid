@@ -2,6 +2,7 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Net;
 using Ecwid.Legacy;
 using Xunit;
@@ -24,7 +25,7 @@ namespace Ecwid.Test.Real
         public async void GetCategoriesAsync_ReturnCorrectList()
         {
             var result = await _client.GetCategoriesAsync();
-            Assert.Equal(3, result.Count);
+            Assert.Equal(3, result.Count());
         }
 
         [Fact]
@@ -32,7 +33,7 @@ namespace Ecwid.Test.Real
         {
             var result = await _client.GetCategoriesAsync(0);
 
-            Assert.Equal(3, result.Count);
+            Assert.Equal(3, result.Count());
         }
 
         [Fact]
@@ -67,17 +68,19 @@ namespace Ecwid.Test.Real
             Assert.NotEmpty(result);
         }
 
-        [Fact]
-        public async void GetProductsAsync_ValidCategoryId_ReturnCorrectList()
+        [Theory]
+        [InlineData(20671017)]
+        [InlineData(0)]
+        public async void GetProductsAsync_ValidCategoryId_ReturnCorrectList(int c)
         {
-            var result = await _client.GetProductsAsync(20671017);
+            var result = await _client.GetProductsAsync(c);
 
             Assert.NotEmpty(result);
         }
 
         [Fact]
         public async void GetProductsAsyncException_ThrowsException()
-            => await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => _client.GetProductsAsync(-1));
+            => await Assert.ThrowsAsync<ArgumentException>(() => _client.GetProductsAsync(-1));
 
         [Fact]
         public async void GetProductsAsyncExceptionWrongToken_ThrowsException_Forbidden()
@@ -102,9 +105,11 @@ namespace Ecwid.Test.Real
             Assert.NotNull(result);
         }
 
-        [Fact]
-        public async void GetProductAsyncException_ThrowsException()
-            => await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => _client.GetProductAsync(-1));
+        [Theory]
+        [InlineData(-1)]
+        [InlineData(0)]
+        public async void GetProductAsync_IncorrectInt_ThrowsException(int i)
+            => await Assert.ThrowsAsync<ArgumentException>(() => _client.GetProductAsync(i));
 
         [Fact]
         public async void UpdateProductAsync_ThrowsException_Forbidden()
@@ -114,5 +119,12 @@ namespace Ecwid.Test.Real
 
             Assert.Equal(HttpStatusCode.Forbidden, ex.StatusCode);
         }
+
+        [Theory]
+        [InlineData(-1)]
+        [InlineData(0)]
+        public async void UpdateProductAsync_InvalidInt_ThrowsException(int i) =>
+            await Assert.ThrowsAsync<ArgumentException>(() =>
+                _client.UpdateProductAsync(i, new {weight = 600}));
     }
 }

@@ -1,6 +1,7 @@
 ﻿// Licensed under the MIT License. See LICENSE in the git repository root for license information.
 
 using Flurl;
+
 // ReSharper disable UnusedMember.Global
 
 namespace Ecwid

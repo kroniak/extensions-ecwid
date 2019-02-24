@@ -20,36 +20,36 @@ namespace Ecwid.Legacy
             => await CheckTokenAsync<LegacyOrderResponse<LegacyOrder>>(GetUrl("orders"), cancellationToken);
 
         /// <inheritdoc />
-        public async Task<List<LegacyOrder>> GetNewOrdersAsync()
+        public async Task<IEnumerable<LegacyOrder>> GetNewOrdersAsync()
             => await GetNewOrdersAsync(CancellationToken.None);
 
         /// <inheritdoc />
-        public async Task<List<LegacyOrder>> GetNewOrdersAsync(CancellationToken cancellationToken)
+        public async Task<IEnumerable<LegacyOrder>> GetNewOrdersAsync(CancellationToken cancellationToken)
             => await GetOrdersAsync(new {statuses = "NEW,AWAITING_PROCESSING"}, cancellationToken);
 
         /// <inheritdoc />
-        public async Task<List<LegacyOrder>> GetNonPaidOrdersAsync()
+        public async Task<IEnumerable<LegacyOrder>> GetNonPaidOrdersAsync()
             => await GetNonPaidOrdersAsync(CancellationToken.None);
 
         /// <inheritdoc />
-        public async Task<List<LegacyOrder>> GetNonPaidOrdersAsync(CancellationToken cancellationToken)
+        public async Task<IEnumerable<LegacyOrder>> GetNonPaidOrdersAsync(CancellationToken cancellationToken)
             => await GetOrdersAsync(new {statuses = "QUEUED,AWAITING_PAYMENT"}, cancellationToken);
 
         /// <inheritdoc />
-        public async Task<List<LegacyOrder>> GetOrdersAsync(object query)
+        public async Task<IEnumerable<LegacyOrder>> GetOrdersAsync(object query)
             => await GetOrdersAsync(query, CancellationToken.None);
 
         /// <inheritdoc />
-        public async Task<List<LegacyOrder>> GetOrdersAsync(object query, CancellationToken cancellationToken)
+        public async Task<IEnumerable<LegacyOrder>> GetOrdersAsync(object query, CancellationToken cancellationToken)
         {
             var response =
                 await GetApiAsync<LegacyOrderResponse<LegacyOrder>>(GetUrl("orders"), query, cancellationToken);
 
-            var result = response.Orders?.ToList() ?? new List<LegacyOrder>();
+            var result = response.Orders ?? new List<LegacyOrder>();
 
             // return if response is null or response is full
-            if (result.Count == 0 || response.Total == response.Count)
-                return result;
+            if (result.Count == 0) return result;
+            if (response.Total == response.Count) return result;
 
             // if query is not null check it contains limit or offset.
             if (query?.ToKeyValuePairs().Count(pair => pair.Key == "limit" || pair.Key == "offset") > 0)
@@ -64,6 +64,7 @@ namespace Ecwid.Legacy
                 if (response.Orders != null)
                     result.AddRange(response.Orders);
             }
+
             return result;
         }
 
@@ -76,25 +77,25 @@ namespace Ecwid.Legacy
             =>
                 (await
                     GetApiAsync<LegacyOrderResponse<LegacyOrder>>(GetUrl("orders"), new {limit = 0}, cancellationToken))
-                    .Total;
+                .Total;
 
         /// <inheritdoc />
-        public async Task<List<LegacyOrder>> GetPaidNotShippedOrdersAsync()
+        public async Task<IEnumerable<LegacyOrder>> GetPaidNotShippedOrdersAsync()
             => await GetPaidNotShippedOrdersAsync(CancellationToken.None);
 
         /// <inheritdoc />
-        public async Task<List<LegacyOrder>> GetPaidNotShippedOrdersAsync(CancellationToken cancellationToken)
+        public async Task<IEnumerable<LegacyOrder>> GetPaidNotShippedOrdersAsync(CancellationToken cancellationToken)
             =>
                 await
                     GetOrdersAsync(new {statuses = "PAID,ACCEPTED,NEW,AWAITING_PROCESSING,PROCESSING"},
                         cancellationToken);
 
         /// <inheritdoc />
-        public async Task<List<LegacyOrder>> GetShippedOrdersAsync()
+        public async Task<IEnumerable<LegacyOrder>> GetShippedOrdersAsync()
             => await GetShippedOrdersAsync(CancellationToken.None);
 
         /// <inheritdoc />
-        public async Task<List<LegacyOrder>> GetShippedOrdersAsync(CancellationToken cancellationToken)
+        public async Task<IEnumerable<LegacyOrder>> GetShippedOrdersAsync(CancellationToken cancellationToken)
             => await GetOrdersAsync(new {statuses = "SHIPPED"}, cancellationToken);
 
         /// <inheritdoc />

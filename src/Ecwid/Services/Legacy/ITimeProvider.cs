@@ -4,24 +4,24 @@ using System;
 
 namespace Ecwid.Legacy
 {
-	/// <summary>
-	/// Interface to shim DateTime.Now
-	/// </summary>
-	public interface ITimeProvider
-	{
-		/// <summary>
-		/// Gets the now.
-		/// </summary>
-		/// <value>
-		/// The now.
-		/// </value>
-		DateTime Now { get; }
-	}
+    /// <summary>
+    /// Interface to shim DateTime.Now
+    /// </summary>
+    public interface ITimeProvider
+    {
+        /// <summary>
+        /// Gets the now.
+        /// </summary>
+        /// <value>
+        /// The now.
+        /// </value>
+        DateTime Now { get; }
+    }
 
-	/// <inheritdoc />
-	public class RealTimeProvider : ITimeProvider
-	{
-		/// <inheritdoc />
-		public DateTime Now => DateTime.Now;
-	}
+    /// <inheritdoc />
+    public class RealTimeProvider : ITimeProvider
+    {
+        /// <inheritdoc />
+        public DateTime Now => DateTime.Now;
+    }
 }

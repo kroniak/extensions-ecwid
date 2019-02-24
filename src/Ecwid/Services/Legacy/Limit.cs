@@ -15,6 +15,7 @@ namespace Ecwid.Legacy
 
         // Internal settings
         private readonly int _timeInterval;
+
         // Counters
         private DateTime _start;
         private ITimeProvider _timeProvider;

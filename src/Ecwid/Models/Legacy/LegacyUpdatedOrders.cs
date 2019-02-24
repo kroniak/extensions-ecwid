@@ -13,10 +13,9 @@ namespace Ecwid.Models.Legacy
         }
 
         /// <inheritdoc />
-        public LegacyUpdatedOrders(ICollection<LegacyUpdatedOrder> list)
+        public LegacyUpdatedOrders(IEnumerable<LegacyUpdatedOrder> list)
         {
-            if (list != null && list.Count > 0)
-                AddRange(list);
+            if (list != null) AddRange(list);
         }
     }
 }

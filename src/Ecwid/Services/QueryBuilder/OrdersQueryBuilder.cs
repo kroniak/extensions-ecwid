@@ -51,7 +51,7 @@ namespace Ecwid
 
                 AddOrUpdate(name, result);
             }
-                // ReSharper disable once CatchAllClause
+            // ReSharper disable once CatchAllClause
             catch (Exception exception)
             {
                 throw new ArgumentException("Can not add or update statuses. Look inner exception.", exception);

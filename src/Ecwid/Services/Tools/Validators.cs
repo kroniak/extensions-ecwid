@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
+// ReSharper disable PossibleMultipleEnumeration
+
 namespace Ecwid.Tools
 {
     /// <summary>
@@ -15,7 +17,7 @@ namespace Ecwid.Tools
         /// <summary>
         /// The available legacy fulfillment statuses.
         /// </summary>
-        public static readonly IList<string> AvailableLegacyFulfillmentStatuses = new List<string>
+        public static readonly IEnumerable<string> AvailableLegacyFulfillmentStatuses = new List<string>
         {
             "AWAITING_PROCESSING",
             "NEW",
@@ -29,7 +31,7 @@ namespace Ecwid.Tools
         /// <summary>
         /// The available fulfillment statuses.
         /// </summary>
-        public static readonly IList<string> AvailableFulfillmentStatuses = new List<string>
+        public static readonly IEnumerable<string> AvailableFulfillmentStatuses = new List<string>
         {
             "AWAITING_PROCESSING",
             "PROCESSING",
@@ -42,7 +44,7 @@ namespace Ecwid.Tools
         /// <summary>
         /// The available legacy payment statuses.
         /// </summary>
-        public static readonly IList<string> AvailableLegacyPaymentStatuses = new List<string>
+        public static readonly IEnumerable<string> AvailableLegacyPaymentStatuses = new List<string>
         {
             "PAID",
             "ACCEPTED",
@@ -57,7 +59,7 @@ namespace Ecwid.Tools
         /// <summary>
         /// The available payment statuses.
         /// </summary>
-        public static readonly IList<string> AvailablePaymentStatuses = new List<string>
+        public static readonly IEnumerable<string> AvailablePaymentStatuses = new List<string>
         {
             "PAID",
             "CANCELLED",
@@ -71,19 +73,7 @@ namespace Ecwid.Tools
         /// </summary>
         /// <param name="strings">The strings.</param>
         /// <returns>True if the all of the strings are <see langword="null" /> or <see langword="empty" /></returns>
-        public static bool AreNullOrEmpty(params string[] strings)
-        {
-            return strings.All(IsNullOrEmpty);
-        }
-
-        /// <summary>
-        /// Determines whether [is null or empty] [the specified value].
-        /// </summary>
-        /// <param name="value">The value.</param>
-        public static bool IsNullOrEmpty(string value)
-        {
-            return string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value);
-        }
+        public static bool AreNullOrEmpty(params string[] strings) => strings.All(string.IsNullOrWhiteSpace);
 
         /// <summary>
         /// Statuses validate.
@@ -91,15 +81,15 @@ namespace Ecwid.Tools
         /// <param name="statuses">The statuses.</param>
         /// <param name="statusesAvailable">The statuses available.</param>
         /// <exception cref="ArgumentException">Statuses string is invalid.</exception>
-        public static void StatusesValidate(string statuses, ICollection<string> statusesAvailable)
+        public static void StatusesValidate(string statuses, IEnumerable<string> statusesAvailable)
         {
-            if (IsNullOrEmpty(statuses))
+            if (string.IsNullOrWhiteSpace(statuses))
                 throw new ArgumentException("Statuses string is invalid.", nameof(statuses));
 
             if (statusesAvailable == null)
                 throw new ArgumentException("Statuses collection is invalid.", nameof(statusesAvailable));
 
-            if (statusesAvailable.Count == 0)
+            if (!statusesAvailable.Any())
                 throw new ArgumentException("Statuses collection is invalid.", nameof(statusesAvailable));
 
             try
@@ -114,31 +104,12 @@ namespace Ecwid.Tools
         }
 
         /// <summary>
-        /// Validate the status.
-        /// </summary>
-        /// <param name="status">The status.</param>
-        /// <param name="statusesAvailable">The statuses available.</param>
-        /// <exception cref="ArgumentException">Status string is invalid.</exception>
-        /// <exception cref="ArgumentException">Status string is invalid. Support only one status. </exception>
-        public static string StatusValidate(string status, ICollection<string> statusesAvailable)
-        {
-            StatusesValidate(status, statusesAvailable);
-
-            var result = status.TrimUpperReplaceSplit();
-
-            if (result.Count > 1)
-                throw new ArgumentException("Status string is invalid. Support only one status.", nameof(status));
-
-            return result.First();
-        }
-
-        /// <summary>
         /// Checks the contains words of the string in the list.
         /// </summary>
         /// <param name="str">The string.</param>
         /// <param name="list">The list.</param>
         /// <exception cref="ArgumentException">Unable replace and split string</exception>
-        private static bool CheckContainsString(string str, ICollection<string> list)
+        private static bool CheckContainsString(string str, IEnumerable<string> list)
         {
             var result = str.TrimUpperReplaceSplit();
 
@@ -175,7 +146,7 @@ namespace Ecwid.Tools
         /// <exception cref="ArgumentException"><paramref name="date" /> string is invalid.</exception>
         public static bool ValidateDateTime(string date)
         {
-            if (string.IsNullOrEmpty(date))
+            if (string.IsNullOrWhiteSpace(date))
                 throw new ArgumentException("Date string is null or empty.", nameof(date));
 
             if (new Regex(@"^\d{4}-\d{2}-\d{2}").IsMatch(date))

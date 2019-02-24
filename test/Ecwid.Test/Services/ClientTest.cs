@@ -2,6 +2,7 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using Ecwid.Legacy;
@@ -79,7 +80,7 @@ namespace Ecwid.Test.Services
                 .PaymentStatuses("PAID")
                 .GetAsync();
 
-            Assert.Equal(10, result.Count);
+            Assert.Equal(10, result.Count());
         }
 
         #endregion
@@ -172,7 +173,7 @@ namespace Ecwid.Test.Services
 
         [Fact]
         public async void GetOrderAsync_Exception() => await
-            Assert.ThrowsAsync<ArgumentOutOfRangeException>(
+            Assert.ThrowsAsync<ArgumentException>(
                 async () => await _client.GetOrderAsync(0));
 
         [Fact]
@@ -305,7 +306,7 @@ namespace Ecwid.Test.Services
                 .WithVerb(HttpMethod.Get)
                 .Times(3);
 
-            Assert.Equal(count * 3, result.Count);
+            Assert.Equal(count * 3, result.Count());
         }
 
         [Fact]
@@ -326,7 +327,7 @@ namespace Ecwid.Test.Services
 
             _httpTest.ShouldNotHaveCalled($"{CheckOrdersUrl}&offset=*&{query}");
 
-            Assert.Equal(count, result.Count);
+            Assert.Equal(count, result.Count());
         }
 
         [Fact]
@@ -350,7 +351,7 @@ namespace Ecwid.Test.Services
             _httpTest
                 .RespondWithJson("Status QUEUED is deprecated, use AWAITING_PAYMENT instead", 400);
 
-            await Assert.ThrowsAsync<EcwidConfigException>(() =>
+            await Assert.ThrowsAsync<ArgumentException>(() =>
                 _client.UpdateOrderAsync(new OrderEntry {Email = "test@test.com"}));
 
             _httpTest.ShouldNotHaveMadeACall();
@@ -377,7 +378,7 @@ namespace Ecwid.Test.Services
             _httpTest
                 .RespondWithJson("The order with given number is not found", 404);
 
-            await Assert.ThrowsAsync<EcwidConfigException>(() =>
+            await Assert.ThrowsAsync<ArgumentException>(() =>
                 _client.DeleteOrderAsync(new OrderEntry {Email = "test@test.com"}));
 
             _httpTest.ShouldNotHaveMadeACall();
@@ -496,12 +497,14 @@ namespace Ecwid.Test.Services
                     Assert.ThrowsAsync<EcwidConfigException>(
                         () => _defaultLegacyClient.GetCategoriesAsync());
 
-        [Fact]
-        public async void GetCategoryAsync_Exception()
+        [Theory]
+        [InlineData(-1)]
+        [InlineData(0)]
+        public async void GetCategoryAsync_IncorrectInt_Exception(int i)
             =>
                 await
-                    Assert.ThrowsAsync<ArgumentOutOfRangeException>(
-                        () => _legacyClient.GetCategoryAsync(-1));
+                    Assert.ThrowsAsync<ArgumentException>(
+                        () => _legacyClient.GetCategoryAsync(i));
 
         [Fact]
         public async void GetCategoryAsync_404()
@@ -664,7 +667,7 @@ namespace Ecwid.Test.Services
                 .WithVerb(HttpMethod.Get)
                 .Times(1);
 
-            Assert.Equal(count * 2, result.Count);
+            Assert.Equal(count * 2, result.Count());
         }
 
         [Fact]
@@ -683,17 +686,17 @@ namespace Ecwid.Test.Services
 
             _httpTest.ShouldNotHaveCalled($"{_checkOrdersLegacyUrl}&limit=5&offset=5");
 
-            Assert.Equal(200, result.Count);
+            Assert.Equal(200, result.Count());
         }
 
         [Fact]
         public async void LegacyOrdersUpdateAsyncNullBuilder_Exception()
         {
             await
-                Assert.ThrowsAsync<EcwidConfigException>(
+                Assert.ThrowsAsync<EcwidException>(
                     async () => await _legacyClient.Orders.UpdateAsync("", "", ""));
             await
-                Assert.ThrowsAsync<EcwidConfigException>(
+                Assert.ThrowsAsync<EcwidException>(
                     async () =>
                         await
                             _legacyClient.Orders.Limit(5)
@@ -702,7 +705,7 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void UpdateAsyncNullStrings_Exception() => await Assert.ThrowsAsync<EcwidConfigException>(async ()
+        public async void UpdateAsyncNullStrings_Exception() => await Assert.ThrowsAsync<EcwidException>(async ()
             => await _legacyClient.Orders.Order(1).UpdateAsync("", "", ""));
 
         [Fact]
@@ -821,7 +824,7 @@ namespace Ecwid.Test.Services
                 .WithVerb(HttpMethod.Get)
                 .Times(3);
 
-            Assert.Equal(count * 3, result.Count);
+            Assert.Equal(count * 3, result.Count());
         }
 
         [Fact]
@@ -842,7 +845,7 @@ namespace Ecwid.Test.Services
 
             _httpTest.ShouldNotHaveCalled($"{CheckDiscountCouponsUrl}&offset=*&{query}");
 
-            Assert.Equal(count, result.Count);
+            Assert.Equal(count, result.Count());
         }
 
         [Fact]

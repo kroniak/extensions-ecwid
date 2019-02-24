@@ -17,7 +17,7 @@ namespace Ecwid.Models
         /// The admin notification emails.
         /// </value>
         [JsonProperty("adminNotificationEmails")]
-        public IList<string> AdminNotificationEmails { get; set; }
+        public List<string> AdminNotificationEmails { get; set; }
 
         /// <summary>
         /// Gets or sets the customer notification email address used as the 'reply-to’ field in the notifications to customers.

@@ -28,20 +28,20 @@ namespace Ecwid
             => await CheckTokenAsync<SearchResult>(GetUrl("orders"), cancellationToken);
 
         /// <inheritdoc />
-        public async Task<List<OrderEntry>> GetNewOrdersAsync()
+        public async Task<IEnumerable<OrderEntry>> GetNewOrdersAsync()
             => await GetNewOrdersAsync(CancellationToken.None);
 
         /// <inheritdoc />
-        public async Task<List<OrderEntry>> GetNewOrdersAsync(CancellationToken cancellationToken)
-            => await GetOrdersAsync(new { fulfillmentStatus = "AWAITING_PROCESSING" }, cancellationToken);
+        public async Task<IEnumerable<OrderEntry>> GetNewOrdersAsync(CancellationToken cancellationToken)
+            => await GetOrdersAsync(new {fulfillmentStatus = "AWAITING_PROCESSING"}, cancellationToken);
 
         /// <inheritdoc />
-        public async Task<List<OrderEntry>> GetNonPaidOrdersAsync()
+        public async Task<IEnumerable<OrderEntry>> GetNonPaidOrdersAsync()
             => await GetNonPaidOrdersAsync(CancellationToken.None);
 
         /// <inheritdoc />
-        public async Task<List<OrderEntry>> GetNonPaidOrdersAsync(CancellationToken cancellationToken)
-            => await GetOrdersAsync(new { paymentStatus = "AWAITING_PAYMENT" }, cancellationToken);
+        public async Task<IEnumerable<OrderEntry>> GetNonPaidOrdersAsync(CancellationToken cancellationToken)
+            => await GetOrdersAsync(new {paymentStatus = "AWAITING_PAYMENT"}, cancellationToken);
 
         /// <inheritdoc />
         public async Task<int> GetOrdersCountAsync()
@@ -49,41 +49,41 @@ namespace Ecwid
 
         /// <inheritdoc />
         public async Task<int> GetOrdersCountAsync(CancellationToken cancellationToken)
-            => (await GetApiAsync<SearchResult>(GetUrl("orders"), new { limit = 1 }, cancellationToken)).Total;
+            => (await GetApiAsync<SearchResult>(GetUrl("orders"), new {limit = 1}, cancellationToken)).Total;
 
         /// <inheritdoc />
-        public async Task<List<OrderEntry>> GetPaidNotShippedOrdersAsync()
+        public async Task<IEnumerable<OrderEntry>> GetPaidNotShippedOrdersAsync()
             => await GetPaidNotShippedOrdersAsync(CancellationToken.None);
 
         /// <inheritdoc />
-        public async Task<List<OrderEntry>> GetPaidNotShippedOrdersAsync(CancellationToken cancellationToken)
+        public async Task<IEnumerable<OrderEntry>> GetPaidNotShippedOrdersAsync(CancellationToken cancellationToken)
             =>
                 await
-                    GetOrdersAsync(new { paymentStatus = "PAID", fulfillmentStatus = "AWAITING_PROCESSING,PROCESSING" },
+                    GetOrdersAsync(new {paymentStatus = "PAID", fulfillmentStatus = "AWAITING_PROCESSING,PROCESSING"},
                         cancellationToken);
 
         /// <inheritdoc />
-        public async Task<List<OrderEntry>> GetShippedOrdersAsync()
+        public async Task<IEnumerable<OrderEntry>> GetShippedOrdersAsync()
             => await GetShippedOrdersAsync(CancellationToken.None);
 
         /// <inheritdoc />
-        public async Task<List<OrderEntry>> GetShippedOrdersAsync(CancellationToken cancellationToken)
-            => await GetOrdersAsync(new { fulfillmentStatus = "SHIPPED" }, cancellationToken);
+        public async Task<IEnumerable<OrderEntry>> GetShippedOrdersAsync(CancellationToken cancellationToken)
+            => await GetOrdersAsync(new {fulfillmentStatus = "SHIPPED"}, cancellationToken);
 
         /// <inheritdoc />
-        public async Task<List<OrderEntry>> GetOrdersAsync(object query)
+        public async Task<IEnumerable<OrderEntry>> GetOrdersAsync(object query)
             => await GetOrdersAsync(query, CancellationToken.None);
 
         /// <inheritdoc />
-        public async Task<List<OrderEntry>> GetOrdersAsync(object query, CancellationToken cancellationToken)
+        public async Task<IEnumerable<OrderEntry>> GetOrdersAsync(object query, CancellationToken cancellationToken)
         {
             var response = await GetApiAsync<SearchResult>(GetUrl("orders"), query, cancellationToken);
 
-            var result = response.Orders?.ToList() ?? new List<OrderEntry>();
+            var result = response.Orders ?? new List<OrderEntry>();
 
             // return if response is null or response is full
-            if (result.Count == 0 || response.Total == response.Count)
-                return result;
+            if (result.Count == 0) return result;
+            if (response.Total == response.Count) return result;
 
             // if query is not null check it contains limit or offset.
             if (query?.ToKeyValuePairs().Count(pair => pair.Key == "limit" || pair.Key == "offset") > 0)
@@ -95,7 +95,7 @@ namespace Ecwid
                     await
                         GetApiAsync<SearchResult>(
                             GetUrl("orders").SetQueryParams(
-                                new { offset = response.Offset + response.Limit }), query, cancellationToken);
+                                new {offset = response.Offset + response.Limit}), query, cancellationToken);
 
                 // ReSharper disable once ExceptionNotDocumentedOptional
                 if (response.Orders != null)
@@ -106,13 +106,12 @@ namespace Ecwid
         }
 
         /// <inheritdoc />
-        public async Task<List<OrderEntry>> GetIncompleteOrdersAsync()
+        public async Task<IEnumerable<OrderEntry>> GetIncompleteOrdersAsync()
             => await GetIncompleteOrdersAsync(CancellationToken.None);
 
-
         /// <inheritdoc />
-        public async Task<List<OrderEntry>> GetIncompleteOrdersAsync(CancellationToken cancellationToken)
-            => await GetOrdersAsync(new { paymentStatus = "INCOMPLETE" }, cancellationToken);
+        public async Task<IEnumerable<OrderEntry>> GetIncompleteOrdersAsync(CancellationToken cancellationToken)
+            => await GetOrdersAsync(new {paymentStatus = "INCOMPLETE"}, cancellationToken);
 
         /// <inheritdoc />
         public async Task<OrderEntry> GetOrderAsync(int orderNumber)
@@ -122,18 +121,18 @@ namespace Ecwid
         public async Task<OrderEntry> GetOrderAsync(int orderNumber, CancellationToken cancellationToken)
         {
             if (orderNumber <= 0)
-                throw new ArgumentOutOfRangeException(nameof(orderNumber));
+                throw new ArgumentException(nameof(orderNumber));
 
             // ReSharper disable once RedundantAnonymousTypePropertyName
-            var orders = await GetOrdersAsync(new { orderNumber = orderNumber }, cancellationToken);
+            var orders = await GetOrdersAsync(new {orderNumber = orderNumber}, cancellationToken);
 
-            return orders.Count == 0 ? null : orders.FirstOrDefault();
+            return orders.FirstOrDefault();
         }
 
         /// <inheritdoc />
         public async Task<UpdateStatus> UpdateOrderAsync(OrderEntry order, CancellationToken cancellationToken)
         {
-            if (order.OrderNumber == 0) throw new EcwidConfigException("Order number is 0.");
+            if (order.OrderNumber <= 0) throw new ArgumentException("Order number is 0.");
             return await PutApiAsync<UpdateStatus>(GetUrl($"orders/{order.OrderNumber}"), order, cancellationToken);
         }
 
@@ -152,7 +151,7 @@ namespace Ecwid
         /// <inheritdoc />
         public async Task<DeleteStatus> DeleteOrderAsync(int orderNumber, CancellationToken cancellationToken)
         {
-            if (orderNumber == 0) throw new EcwidConfigException("Order number is 0.");
+            if (orderNumber <= 0) throw new ArgumentException("Order number is 0.");
             return await DeleteApiAsync<DeleteStatus>(GetUrl($"orders/{orderNumber}"), cancellationToken);
         }
 

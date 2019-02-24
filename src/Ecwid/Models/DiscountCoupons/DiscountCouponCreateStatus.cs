@@ -9,7 +9,7 @@
         /// Internal unique coupon Id
         /// </summary>
         public long Id { get; set; }
-        
+
         /// <summary>
         /// Code of the created coupon
         /// </summary>

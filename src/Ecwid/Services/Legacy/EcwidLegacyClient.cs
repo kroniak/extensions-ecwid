@@ -73,7 +73,8 @@ namespace Ecwid.Legacy
 
             if (segment == "orders")
                 token = Credentials?.OrderToken;
-            else if (segment == "products" || segment == "product" || segment == "category" || segment == "categories") token = Credentials?.ProductToken;
+            else if (segment == "products" || segment == "product" || segment == "category" || segment == "categories")
+                token = Credentials?.ProductToken;
 
             if (token == null)
                 throw new EcwidConfigException("Credentials are null. Can not do a request.");
@@ -109,7 +110,7 @@ namespace Ecwid.Legacy
                     if (start.AddSeconds(Settings.MaxSecondsToWait) < DateTime.Now)
                         throw new EcwidLimitException("Limit overheat exception", LimitsService.Value.GetInfo());
 
-                    Task.Delay(Settings.RetryInterval*1000).Wait();
+                    Task.Delay(Settings.RetryInterval * 1000).Wait();
                     agreement = LimitsService.Value.Tick();
                 }
             }
