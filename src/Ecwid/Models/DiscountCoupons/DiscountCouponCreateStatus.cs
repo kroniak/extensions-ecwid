@@ -1,4 +1,4 @@
-﻿namespace Ecwid
+﻿namespace Ecwid.Models
 {
     /// <summary>
     ///     The object returned from the Discount Coupon API when creating new Discount Coupons

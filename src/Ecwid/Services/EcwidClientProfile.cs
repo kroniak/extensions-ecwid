@@ -11,39 +11,19 @@ namespace Ecwid
     {
         #region Implementation of IEcwidProfileClient
 
-        /// <summary>
-        /// Gets the store profile asynchronous.
-        /// </summary>
-        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
-        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        /// <inheritdoc />
         public async Task<Profile> GetProfileAsync()
             => await GetProfileAsync(CancellationToken.None);
 
-        /// <summary>
-        /// Gets the store profile asynchronous.
-        /// </summary>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
-        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        /// <inheritdoc />
         public async Task<Profile> GetProfileAsync(CancellationToken cancellationToken)
             => await GetApiAsync<Profile>(GetUrl("profile"), cancellationToken);
 
-        /// <summary>
-        /// Update the store profile asynchronous.
-        /// </summary>
-        /// <param name="profile">The store profile.</param>
-        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
-        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        /// <inheritdoc />
         public async Task<UpdateStatus> UpdateProfileAsync(Profile profile)
             => await UpdateProfileAsync(profile, CancellationToken.None);
 
-        /// <summary>
-        /// Update the store profile asynchronous.
-        /// </summary>
-        /// <param name="profile">The store profile.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
-        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
+        /// <inheritdoc />
         public async Task<UpdateStatus> UpdateProfileAsync(Profile profile, CancellationToken cancellationToken)
         {
             if (profile == null)

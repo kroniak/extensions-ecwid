@@ -6,9 +6,7 @@ using System.Collections.Generic;
 // ReSharper disable once CheckNamespace
 namespace Ecwid
 {
-    /// <summary>
-    /// Throws when legacy client HTTP limit is overhead.
-    /// </summary>
+    /// <inheritdoc />
     public class EcwidLimitException : EcwidException
     {
         /// <summary>
@@ -16,28 +14,17 @@ namespace Ecwid
         /// </summary>
         public IDictionary<int, int> CurrentLimitValues;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="EcwidLimitException" /> class.
-        /// </summary>
-        /// <param name="message">The message.</param>
+        /// <inheritdoc />
         internal EcwidLimitException(string message) : base(message)
         {
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="EcwidLimitException" /> class.
-        /// </summary>
-        /// <param name="message">The message.</param>
-        /// <param name="innerException">The inner exception.</param>
+        /// <inheritdoc />
         internal EcwidLimitException(string message, Exception innerException) : base(message, innerException)
         {
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="EcwidLimitException" /> class.
-        /// </summary>
-        /// <param name="message">The message.</param>
-        /// <param name="values">Current limits values.</param>
+        /// <inheritdoc />
         internal EcwidLimitException(string message, IDictionary<int, int> values) : base(message)
         {
             CurrentLimitValues = values;

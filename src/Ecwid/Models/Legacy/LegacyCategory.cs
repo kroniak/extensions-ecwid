@@ -5,9 +5,7 @@ using Newtonsoft.Json;
 
 namespace Ecwid.Models.Legacy
 {
-    /// <summary>
-    /// This object represents full information about the category and its products and subcategories.
-    /// </summary>
+    /// <inheritdoc />
     public class LegacyCategory : LegacyCategoryEntry
     {
         /// <summary>

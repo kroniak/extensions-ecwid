@@ -5,16 +5,14 @@ using Newtonsoft.Json;
 
 namespace Ecwid.Models
 {
-    /// <summary>
-    /// System Settings → Taxes.
-    /// </summary>
+    /// <inheritdoc />
     public class Tax : BaseEntity
     {
         /// <summary>
         /// Gets or sets a value indicating whether [applied by default].
         /// </summary>
         /// <value>
-        /// <c>true</c> if the tax is applied to all products. <c>false</c> is the tax is only applied to thos product that have
+        /// <c>true</c> if the tax is applied to all products. <c>false</c> is the tax is only applied to this product that have
         /// this tax enabled.
         /// </value>
         [JsonProperty("appliedByDefault")]

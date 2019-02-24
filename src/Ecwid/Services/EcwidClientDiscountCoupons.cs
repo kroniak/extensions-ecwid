@@ -15,37 +15,19 @@ namespace Ecwid
 
         #region Implementation of IEcwidDiscountCouponsClient
 
-        /// <summary>
-        /// Checks the shop authentication asynchronous.
-        /// </summary>
-        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
-        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
+        /// <inheritdoc />
         public async Task<bool> CheckDiscountCouponsTokenAsync()
             => await CheckDiscountCouponsTokenAsync(CancellationToken.None);
 
-        /// <summary>
-        /// Checks the shop authentication asynchronous.
-        /// </summary>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
-        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
+        /// <inheritdoc />
         public async Task<bool> CheckDiscountCouponsTokenAsync(CancellationToken cancellationToken)
             => await CheckTokenAsync<DiscountCouponSearchResults>(GetUrl(DiscountCouponsUrl), cancellationToken);
         
-        /// <summary>
-        /// Gets the discount coupon with the specified <paramref name="couponIdentifier"/>.
-        /// </summary>
-        /// <param name="couponIdentifier">The couponIdentifier of the coupon to retrieve</param>
-        /// <exception cref="ArgumentNullException">Coupon Identifier is null</exception>
+        /// <inheritdoc />
         public async Task<DiscountCouponInfo> GetDiscountCouponAsync(string couponIdentifier) =>
             await GetDiscountCouponAsync(couponIdentifier, CancellationToken.None);
 
-        /// <summary>
-        /// Gets the discount coupon with the specified <paramref name="couponIdentifier"/>.
-        /// </summary>
-        /// <param name="couponIdentifier">The couponIdentifier of the coupon to retrieve</param>
-        /// <param name="cancellationToken">The cancellation token</param>
-        /// <exception cref="ArgumentNullException">Coupon Identifier is null</exception>
+        /// <inheritdoc />
         public async Task<DiscountCouponInfo> GetDiscountCouponAsync(string couponIdentifier, CancellationToken cancellationToken)
         {
             if (couponIdentifier == null)
@@ -59,28 +41,11 @@ namespace Ecwid
                        : discountCoupons.FirstOrDefault();
         }
 
-        /// <summary>
-        /// Gets the discount coupons asynchronously. If <paramref name="query" /> contains limit or offset parameters gets only one page.
-        /// </summary>
-        /// <param name="query">
-        /// The query. It's a list of key-value pairs. e.g.
-        /// <code>new {discount_type = "ABS_AND_SHIPPING", limit = 100}</code> or Dictionary{string, object}
-        /// </param>
-        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
-        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
+        /// <inheritdoc />
         public async Task<List<DiscountCouponInfo>> GetDiscountCouponsAsync(object query) =>
             await GetDiscountCouponsAsync(query, CancellationToken.None);
 
-        /// <summary>
-        /// Gets the discount coupons asynchronously. If <paramref name="query" /> contains limit or offset parameters gets only one page.
-        /// </summary>
-        /// <param name="query">
-        /// The query. It's a list of key-value pairs. e.g.
-        /// <code>new {discount_type = "ABS_AND_SHIPPING", limit = 100}</code> or Dictionary{string, object}
-        /// </param>
-        /// <param name="cancellationToken">The cancellation token</param>
-        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
-        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
+        /// <inheritdoc />
         public async Task<List<DiscountCouponInfo>> GetDiscountCouponsAsync(object query, CancellationToken cancellationToken)
         {
             var response = await GetApiAsync<DiscountCouponSearchResults>(GetUrl(DiscountCouponsUrl), query, cancellationToken);
@@ -111,35 +76,21 @@ namespace Ecwid
             return result;
         }
 
-        /// <summary>
-        /// Create one discount coupon asynchronously.
-        /// </summary>
-        /// <param name="coupon">The discount coupon to create.</param>
+        /// <inheritdoc />
         public async Task<DiscountCouponCreateStatus> CreateDiscountCouponAsync(DiscountCouponInfo coupon)
             => await CreateDiscountCouponAsync(coupon, CancellationToken.None);
 
-        /// <summary>
-        /// Create one discount coupon asynchronously.
-        /// </summary>
-        /// <param name="coupon">The discount coupon to create.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <inheritdoc />
         public async Task<DiscountCouponCreateStatus> CreateDiscountCouponAsync(DiscountCouponInfo coupon, CancellationToken cancellationToken)
         {
             return await PostJsonApiAsync<DiscountCouponCreateStatus>(GetUrl(DiscountCouponsUrl), coupon, cancellationToken);
         }
 
-        /// <summary>
-        /// Update one discount coupon asynchronously.
-        /// </summary>
-        /// <param name="coupon">The discount coupon to update.</param>
+        /// <inheritdoc />
         public async Task<UpdateStatus> UpdateDiscountCouponAsync(DiscountCouponInfo coupon)
             => await UpdateDiscountCouponAsync(coupon, CancellationToken.None);
 
-        /// <summary>
-        /// Update one discount coupon asynchronously.
-        /// </summary>
-        /// <param name="coupon">The discount coupon to update.</param>
-        /// <param name="cancellationToken">The cancellationToken</param>
+        /// <inheritdoc />
         public async Task<UpdateStatus> UpdateDiscountCouponAsync(DiscountCouponInfo coupon, CancellationToken cancellationToken)
         {
             if (coupon == null)
@@ -155,27 +106,17 @@ namespace Ecwid
             return await PutApiAsync<UpdateStatus>(GetUrl($"{DiscountCouponsUrl}/{coupon.Code}"), coupon, cancellationToken);
         }
 
-        /// <summary>
-        /// Delete one discount coupon asynchronously.
-        /// </summary>
-        /// <param name="coupon">The discount coupon to delete.</param>
+        /// <inheritdoc />
         public async Task<DeleteStatus> DeleteDiscountCouponAsync(DiscountCouponInfo coupon)
             => await DeleteDiscountCouponAsync(coupon.Code);
 
-        /// <summary>
-        /// Delete one discount coupon asynchronously.
-        /// </summary>
-        /// <param name="couponIdentifier">The discount coupon code to delete.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <inheritdoc />
         public async Task<DeleteStatus> DeleteDiscountCouponAsync(string couponIdentifier, CancellationToken cancellationToken)
         {
             return await DeleteApiAsync<DeleteStatus>(GetUrl($"{DiscountCouponsUrl}/{couponIdentifier}"), cancellationToken);
         }
 
-        /// <summary>
-        /// Delete one discount coupon asynchronously.
-        /// </summary>
-        /// <param name="couponIdentifier">The discount coupon code to delete.</param>
+        /// <inheritdoc />
         public async Task<DeleteStatus> DeleteDiscountCouponAsync(string couponIdentifier)
             => await DeleteDiscountCouponAsync(couponIdentifier, CancellationToken.None);
 

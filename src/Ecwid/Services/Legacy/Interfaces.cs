@@ -8,9 +8,6 @@ using Ecwid.Models.Legacy;
 
 namespace Ecwid.Legacy
 {
-	/// <summary>
-	/// Public legacy client API.
-	/// </summary>
 	public interface IEcwidLegacyClient : IEcwidOrdersLegacyClient, IEcwidProductsLegacyClient
 	{
 		/// <summary>
@@ -54,9 +51,7 @@ namespace Ecwid.Legacy
 		IEcwidLegacyClient Configure(EcwidLegacyCredentials credentials);
 	}
 
-	/// <summary>
-	/// Public legacy orders client API.
-	/// </summary>
+	/// <inheritdoc />
 	public interface IEcwidOrdersLegacyClient : IEcwidOrdersClient<LegacyOrder, LegacyUpdatedOrders>
 	{
 	}

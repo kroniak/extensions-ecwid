@@ -4,9 +4,7 @@ using Newtonsoft.Json;
 
 namespace Ecwid.Models.Legacy
 {
-    /// <summary>
-    /// This object represents full information on a category.
-    /// </summary>
+    /// <inheritdoc />
     public class LegacyCategoryEntry : BaseEntity
     {
         /// <summary>

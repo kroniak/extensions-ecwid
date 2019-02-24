@@ -5,9 +5,7 @@ using Ecwid.Tools;
 
 namespace Ecwid.Legacy
 {
-    /// <summary>
-    /// Credentials for Ecwid Client v1 (Legacy).
-    /// </summary>
+    /// <inheritdoc />
     public class EcwidLegacyCredentials : BaseCredentials
     {
         private string _orderToken;

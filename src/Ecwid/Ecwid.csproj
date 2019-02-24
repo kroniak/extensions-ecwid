@@ -15,6 +15,7 @@
     <Company>kroniak</Company>
     <Copyright>Copyright ©2016 by me@kroniak.net</Copyright>
     <Title>Ecwid</Title>
+    <PackageVersion>1.0.0-rc4</PackageVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

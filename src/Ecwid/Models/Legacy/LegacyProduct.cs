@@ -5,9 +5,7 @@ using Newtonsoft.Json;
 
 namespace Ecwid.Models.Legacy
 {
-    /// <summary>
-    /// This object represents full information on a product: all fields of the LegacyProductEntry plus some additional fields.
-    /// </summary>
+    /// <inheritdoc />
     public class LegacyProduct : LegacyProductEntry
     {
         /// <summary>

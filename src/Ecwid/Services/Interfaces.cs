@@ -99,9 +99,7 @@ namespace Ecwid
         Task<UpdateStatus> UpdateProfileAsync(Profile profile, CancellationToken cancellationToken);
     }
 
-    /// <summary>
-    /// Public orders client API.
-    /// </summary>
+    /// <inheritdoc />
     public interface IEcwidOrdersClient : IEcwidOrdersClient<OrderEntry, UpdateStatus>
     {
         /// <summary>

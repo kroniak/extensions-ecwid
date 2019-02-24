@@ -4,9 +4,7 @@ using Newtonsoft.Json;
 
 namespace Ecwid.Models.Legacy
 {
-    /// <summary>
-    /// Base order for <see cref="LegacyUpdatedOrder" /> and <see cref="LegacyOrder" />.
-    /// </summary>
+    /// <inheritdoc />
     public abstract class LegacyBaseOrder : BaseOrder
     {
         /// <summary>

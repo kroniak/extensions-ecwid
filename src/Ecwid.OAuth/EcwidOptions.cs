@@ -13,11 +13,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Ecwid.OAuth
 {
-    /// <summary>
-    /// Configuration Ecwid options for <see cref="!:OAuthMiddleware" />. Based on
-    /// <seealso cref="OAuthOptions" />.
-    /// This class sets default option to OAuth2.
-    /// </summary>
+    /// <inheritdoc />
     public class EcwidOptions : OAuthOptions
     {
         /// <summary>
@@ -36,13 +32,7 @@ namespace Ecwid.OAuth
             SetEvents();
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="EcwidOptions" /> class with <see cref="EcwidDefaults" /> options.
-        /// </summary>
-        /// <param name="clientId">The client identifier.</param>
-        /// <param name="clientSecret">The client secret.</param>
-        /// <exception cref="ArgumentException"><paramref name="clientId" /> is null or empty.</exception>
-        /// <exception cref="ArgumentException"><paramref name="clientSecret" /> is null or empty.</exception>
+        /// <inheritdoc />
         public EcwidOptions(string clientId, string clientSecret) : this()
         {
             if (string.IsNullOrEmpty(clientId))
@@ -55,15 +45,7 @@ namespace Ecwid.OAuth
             ClientSecret = clientSecret;
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="EcwidOptions" /> class with <see cref="EcwidDefaults" /> options.
-        /// </summary>
-        /// <param name="clientId">The client identifier.</param>
-        /// <param name="clientSecret">The client secret.</param>
-        /// <param name="scopes">A list of permissions to request.</param>
-        /// <exception cref="ArgumentException"><paramref name="clientId" /> is null or empty.</exception>
-        /// <exception cref="ArgumentException"><paramref name="clientSecret" /> is null or empty.</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="scopes" /> is null.</exception>
+        /// <inheritdoc />
         public EcwidOptions(string clientId, string clientSecret, IEnumerable<string> scopes) : this()
         {
             if (scopes == null) throw new ArgumentNullException(nameof(scopes));

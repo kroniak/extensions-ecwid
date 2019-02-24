@@ -4,24 +4,15 @@ using System;
 
 namespace Ecwid
 {
-    /// <summary>
-    /// Base class for Ecwid client exception
-    /// </summary>
+    /// <inheritdoc />
     public class EcwidException : Exception
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="EcwidException" /> class.
-        /// </summary>
-        /// <param name="message">The message.</param>
+        /// <inheritdoc />
         protected EcwidException(string message) : base(message)
         {
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="EcwidException" /> class.
-        /// </summary>
-        /// <param name="message">The message.</param>
-        /// <param name="innerException">The inner exception.</param>
+        /// <inheritdoc />
         protected EcwidException(string message, Exception innerException) : base(message, innerException)
         {
         }

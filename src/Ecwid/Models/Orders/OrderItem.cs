@@ -5,9 +5,7 @@ using Newtonsoft.Json;
 
 namespace Ecwid.Models
 {
-    /// <summary>
-    /// This object represents order item.
-    /// </summary>
+    /// <inheritdoc />
     public class OrderItem : BaseEntity
     {
         /// <summary>
@@ -22,7 +20,7 @@ namespace Ecwid.Models
         /// <summary>
         /// Gets or sets the ID of the category this product belongs to. If the product belongs to many categories, categoryID will
         /// return the ID
-        /// of the default product category. If the product doesn’t belong to any category, 0 is returned.
+        /// of the default product category. If the product doesn't belong to any category, 0 is returned.
         /// </summary>
         /// <value>
         /// The category identifier.
