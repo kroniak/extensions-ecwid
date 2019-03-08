@@ -42,3 +42,4 @@ publish/
 *.DotSettings
 coverage.json
 lcov.info
+.sonarqube
