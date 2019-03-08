@@ -9,6 +9,8 @@ using Ecwid.Models;
 using Flurl;
 using Flurl.Util;
 
+// ReSharper disable PossibleMultipleEnumeration
+
 namespace Ecwid
 {
     public partial class EcwidClient
@@ -79,15 +81,24 @@ namespace Ecwid
         {
             var response = await GetApiAsync<SearchResult>(GetUrl("orders"), query, cancellationToken);
 
-            var result = response.Orders ?? new List<OrderEntry>();
+            var result = response.Orders ?? Enumerable.Empty<OrderEntry>();
 
             // return if response is null or response is full
-            if (result.Count == 0) return result;
-            if (response.Total == response.Count) return result;
+            if (result.FirstOrDefault() == null)
+            {
+                return result;
+            }
+
+            if (response.Total == response.Count)
+            {
+                return result;
+            }
 
             // if query is not null check it contains limit or offset.
             if (query?.ToKeyValuePairs().Count(pair => pair.Key == "limit" || pair.Key == "offset") > 0)
+            {
                 return result;
+            }
 
             while (response.Count == response.Limit)
             {
@@ -99,7 +110,9 @@ namespace Ecwid
 
                 // ReSharper disable once ExceptionNotDocumentedOptional
                 if (response.Orders != null)
-                    result.AddRange(response.Orders);
+                {
+                    result = result.Concat(response.Orders);
+                }
             }
 
             return result;

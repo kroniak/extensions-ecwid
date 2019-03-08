@@ -53,6 +53,6 @@ namespace Ecwid.Models
         /// The items.
         /// </value>
         [JsonProperty("items")]
-        public List<OrderEntry> Orders { get; set; }
+        public IEnumerable<OrderEntry> Orders { get; set; }
     }
 }

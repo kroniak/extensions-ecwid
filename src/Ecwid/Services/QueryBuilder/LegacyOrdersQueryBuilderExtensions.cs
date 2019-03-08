@@ -1,7 +1,7 @@
 ﻿// Licensed under the MIT License. See LICENSE in the git repository root for license information.
 
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Ecwid.Models.Legacy;
@@ -209,8 +209,7 @@ namespace Ecwid.Legacy
                 Validators.StatusesValidate(fulfillmentStatuses, Validators.AvailableLegacyFulfillmentStatuses);
 
                 var resultList = paymentStatuses.TrimUpperReplaceSplit();
-                var result = new List<string>(resultList);
-                result.AddRange(fulfillmentStatuses.TrimUpperReplaceSplit());
+                var result = resultList.Concat(fulfillmentStatuses.TrimUpperReplaceSplit());
 
                 query.AddOrUpdateStatuses("statuses", result);
             }

@@ -52,13 +52,22 @@ namespace Ecwid
             var response =
                 await GetApiAsync<DiscountCouponSearchResults>(GetUrl(DiscountCouponsUrl), query, cancellationToken);
 
-            var result = response.DiscountCoupons ?? new List<DiscountCouponInfo>();
+            var result = response.DiscountCoupons ?? Enumerable.Empty<DiscountCouponInfo>();
 
-            if (result.Count == 0) return result;
-            if (response.Total == response.Count) return result;
+            if (result.FirstOrDefault() == null)
+            {
+                return result;
+            }
+
+            if (response.Total == response.Count)
+            {
+                return result;
+            }
 
             if (query?.ToKeyValuePairs().Count(pair => pair.Key == "limit" || pair.Key == "offset") > 0)
+            {
                 return result;
+            }
 
             while (response.Count == response.Limit)
             {
@@ -71,7 +80,9 @@ namespace Ecwid
 
                 // ReSharper disable once ExceptionNotDocumentedOptional
                 if (response.DiscountCoupons != null)
-                    result.AddRange(response.DiscountCoupons);
+                {
+                    result = result.Concat(response.DiscountCoupons);
+                }
             }
 
             return result;

@@ -3,7 +3,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using Ecwid.Legacy;
 using Xunit;
 
@@ -100,9 +99,9 @@ namespace Ecwid.Test.Real
             Assert.Single(result);
         }
 
-        /// <summary>
-        /// Gets the orders asynchronous multi threading pass.
-        /// </summary>
+//        /// <summary>
+//        /// Gets the orders asynchronous multi threading pass.
+//        /// </summary>
 //        [Fact]
 //        public void GetOrdersAsyncMultiThreading_ReturnCorrectList()
 //        {
