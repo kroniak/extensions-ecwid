@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ecwid.Models.Legacy;
 using Flurl.Util;
+// ReSharper disable PossibleMultipleEnumeration
 
 namespace Ecwid.Legacy
 {
