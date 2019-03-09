@@ -61,7 +61,7 @@ namespace Ecwid.Models
         /// The rules.
         /// </value>
         [JsonProperty("rules")]
-        public List<TaxRule> Rules { get; set; }
+        public IEnumerable<TaxRule> Rules { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [tax shipping].

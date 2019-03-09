@@ -99,7 +99,7 @@ namespace Ecwid.Models
         /// The taxes.
         /// </value>
         [JsonProperty("taxes")]
-        public List<Tax> Taxes { get; set; }
+        public IEnumerable<Tax> Taxes { get; set; }
 
         /// <summary>
         /// Gets or sets the destination zones.
@@ -108,6 +108,6 @@ namespace Ecwid.Models
         /// The destination zones.
         /// </value>
         [JsonProperty("zones")]
-        public List<Zone> Zones { get; set; }
+        public IEnumerable<Zone> Zones { get; set; }
     }
 }

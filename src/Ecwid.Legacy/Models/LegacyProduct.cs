@@ -24,7 +24,7 @@ namespace Ecwid.Legacy.Models
         /// The options.
         /// </value>
         [JsonProperty("options")]
-        public List<LegacyProductOption> Options { get; set; }
+        public IEnumerable<LegacyProductOption> Options { get; set; }
 
         /// <summary>
         /// Gets or sets a list of included taxes.
@@ -33,7 +33,7 @@ namespace Ecwid.Legacy.Models
         /// The taxes.
         /// </value>
         [JsonProperty("taxes")]
-        public List<LegacyProductTax> Taxes { get; set; }
+        public IEnumerable<LegacyProductTax> Taxes { get; set; }
 
         /// <summary>
         /// Gets or sets a list of gallery images.
@@ -42,7 +42,7 @@ namespace Ecwid.Legacy.Models
         /// The gallery images.
         /// </value>
         [JsonProperty("galleryImages")]
-        public List<LegacyGalleryImage> GalleryImages { get; set; }
+        public IEnumerable<LegacyGalleryImage> GalleryImages { get; set; }
 
         /// <summary>
         /// Gets or sets a list of categories which this product belongs to.
@@ -53,7 +53,7 @@ namespace Ecwid.Legacy.Models
         /// The categories.
         /// </value>
         [JsonProperty("categories")]
-        public List<LegacyCategoryEntry> Categories { get; set; }
+        public IEnumerable<LegacyCategoryEntry> Categories { get; set; }
 
         /// <summary>
         /// If present, unique ID for default product combination.
@@ -71,7 +71,7 @@ namespace Ecwid.Legacy.Models
         /// The combinations.
         /// </value>
         [JsonProperty("combinations")]
-        public List<LegacyProductCombination> Combinations { get; set; }
+        public IEnumerable<LegacyProductCombination> Combinations { get; set; }
 
         /// <summary>
         /// Gets or sets the creation date (UNIX timestamp).
@@ -112,7 +112,7 @@ namespace Ecwid.Legacy.Models
         /// The attributes.
         /// </value>
         [JsonProperty("attributes")]
-        public List<LegacyAttribute> Attributes { get; set; }
+        public IEnumerable<LegacyAttribute> Attributes { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [in stock].

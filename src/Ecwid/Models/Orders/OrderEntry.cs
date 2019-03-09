@@ -217,7 +217,7 @@ namespace Ecwid.Models
         /// The discount information.
         /// </value>
         [JsonProperty("discountInfo")]
-        public List<DiscountInfo> DiscountInfo { get; set; }
+        public IEnumerable<DiscountInfo> DiscountInfo { get; set; }
 
         /// <summary>
         /// Gets or sets the information about applied coupon.
@@ -289,7 +289,7 @@ namespace Ecwid.Models
         /// The items.
         /// </value>
         [JsonProperty("items")]
-        public List<OrderItem> Items { get; set; }
+        public IEnumerable<OrderItem> Items { get; set; }
 
         /// <summary>
         /// Gets or sets the name and address of the person entered in shipping information.
