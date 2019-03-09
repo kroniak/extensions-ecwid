@@ -21,11 +21,13 @@ var result = await client.Configure(someShopId, someToken).Orders
 
 `PM> Install-Package Ecwid -Pre` - services and models
 
-`PM> Install-Package Ecwid.OAuth -Pre` - a pipeline OAuth2 wrapper for ASP.NET Core (aka ASP.NET 5)
+`PM> Install-Package Ecwid.Legacy -Pre` - Legacy v1 services and models
+
+`PM> Install-Package Ecwid.OAuth -Pre` - a pipeline OAuth2 wrapper for ASP.NET Core
 
 ## Ecwid API
 
-You can learn abount v3 (general) API [here](https://developers.ecwid.com/api-documentation)
+You can learn about v3 (general) API [here](https://developers.ecwid.com/api-documentation)
 
 You can learn about v1 (Legacy) API:
 
@@ -35,10 +37,10 @@ You can learn about v1 (Legacy) API:
 
 ## Namespaces
 
-- Ecwid.Models - model classes for API v3
-- Ecwid.Models.Legacy - model classes for API v1
 - Ecwid - client for API v3
+- Ecwid.Models - model classes for API v3
 - Ecwid.Legacy - client for API v1
+- Ecwid.Legacy.Models - model classes for API v1
 
 ## How to use
 
