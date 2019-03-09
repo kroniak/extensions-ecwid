@@ -2,6 +2,8 @@
 
 using Ecwid.Legacy.Models;
 
+// ReSharper disable CheckNamespace
+
 namespace Ecwid.Legacy
 {
     /// <inheritdoc />

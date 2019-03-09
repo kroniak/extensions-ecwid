@@ -1,5 +1,7 @@
 ﻿// Licensed under the MIT License. See LICENSE in the git repository root for license information.
 
+// ReSharper disable CheckNamespace
+
 namespace Ecwid.Legacy
 {
     /// <inheritdoc />

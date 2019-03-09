@@ -2,6 +2,8 @@
 
 using System;
 
+// ReSharper disable CheckNamespace
+
 namespace Ecwid.Legacy
 {
     /// <summary>

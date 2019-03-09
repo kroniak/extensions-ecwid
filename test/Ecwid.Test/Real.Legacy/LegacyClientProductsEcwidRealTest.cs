@@ -80,12 +80,18 @@ namespace Ecwid.Test.Real.Legacy
 
         [Fact]
         public async void GetProductsAsyncException_ThrowsException()
-            => await Assert.ThrowsAsync<ArgumentException>(() => _client.GetProductsAsync(-1));
+        {
+            var exception = await Assert.ThrowsAsync<ArgumentException>(() => _client.GetProductsAsync(-1));
+            Assert.Contains("Category id is empty.", exception.Message);
+        }
 
         [Fact]
         public async void GetProductsAsyncExceptionWrongToken_ThrowsException_Forbidden()
         {
             var ex = await Assert.ThrowsAsync<EcwidHttpException>(() => _client.GetProductsAsync(null, true));
+
+            Assert.Contains("Call failed with status code 403 (Incorrect API key has been found in request",
+                ex.Message);
 
             Assert.Equal(HttpStatusCode.Forbidden, ex.StatusCode);
         }
@@ -109,13 +115,18 @@ namespace Ecwid.Test.Real.Legacy
         [InlineData(-1)]
         [InlineData(0)]
         public async void GetProductAsync_IncorrectInt_ThrowsException(int i)
-            => await Assert.ThrowsAsync<ArgumentException>(() => _client.GetProductAsync(i));
+        {
+            var exception = await Assert.ThrowsAsync<ArgumentException>(() => _client.GetProductAsync(i));
+            Assert.Contains("Product id is empty.", exception.Message);
+        }
 
         [Fact]
         public async void UpdateProductAsync_ThrowsException_Forbidden()
         {
             var ex = await Assert.ThrowsAsync<EcwidHttpException>(() =>
                 _client.UpdateProductAsync(123, new {weight = 600}));
+            Assert.Contains("Call failed with status code 403 (Incorrect API key has been found in request",
+                ex.Message);
 
             Assert.Equal(HttpStatusCode.Forbidden, ex.StatusCode);
         }
@@ -123,8 +134,11 @@ namespace Ecwid.Test.Real.Legacy
         [Theory]
         [InlineData(-1)]
         [InlineData(0)]
-        public async void UpdateProductAsync_InvalidInt_ThrowsException(int i) =>
-            await Assert.ThrowsAsync<ArgumentException>(() =>
+        public async void UpdateProductAsync_InvalidInt_ThrowsException(int i)
+        {
+            var exception = await Assert.ThrowsAsync<ArgumentException>(() =>
                 _client.UpdateProductAsync(i, new {weight = 600}));
+            Assert.Contains("Product id is empty.", exception.Message);
+        }
     }
 }

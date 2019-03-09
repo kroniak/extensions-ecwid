@@ -68,12 +68,14 @@ namespace Ecwid.Tools
             "INCOMPLETE"
         };
 
+        private static readonly IEnumerable<string> ExceptionQueryList = new[] {"limit", "offset"};
+
         /// <summary>
         /// Check strings for <see langword="null" /> or <see langword="empty" />.
         /// </summary>
         /// <param name="strings">The strings.</param>
         /// <returns>True if the all of the strings are <see langword="null" /> or <see langword="empty" /></returns>
-        public static bool AreNullOrEmpty(params string[] strings) => strings.All(string.IsNullOrWhiteSpace);
+        private static bool AreNullOrEmpty(params string[] strings) => strings.All(string.IsNullOrWhiteSpace);
 
         /// <summary>
         /// Check strings for <see langword="null" /> or <see langword="empty" />.
@@ -134,8 +136,7 @@ namespace Ecwid.Tools
             Dictionary<string, object> query, params string[] strings)
         {
             //check query builder query params count
-            var exceptionList = new[] {"limit", "offset"};
-            var count = query.Keys.Count(s => !exceptionList.Contains(s));
+            var count = query.Keys.Count(s => !ExceptionQueryList.Contains(s));
             if (count == 0)
                 throw new ArgumentException("Query is empty. Prevent change all orders.", nameof(query));
 

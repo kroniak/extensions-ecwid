@@ -13,26 +13,74 @@ namespace Ecwid.Test.Services.Legacy
     {
         private readonly IEcwidLegacyClient _defaultLegacyClient = new EcwidLegacyClient();
 
+        [Fact]
+        public void Extension_IncorrectInt_Exception()
+        {
+            var exception = Assert.Throws<ArgumentException>(() => _defaultLegacyClient.Orders.Order(null));
+            Assert.Contains("VendorNumber is null or empty.", exception.Message);
+        }
+
+        [Fact]
+        public void Extension_IncorrectInt_InvalidArgument_2Part_Exception()
+        {
+            var exception = Assert.Throws<ArgumentException>(() => _defaultLegacyClient.Orders.FromOrder(null));
+            Assert.Contains("VendorNumber is null or empty.", exception.Message);
+        }
+
         [Theory]
         [InlineData(-1)]
         [InlineData(0)]
-        public void Extension_IncorrectInt_Exception(int i)
+        public void Extension_IncorrectInt_InvalidArgument_3Part_Exception(int i)
         {
-            Assert.Throws<ArgumentException>(() => _defaultLegacyClient.Orders.Order(null));
-            Assert.Throws<ArgumentException>(() => _defaultLegacyClient.Orders.FromOrder(null));
-            Assert.Throws<ArgumentException>(() => _defaultLegacyClient.Orders.Order(i));
-            Assert.Throws<ArgumentException>(() => _defaultLegacyClient.Orders.FromOrder(i));
-            Assert.Throws<ArgumentException>(() => _defaultLegacyClient.Orders.Limit(i));
-            Assert.Throws<ArgumentException>(() => _defaultLegacyClient.Orders.Offset(i));
+            var exception = Assert.Throws<ArgumentException>(() => _defaultLegacyClient.Orders.Order(i));
+            Assert.Contains("Number must be greater than 0", exception.Message);
+        }
+
+        [Theory]
+        [InlineData(-1)]
+        [InlineData(0)]
+        public void Extension_IncorrectInt_InvalidArgument_4Part_Exception(int i)
+        {
+            var exception = Assert.Throws<ArgumentException>(() => _defaultLegacyClient.Orders.FromOrder(i));
+            Assert.Contains("Number must be greater than 0", exception.Message);
+        }
+
+        [Theory]
+        [InlineData(-1)]
+        [InlineData(0)]
+        public void Extension_IncorrectInt_InvalidArgument_5Part_Exception(int i)
+        {
+            var exception = Assert.Throws<ArgumentException>(() => _defaultLegacyClient.Orders.Limit(i));
+            Assert.Contains("Limit must be greater than 0", exception.Message);
+        }
+
+        [Theory]
+        [InlineData(-1)]
+        [InlineData(0)]
+        public void Extension_IncorrectInt_InvalidArgument_6Part_Exception(int i)
+        {
+            var exception = Assert.Throws<ArgumentException>(() => _defaultLegacyClient.Orders.Offset(i));
+            Assert.Contains("Offset must be greater than 0.", exception.Message);
         }
 
         [Theory]
         [InlineData(null)]
         [InlineData("")]
-        public void Extension_IncorrectString_Exception(string i)
+        public void ExtensionOrder_IncorrectString_Exception(string i)
         {
-            Assert.Throws<ArgumentException>(() => _defaultLegacyClient.Orders.Order(i));
-            Assert.Throws<ArgumentException>(() => _defaultLegacyClient.Orders.FromOrder(i));
+            var exception = Assert.Throws<ArgumentException>(() => _defaultLegacyClient.Orders.Order(i));
+
+            Assert.Contains("VendorNumber is null or empty.", exception.Message);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        public void ExtensionFromOrder_IncorrectString_Exception(string i)
+        {
+            var exception = Assert.Throws<ArgumentException>(() => _defaultLegacyClient.Orders.FromOrder(i));
+
+            Assert.Contains("VendorNumber is null or empty.", exception.Message);
         }
 
         [Fact]
@@ -98,10 +146,9 @@ namespace Ecwid.Test.Services.Legacy
         public void Statuses_Exception(string paid, string full)
         {
             var exception = Assert.Throws<EcwidConfigException>(() => _defaultLegacyClient.Orders.Statuses(paid, full));
-            
-            Assert.Equal("Can not add or update statuses. Look inner exception.", exception.Message);
-            Assert.Equal("Statuses string is invalid.\nParameter name: statuses", exception.InnerException.Message);
 
+            Assert.Equal("Can not add or update statuses. Look inner exception.", exception.Message);
+            Assert.Contains("Statuses string is invalid.", exception.InnerException.Message);
         }
 
         [Theory]
@@ -122,8 +169,13 @@ namespace Ecwid.Test.Services.Legacy
         [InlineData("DECLINED ,CANCEL")]
         [InlineData("DECLINED CANCELLED FAIL")]
         [InlineData("")]
-        public void PaymentStatuses_Exception(string paid) =>
-            Assert.Throws<EcwidConfigException>(() => _defaultLegacyClient.Orders.PaymentStatuses(paid));
+        public void PaymentStatuses_Exception(string paid)
+        {
+            var exception =
+                Assert.Throws<EcwidConfigException>(() => _defaultLegacyClient.Orders.PaymentStatuses(paid));
+            Assert.Equal("Can not add or update statuses. Look inner exception.", exception.Message);
+            Assert.Contains("Statuses string is invalid.", exception.InnerException.Message);
+        }
 
         [Fact]
         public void AddTwicePaymentStatuses_ReturnCorrectResult()
@@ -153,8 +205,14 @@ namespace Ecwid.Test.Services.Legacy
         [Theory]
         [InlineData("PAID, DECLINE")]
         [InlineData("")]
-        public void FulfillmentStatuses_Exception(string paid) =>
-            Assert.Throws<EcwidConfigException>(() => _defaultLegacyClient.Orders.FulfillmentStatuses(paid));
+        public void FulfillmentStatuses_Exception(string paid)
+        {
+            var exception =
+                Assert.Throws<EcwidConfigException>(() => _defaultLegacyClient.Orders.FulfillmentStatuses(paid));
+
+            Assert.Equal("Can not add or update statuses. Look inner exception.", exception.Message);
+            Assert.Contains("Statuses string is invalid.", exception.InnerException.Message);
+        }
 
         [Fact]
         public void AddBothStatuses_ReturnCorrectResult()

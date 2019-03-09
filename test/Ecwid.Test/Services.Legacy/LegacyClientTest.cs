@@ -35,19 +35,23 @@ namespace Ecwid.Test.Services.Legacy
 
         [Fact]
         public async void GetCategoriesAsync_LegacyCategoriesUrl_Exception()
-            =>
-                await
-                    Assert.ThrowsAsync<EcwidConfigException>(
-                        () => _defaultLegacyClient.GetCategoriesAsync());
+        {
+            var exception = await
+                Assert.ThrowsAsync<EcwidConfigException>(
+                    () => _defaultLegacyClient.GetCategoriesAsync());
+            Assert.Contains("Credentials are null. Can not do a request.", exception.Message);
+        }
 
         [Theory]
         [InlineData(-1)]
         [InlineData(0)]
         public async void GetCategoryAsync_IncorrectInt_Exception(int i)
-            =>
-                await
-                    Assert.ThrowsAsync<ArgumentException>(
-                        () => _legacyClient.GetCategoryAsync(i));
+        {
+            var exception = await
+                Assert.ThrowsAsync<ArgumentException>(
+                    () => _legacyClient.GetCategoryAsync(i));
+            Assert.Contains("Category is is 0.", exception.Message);
+        }
 
         [Fact]
         public async void GetCategoryAsync_404()
@@ -69,14 +73,16 @@ namespace Ecwid.Test.Services.Legacy
         #region LegacyOrders
 
         [Fact]
-        public async void LegacyOrdersOrdersUrl_Exception()
-            =>
-                await
-                    Assert.ThrowsAsync<EcwidConfigException>(
-                        () => _defaultLegacyClient.CheckOrdersTokenAsync());
+        public async void LegacyOrders_OrdersUrl_Exception()
+        {
+            var exception = await
+                Assert.ThrowsAsync<EcwidConfigException>(
+                    () => _defaultLegacyClient.CheckOrdersTokenAsync());
+            Assert.Contains("Credentials are null. Can not do a request.", exception.Message);
+        }
 
         [Fact]
-        public async void LegacyOrdersCheckOrdersTokenAsync_ReturnTrue()
+        public async void LegacyOrders_CheckOrdersTokenAsync_ReturnTrue()
         {
             _httpTest
                 .RespondWithJson(new {count = 0, total = 0, order = "[]"});
@@ -91,7 +97,7 @@ namespace Ecwid.Test.Services.Legacy
         }
 
         [Fact]
-        public async void LegacyOrdersCheckOrdersAuthAsync_ReturnFalse()
+        public async void LegacyOrders_CheckOrdersAuthAsync_ReturnFalse()
         {
             _httpTest
                 .RespondWithJson(new {count = 0, total = 0, order = "[]"}, 403);
@@ -106,7 +112,7 @@ namespace Ecwid.Test.Services.Legacy
         }
 
         [Fact]
-        public async void LegacyOrdersGetOrdersCountAsync_ReturnCorrectList()
+        public async void LegacyOrders_GetOrdersCountAsync_ReturnCorrectList()
         {
             _httpTest
                 .RespondWithJson(new {count = 0, total = 10, order = "[]"});
@@ -121,7 +127,7 @@ namespace Ecwid.Test.Services.Legacy
         }
 
         [Fact]
-        public async void LegacyOrdersGetNewOrdersAsync_ReturnSingleList()
+        public async void LegacyOrders_GetNewOrdersAsync_ReturnSingleList()
         {
             var response = Mocks.MockLegacyOrderResponseWithOneOrder;
 
@@ -138,7 +144,7 @@ namespace Ecwid.Test.Services.Legacy
         }
 
         [Fact]
-        public async void LegacyOrdersGetNonPaidOrdersAsync_ReturnSingleList()
+        public async void LegacyOrders_GetNonPaidOrdersAsync_ReturnSingleList()
         {
             var response = Mocks.MockLegacyOrderResponseWithOneOrder;
 
@@ -155,7 +161,7 @@ namespace Ecwid.Test.Services.Legacy
         }
 
         [Fact]
-        public async void LegacyOrdersGetPaidNotShippedOrdersAsync_ReturnSingleList()
+        public async void LegacyOrders_GetPaidNotShippedOrdersAsync_ReturnSingleList()
         {
             var response = Mocks.MockLegacyOrderResponseWithOneOrder;
 
@@ -172,7 +178,7 @@ namespace Ecwid.Test.Services.Legacy
         }
 
         [Fact]
-        public async void LegacyOrdersGetShippedOrdersAsync_ReturnSingle()
+        public async void LegacyOrders_GetShippedOrdersAsync_ReturnSingle()
         {
             var response = Mocks.MockLegacyOrderResponseWithOneOrder;
 
@@ -233,26 +239,38 @@ namespace Ecwid.Test.Services.Legacy
         }
 
         [Fact]
-        public async void LegacyOrdersUpdateAsyncNullBuilder_Exception()
+        public async void LegacyOrders_UpdateAsyncNullBuilder_Exception()
         {
-            await
+            var exception = await
                 Assert.ThrowsAsync<EcwidException>(
                     async () => await _legacyClient.Orders.UpdateAsync("", "", ""));
-            await
+
+            Assert.Contains("Can not add or update statuses. Look inner exception.", exception.Message);
+            Assert.Contains("Query is empty. Prevent change all orders.", exception.InnerException.Message);
+
+            exception = await
                 Assert.ThrowsAsync<EcwidException>(
                     async () =>
                         await
                             _legacyClient.Orders.Limit(5)
                                 .Offset(5)
                                 .UpdateAsync("", "", ""));
+            Assert.Contains("Can not add or update statuses. Look inner exception.", exception.Message);
+            Assert.Contains("Query is empty. Prevent change all orders.", exception.InnerException.Message);
         }
 
         [Fact]
-        public async void UpdateAsyncNullStrings_Exception() => await Assert.ThrowsAsync<EcwidException>(async ()
-            => await _legacyClient.Orders.Order(1).UpdateAsync("", "", ""));
+        public async void UpdateAsyncNullStrings_Exception()
+        {
+            var exception = await Assert.ThrowsAsync<EcwidException>(async ()
+                => await _legacyClient.Orders.Order(1).UpdateAsync("", "", ""));
+
+            Assert.Contains("Can not add or update statuses. Look inner exception.", exception.Message);
+            Assert.Contains("All new statuses are null or empty.", exception.InnerException.Message);
+        }
 
         [Fact]
-        public async void LegacyOrdersUpdateAsync_ReturnEmptyList()
+        public async void LegacyOrders_UpdateAsync_ReturnEmptyList()
         {
             _httpTest
                 .RespondWithJson(new {count = 0, total = 10, order = "[]"});
@@ -268,7 +286,7 @@ namespace Ecwid.Test.Services.Legacy
         }
 
         [Fact]
-        public async void LegacyOrdersUpdateAsync_ReturnSingle()
+        public async void LegacyOrders_UpdateAsync_ReturnSingle()
         {
             _httpTest
                 .RespondWithJson(Mocks.MockLegacyOrderResponseForUpdate);
@@ -284,14 +302,16 @@ namespace Ecwid.Test.Services.Legacy
         }
 
         [Fact]
-        public async void LegacyOrdersUpdateAsync_Exception()
+        public async void LegacyOrders_UpdateAsync_Exception()
         {
             _httpTest
                 .RespondWithJson(Mocks.MockLegacyOrderResponseForUpdate, 400);
 
-            await
+            var exception = await
                 Assert.ThrowsAsync<EcwidHttpException>(
                     () => _legacyClient.Orders.Order(1).UpdateAsync("PAID", "PROCESSING", "test_code"));
+
+            Assert.Contains("Call failed with status code 400 (Bad Request):", exception.Message);
 
             _httpTest.ShouldHaveCalled(
                     $"{_checkOrdersLegacyUrl}&order=1&new_payment_status=PAID&new_fulfillment_status=PROCESSING&new_shipping_tracking_code=test_code")

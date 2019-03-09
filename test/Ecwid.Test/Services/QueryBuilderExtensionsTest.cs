@@ -13,8 +13,11 @@ namespace Ecwid.Test.Services
         private readonly IEcwidClient _defaultClient = new EcwidClient();
 
         [Fact]
-        public void AddOrUpdateStatuses_Exception() =>
-            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.AddOrUpdateStatuses("", null));
+        public void AddOrUpdateStatuses_Exception()
+        {
+            var exception = Assert.Throws<ArgumentException>(() => _defaultClient.Orders.AddOrUpdateStatuses("", null));
+            Assert.Contains("Value cannot be null.", exception.InnerException.Message);
+        }
 
         [Fact]
         public void AddFulfillmentStatuses_ReturnCorrectResult()
@@ -45,8 +48,11 @@ namespace Ecwid.Test.Services
         [Theory]
         [InlineData(-1)]
         [InlineData(0)]
-        public void CouponCode_Exception(int i) =>
-            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.CouponCode(i));
+        public void CouponCode_Exception(int i)
+        {
+            var exception = Assert.Throws<ArgumentException>(() => _defaultClient.Orders.CouponCode(i));
+            Assert.Contains("Coupon code must be greater than 0.", exception.Message);
+        }
 
         [Fact]
         public void Custom_ReturnCorrectResult()
@@ -64,15 +70,38 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public void Customer_Exception() => Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Customer(""));
+        public void Customer_Exception()
+        {
+            var exception = Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Customer(""));
+            Assert.Contains("Customer is null or empty.", exception.Message);
+        }
 
         [Fact]
         public void Custom_Exception()
         {
-            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Custom(null, new {a = 1}));
-            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Custom(null, null));
-            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Custom("", new {a = 1}));
-            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Custom(" ", new {a = 1}));
+            var exception = Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Custom(null, new {a = 1}));
+            Assert.Contains("Name is null or empty.", exception.Message);
+        }
+
+        [Fact]
+        public void Custom_InvalidArgument_2Part_Exception()
+        {
+            var exception = Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Custom(null, null));
+            Assert.Contains("Value is null.", exception.Message);
+        }
+
+        [Fact]
+        public void Custom_InvalidArgument_3Part_Exception()
+        {
+            var exception = Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Custom("", new {a = 1}));
+            Assert.Contains("Name is null or empty.", exception.Message);
+        }
+
+        [Fact]
+        public void Custom_InvalidArgument_4Part_Exception()
+        {
+            var exception = Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Custom(" ", new {a = 1}));
+            Assert.Contains("Name is null or empty.", exception.Message);
         }
 
         [Theory]
@@ -88,12 +117,24 @@ namespace Ecwid.Test.Services
         [InlineData("2015-00-22 18:48:38")]
         [InlineData("2015-00-22 18:48:38 -0500")]
         [InlineData("-1")]
+        [InlineData("1111111111111111111111111111111111111111111111111111111111")]
+        public void Date_Exception(string date)
+        {
+            var exception =
+                Assert.Throws<ArgumentException>(() => _defaultClient.Orders.CreatedFrom(date).GetParam("createdFrom"));
+            Assert.Contains("Date string is invalid.", exception.Message);
+        }
+
+        [Theory]
         [InlineData("")]
         [InlineData(null)]
         [InlineData(" ")]
-        [InlineData("1111111111111111111111111111111111111111111111111111111111")]
-        public void Date_Exception(string date)
-            => Assert.Throws<ArgumentException>(() => _defaultClient.Orders.CreatedFrom(date).GetParam("createdFrom"));
+        public void Date_InvalidArgument_2Part_Exception(string date)
+        {
+            var exception =
+                Assert.Throws<ArgumentException>(() => _defaultClient.Orders.CreatedFrom(date).GetParam("createdFrom"));
+            Assert.Contains("Date string is null or empty.", exception.Message);
+        }
 
         [Fact]
         public void Date_ReturnCorrectResult()
@@ -156,27 +197,67 @@ namespace Ecwid.Test.Services
 
         [Theory]
         [InlineData("2015-13-22")]
+        public void DateStringCreated_IncorrectFrom_Exception(string date)
+        {
+            var exception = Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Created(date, "2015-04-22"));
+            Assert.Contains("Date string is invalid.", exception.Message);
+        }
+
+        [Theory]
         [InlineData("")]
-        public void DateStringCreated_IncorrectFrom_Exception(string date) =>
-            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Created(date, "2015-04-22"));
+        public void DateStringCreated_IncorrectFrom_InvalidArgument_2Part_Exception(string date)
+        {
+            var exception = Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Created(date, "2015-04-22"));
+            Assert.Contains("Date string is null or empty.", exception.Message);
+        }
+
+        [Theory]
+        [InlineData("")]
+        public void DateStringCreated_IncorrectTo_Exception(string date)
+        {
+            var exception = Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Created("2015-04-22", date));
+            Assert.Contains("Date string is null or empty.", exception.Message);
+        }
 
         [Theory]
         [InlineData("2015-13-22")]
-        [InlineData("")]
-        public void DateStringCreated_IncorrectTo_Exception(string date) =>
-            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Created("2015-04-22", date));
+        public void DateStringCreated_IncorrectTo_InvalidArgument_2Part_Exception(string date)
+        {
+            var exception = Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Created("2015-04-22", date));
+            Assert.Contains("Date string is invalid.", exception.Message);
+        }
 
         [Theory]
         [InlineData("2015-13-22")]
+        public void DateStringUpdated_IncorrectFrom_Exception(string date)
+        {
+            var exception = Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Updated(date, "2015-04-22"));
+            Assert.Contains("Date string is invalid.", exception.Message);
+        }
+
+        [Theory]
         [InlineData("")]
-        public void DateStringUpdated_IncorrectFrom_Exception(string date) =>
-            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Updated(date, "2015-04-22"));
+        public void DateStringUpdated_IncorrectFrom_InvalidArgument_2Part_Exception(string date)
+        {
+            var exception = Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Updated(date, "2015-04-22"));
+            Assert.Contains("Date string is null or empty.", exception.Message);
+        }
+
+        [Theory]
+        [InlineData("")]
+        public void DateStringUpdated_IncorrectTo_Exception(string date)
+        {
+            var exception = Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Updated("2015-04-22", date));
+            Assert.Contains("Date string is null or empty.", exception.Message);
+        }
 
         [Theory]
         [InlineData("2015-13-22")]
-        [InlineData("")]
-        public void DateStringUpdated_IncorrectTo_Exception(string date) =>
-            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Updated("2015-04-22", date));
+        public void DateStringUpdated_IncorrectTo_InvalidArgument_2Part_Exception(string date)
+        {
+            var exception = Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Updated("2015-04-22", date));
+            Assert.Contains("Date string is invalid.", exception.Message);
+        }
 
         [Fact]
         public void FulfillmentStatuses_ReturnCorrectResult()
@@ -190,8 +271,11 @@ namespace Ecwid.Test.Services
         [Theory]
         [InlineData("PAID, DECLINE")]
         [InlineData("")]
-        public void FulfillmentStatuses_Exception(string paid) =>
-            Assert.Throws<EcwidConfigException>(() => _defaultClient.Orders.FulfillmentStatuses(paid));
+        public void FulfillmentStatuses_Exception(string paid)
+        {
+            var exception = Assert.Throws<EcwidConfigException>(() => _defaultClient.Orders.FulfillmentStatuses(paid));
+            Assert.Contains("Statuses string is invalid.", exception.InnerException.Message);
+        }
 
         [Fact]
         public void Keywords_ReturnCorrectResult()
@@ -204,8 +288,10 @@ namespace Ecwid.Test.Services
         [Fact]
         public void Keywords_Exception()
         {
-            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Keywords(""));
-            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Keywords(null));
+            var exception = Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Keywords(""));
+            Assert.Contains("Keywords is null or empty.", exception.Message);
+            exception = Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Keywords(null));
+            Assert.Contains("Keywords is null or empty.", exception.Message);
         }
 
         [Fact]
@@ -239,8 +325,10 @@ namespace Ecwid.Test.Services
         [InlineData(0)]
         public void LimitAndOffset_IncorrectLimit_Exception(int i)
         {
-            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Limit(i));
-            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Offset(i));
+            var exception = Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Limit(i));
+            Assert.Contains("Limit must be greater than 0.", exception.Message);
+            exception = Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Offset(i));
+            Assert.Contains("Offset must be greater than 0.", exception.Message);
         }
 
         [Fact]
@@ -256,10 +344,19 @@ namespace Ecwid.Test.Services
         [Fact]
         public void Methods_Exception()
         {
-            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.PaymentMethod(null));
-            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.PaymentMethod(""));
-            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.ShippingMethod(null));
-            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.ShippingMethod(""));
+            var exception = Assert.Throws<ArgumentException>(() => _defaultClient.Orders.PaymentMethod(null));
+            Assert.Contains("PaymentMethod is null or empty.", exception.Message);
+            exception = Assert.Throws<ArgumentException>(() => _defaultClient.Orders.PaymentMethod(""));
+            Assert.Contains("PaymentMethod is null or empty.", exception.Message);
+        }
+
+        [Fact]
+        public void Methods_InvalidArgument_2Part_Exception()
+        {
+            var exception = Assert.Throws<ArgumentException>(() => _defaultClient.Orders.ShippingMethod(null));
+            Assert.Contains("ShippingMethod is null or empty.", exception.Message);
+            exception = Assert.Throws<ArgumentException>(() => _defaultClient.Orders.ShippingMethod(""));
+            Assert.Contains("ShippingMethod is null or empty.", exception.Message);
         }
 
         [Fact]
@@ -275,12 +372,18 @@ namespace Ecwid.Test.Services
         [Theory]
         [InlineData(-1)]
         [InlineData(0)]
-        public void Order_InvalidInt_Exception(int i) =>
-            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Order(i));
+        public void Order_InvalidInt_Exception(int i)
+        {
+            var exception = Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Order(i));
+            Assert.Contains("Number must be greater than 0.", exception.Message);
+        }
 
         [Fact]
-        public void Order_EmptyString_Exception() =>
-            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Order(""));
+        public void Order_EmptyString_Exception()
+        {
+            var exception = Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Order(""));
+            Assert.Contains("VendorNumber is null or empty.", exception.Message);
+        }
 
         [Fact]
         public void PaymentStatuses_ReturnCorrectResult()
@@ -292,8 +395,11 @@ namespace Ecwid.Test.Services
         [Theory]
         [InlineData("PAID, DECLINE")]
         [InlineData("")]
-        public void PaymentStatuses_Exception(string paid) =>
-            Assert.Throws<EcwidConfigException>(() => _defaultClient.Orders.PaymentStatuses(paid));
+        public void PaymentStatuses_Exception(string paid)
+        {
+            var exception = Assert.Throws<EcwidConfigException>(() => _defaultClient.Orders.PaymentStatuses(paid));
+            Assert.Contains("Statuses string is invalid.", exception.InnerException.Message);
+        }
 
         [Fact]
         public void Totals_ReturnCorrectResult()
@@ -313,25 +419,37 @@ namespace Ecwid.Test.Services
         [Theory]
         [InlineData(-1)]
         [InlineData(0)]
-        public void Totals_FromIncorrect_Exception(int i) =>
-            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Totals(i, 1));
+        public void Totals_FromIncorrect_Exception(int i)
+        {
+            var exception = Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Totals(i, 1));
+            Assert.Contains("TotalFrom must be greater than 0.", exception.Message);
+        }
 
         [Theory]
         [InlineData(-1)]
         [InlineData(0)]
-        public void Totals_ToIncorrect_Exception(int i) =>
-            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Totals(1, i));
+        public void Totals_ToIncorrect_Exception(int i)
+        {
+            var exception = Assert.Throws<ArgumentException>(() => _defaultClient.Orders.Totals(1, i));
+            Assert.Contains("TotalTo must be greater than 0.", exception.Message);
+        }
 
         [Theory]
         [InlineData(-1)]
         [InlineData(0)]
-        public void TotalFrom_Incorrect_Exception(int i) =>
-            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.TotalFrom(i));
+        public void TotalFrom_Incorrect_Exception(int i)
+        {
+            var exception = Assert.Throws<ArgumentException>(() => _defaultClient.Orders.TotalFrom(i));
+            Assert.Contains("TotalFrom must be greater than 0.", exception.Message);
+        }
 
         [Theory]
         [InlineData(-1)]
         [InlineData(0)]
-        public void TotalTo_Incorrect_Exception(int i) =>
-            Assert.Throws<ArgumentException>(() => _defaultClient.Orders.TotalTo(i));
+        public void TotalTo_Incorrect_Exception(int i)
+        {
+            var exception = Assert.Throws<ArgumentException>(() => _defaultClient.Orders.TotalTo(i));
+            Assert.Contains("TotalTo must be greater than 0.", exception.Message);
+        }
     }
 }

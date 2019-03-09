@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Ecwid.Legacy.Models;
 using Flurl.Util;
 
+// ReSharper disable CheckNamespace
 // ReSharper disable PossibleMultipleEnumeration
 
 namespace Ecwid.Legacy

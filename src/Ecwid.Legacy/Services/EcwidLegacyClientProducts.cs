@@ -6,6 +6,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ecwid.Legacy.Models;
 
+// ReSharper disable CheckNamespace
+
 namespace Ecwid.Legacy
 {
     public partial class EcwidLegacyClient
@@ -45,7 +47,7 @@ namespace Ecwid.Legacy
         public Task<LegacyCategory> GetCategoryAsync(int categoryId, CancellationToken cancellationToken)
         {
             if (categoryId <= 0)
-                throw new ArgumentException(nameof(categoryId));
+                throw new ArgumentException("Category is is 0.", nameof(categoryId));
 
             return
                 GetApiAsync<LegacyCategory>(GetUrl("category", true), new {id = categoryId}, cancellationToken);
@@ -68,7 +70,7 @@ namespace Ecwid.Legacy
 
                 default:
                     if (categoryId < 0)
-                        throw new ArgumentException(nameof(categoryId));
+                        throw new ArgumentException("Category id is empty.", nameof(categoryId));
 
                     return GetApiAsync<IEnumerable<LegacyProductEntry>>(GetUrl("products", !hiddenProducts),
                         new {category = categoryId, hidden_products = hiddenProducts},
@@ -85,7 +87,7 @@ namespace Ecwid.Legacy
             bool hiddenProducts = false)
         {
             if (productId <= 0)
-                throw new ArgumentException(nameof(productId));
+                throw new ArgumentException("Product id is empty.", nameof(productId));
 
             return GetApiAsync<LegacyProduct>(GetUrl("product", !hiddenProducts),
                 new {id = productId, hidden_products = hiddenProducts},
@@ -103,7 +105,7 @@ namespace Ecwid.Legacy
             if (updatedFields == null) throw new ArgumentNullException(nameof(updatedFields));
 
             if (productId <= 0)
-                throw new ArgumentException(nameof(productId));
+                throw new ArgumentException("Product id is empty.", nameof(productId));
 
             return PutApiAsync(GetUrl("product"), new {id = productId}, updatedFields,
                 cancellationToken);

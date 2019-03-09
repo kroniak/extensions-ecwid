@@ -132,7 +132,7 @@ namespace Ecwid
         public async Task<OrderEntry> GetOrderAsync(int orderNumber, CancellationToken cancellationToken)
         {
             if (orderNumber <= 0)
-                throw new ArgumentException(nameof(orderNumber));
+                throw new ArgumentException("Order number is 0.", nameof(orderNumber));
 
             var orders = await GetOrdersAsync(new {orderNumber}, cancellationToken);
 
@@ -142,7 +142,7 @@ namespace Ecwid
         /// <inheritdoc />
         public Task<UpdateStatus> UpdateOrderAsync(OrderEntry order, CancellationToken cancellationToken)
         {
-            if (order.OrderNumber <= 0) throw new ArgumentException("Order number is 0.");
+            if (order.OrderNumber <= 0) throw new ArgumentException("Order number is 0.", nameof(order));
             return PutApiAsync<UpdateStatus>(GetUrl($"orders/{order.OrderNumber}"), order, cancellationToken);
         }
 
@@ -161,7 +161,7 @@ namespace Ecwid
         /// <inheritdoc />
         public Task<DeleteStatus> DeleteOrderAsync(int orderNumber, CancellationToken cancellationToken)
         {
-            if (orderNumber <= 0) throw new ArgumentException("Order number is 0.");
+            if (orderNumber <= 0) throw new ArgumentException("Order number is 0.", nameof(orderNumber));
             return DeleteApiAsync<DeleteStatus>(GetUrl($"orders/{orderNumber}"), cancellationToken);
         }
 

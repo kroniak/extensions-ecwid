@@ -3,6 +3,8 @@
 using System.Text.RegularExpressions;
 using Ecwid.Tools;
 
+// ReSharper disable CheckNamespace
+
 namespace Ecwid.Legacy
 {
     /// <inheritdoc />

@@ -31,7 +31,7 @@ namespace Ecwid
             where TOrder : BaseOrder
             where TUpdateResponse : class
         {
-            if (value == null) throw new ArgumentException(nameof(value));
+            if (value == null) throw new ArgumentException("Value is null.", nameof(value));
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Name is null or empty.", nameof(name));
 
             query.AddOrUpdate(name, value);

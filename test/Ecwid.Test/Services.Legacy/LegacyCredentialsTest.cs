@@ -41,7 +41,7 @@ namespace Ecwid.Test.Services.Legacy
         [InlineData(null)]
         [InlineData("")]
         [InlineData(" ")]
-        public void EcwidLegacyCredentials_TokenInvalid_Exception2(string token)
+        public void EcwidLegacyCredentials_TokenInvalid_InvalidArgument_2Part_Exception(string token)
         {
             var exception = Assert.Throws<EcwidConfigException>(() => new EcwidLegacyCredentials(ShopId, token, " "));
             Assert.Equal("The authorization token is invalid.", exception.Message);
@@ -51,7 +51,7 @@ namespace Ecwid.Test.Services.Legacy
         [InlineData(null)]
         [InlineData("")]
         [InlineData(" ")]
-        public void EcwidLegacyCredentials_ProductTokenInvalid_Exception2(string token)
+        public void EcwidLegacyCredentials_ProductTokenInvalid_InvalidArgument_2Part_Exception(string token)
         {
             var exception = Assert.Throws<EcwidConfigException>(() => new EcwidLegacyCredentials(ShopId, Token, token));
             Assert.Equal("The authorization token is invalid.", exception.Message);
@@ -61,7 +61,7 @@ namespace Ecwid.Test.Services.Legacy
         [InlineData(null)]
         [InlineData("")]
         [InlineData(" ")]
-        public void EcwidLegacyCredentials_TokenInvalid_Exception3(string token)
+        public void EcwidLegacyCredentials_TokenInvalid_InvalidArgument_3Part_Exception(string token)
         {
             var exception = Assert.Throws<EcwidConfigException>(() =>
                 new EcwidLegacyCredentials(ShopId, Token, Token).OrderToken = token);
@@ -72,7 +72,7 @@ namespace Ecwid.Test.Services.Legacy
         [InlineData(null)]
         [InlineData("")]
         [InlineData(" ")]
-        public void EcwidLegacyCredentials_ProductTokenInvalid_Exception4(string token)
+        public void EcwidLegacyCredentials_ProductTokenInvalid_InvalidArgument_4Part_Exception(string token)
         {
             var exception = Assert.Throws<EcwidConfigException>(
                 () => new EcwidLegacyCredentials(ShopId, Token, Token).ProductToken = token);

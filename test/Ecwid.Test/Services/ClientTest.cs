@@ -43,8 +43,14 @@ namespace Ecwid.Test.Services
                     400)
                 .RespondWith("Wrong numeric parameter 'orderNumber' value: not a number or a number out of range", 400);
 
-            await Assert.ThrowsAsync<EcwidHttpException>(async () => await _client.CheckOrdersTokenAsync());
-            await Assert.ThrowsAsync<EcwidHttpException>(async () => await _client.CheckOrdersTokenAsync());
+            var exception =
+                await Assert.ThrowsAsync<EcwidHttpException>(async () => await _client.CheckOrdersTokenAsync());
+
+            Assert.Contains("Call failed with status code 400 (Bad Request):", exception.Message);
+
+            exception = await Assert.ThrowsAsync<EcwidHttpException>(async () => await _client.CheckOrdersTokenAsync());
+
+            Assert.Contains("Call failed with status code 400 (Bad Request)", exception.Message);
 
             _httpTest.ShouldHaveCalled($"{CheckOrdersUrl}&limit=1")
                 .WithVerb(HttpMethod.Get)
@@ -116,10 +122,11 @@ namespace Ecwid.Test.Services
 
         [Fact]
         public async void OrdersUrl_Exception_ThrowsAsync()
-            =>
-                await
-                    Assert.ThrowsAsync<EcwidConfigException>(
-                        () => _defaultClient.CheckOrdersTokenAsync());
+        {
+            var exception =
+                await Assert.ThrowsAsync<EcwidConfigException>(() => _defaultClient.CheckOrdersTokenAsync());
+            Assert.Contains("Credentials are null. Can not do a request.", exception.Message);
+        }
 
         [Fact]
         public void OrdersGet_ReturnNotNull()
@@ -153,9 +160,11 @@ namespace Ecwid.Test.Services
                 .SimulateTimeout()
                 .SimulateTimeout();
 
-            await
+            var exception = await
                 Assert.ThrowsAsync<EcwidHttpException>(
                     async () => await _client.CheckOrdersTokenAsync());
+
+            Assert.Contains("A task was canceled", exception.Message);
 
             _httpTest.ShouldHaveCalled($"{CheckOrdersUrl}&limit=1")
                 .WithVerb(HttpMethod.Get)
@@ -163,9 +172,13 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void GetOrderAsync_Exception() => await
-            Assert.ThrowsAsync<ArgumentException>(
-                async () => await _client.GetOrderAsync(0));
+        public async void GetOrderAsync_Exception()
+        {
+            var exception = await
+                Assert.ThrowsAsync<ArgumentException>(
+                    async () => await _client.GetOrderAsync(0));
+            Assert.Contains("Order number is 0.", exception.Message);
+        }
 
         [Fact]
         public async void GetOrderAsync_ReturnNull()
@@ -346,8 +359,10 @@ namespace Ecwid.Test.Services
             _httpTest
                 .RespondWithJson("Status QUEUED is deprecated, use AWAITING_PAYMENT instead", 400);
 
-            await Assert.ThrowsAsync<ArgumentException>(() =>
+            var exception = await Assert.ThrowsAsync<ArgumentException>(() =>
                 _client.UpdateOrderAsync(new OrderEntry {Email = "test@test.com"}));
+
+            Assert.Contains("Order number is 0.", exception.Message);
 
             _httpTest.ShouldNotHaveMadeACall();
         }
@@ -373,8 +388,10 @@ namespace Ecwid.Test.Services
             _httpTest
                 .RespondWithJson("The order with given number is not found", 404);
 
-            await Assert.ThrowsAsync<ArgumentException>(() =>
+            var exception = await Assert.ThrowsAsync<ArgumentException>(() =>
                 _client.DeleteOrderAsync(new OrderEntry {Email = "test@test.com"}));
+
+            Assert.Contains("Order number is 0.", exception.Message);
 
             _httpTest.ShouldNotHaveMadeACall();
         }
@@ -401,7 +418,10 @@ namespace Ecwid.Test.Services
 
         [Fact]
         public async void GetProfileAsync_Exception()
-            => await Assert.ThrowsAsync<EcwidConfigException>(() => _defaultClient.GetProfileAsync());
+        {
+            var exception = await Assert.ThrowsAsync<EcwidConfigException>(() => _defaultClient.GetProfileAsync());
+            Assert.Contains("Credentials are null. Can not do a request.", exception.Message);
+        }
 
         [Fact]
         public async void UpdateProfileAsync_ReturnTrue()
@@ -421,7 +441,11 @@ namespace Ecwid.Test.Services
 
         [Fact]
         public async void UpdateProfile_Exception()
-            => await Assert.ThrowsAsync<EcwidHttpException>(async () => await _client.UpdateProfileAsync(null));
+        {
+            var exception =
+                await Assert.ThrowsAsync<EcwidHttpException>(async () => await _client.UpdateProfileAsync(null));
+            Assert.Contains("Something happened to the HTTP call.", exception.Message);
+        }
 
         [Fact]
         public async void UpdateProfileAsyncHttp_Exceptions()
@@ -431,7 +455,10 @@ namespace Ecwid.Test.Services
 
             var profile = new Profile {Account = new Account {AccountName = "John", AccountNickname = "John"}};
 
-            await Assert.ThrowsAsync<EcwidHttpException>(async () => await _client.UpdateProfileAsync(profile));
+            var exception =
+                await Assert.ThrowsAsync<EcwidHttpException>(async () => await _client.UpdateProfileAsync(profile));
+
+            Assert.Contains("Call failed with status code 400 (Bad Request)", exception.Message);
 
             _httpTest.ShouldHaveCalled($"{CheckProfileUrl}")
                 .WithVerb(HttpMethod.Put)
@@ -461,9 +488,13 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void GetDiscountCouponAsync_Exception() => await
-            Assert.ThrowsAsync<ArgumentNullException>(
-                async () => await _client.GetDiscountCouponAsync(null));
+        public async void GetDiscountCouponAsync_Exception()
+        {
+            var exception = await
+                Assert.ThrowsAsync<ArgumentNullException>(
+                    async () => await _client.GetDiscountCouponAsync(null));
+            Assert.Contains("Value cannot be null.", exception.Message);
+        }
 
         [Fact]
         public async void GetDiscountCouponsAsync_ReturnNull()
@@ -486,9 +517,9 @@ namespace Ecwid.Test.Services
         public async void DiscountCoupons_GetDiscountCouponsAsync_QueryOnePages_ReturnCorrectOneResult()
         {
             var mock = Mocks.MockSearchResultWithManyDiscountCouponsAndPages(100, 0, 2);
-            
+
             var expected = mock?.DiscountCoupons.FirstOrDefault()?.Id;
-            
+
             _httpTest
                 .RespondWithJson(mock)
                 .RespondWithJson(Mocks.MockSearchResultWithManyDiscountCouponsAndPages(100, 0, 0));
@@ -605,10 +636,14 @@ namespace Ecwid.Test.Services
             _httpTest
                 .RespondWithJson("Status QUEUED is deprecated, use AWAITING_PAYMENT instead", 400);
 
-            await Assert.ThrowsAsync<ArgumentException>(() => _client.UpdateDiscountCouponAsync(new DiscountCouponInfo
-            {
-                Code = ""
-            }));
+            var exception = await Assert.ThrowsAsync<ArgumentException>(() => _client.UpdateDiscountCouponAsync(
+                new DiscountCouponInfo
+                {
+                    Code = ""
+                }));
+
+            Assert.Contains("Coupon code must have a value", exception.Message);
+
             _httpTest.ShouldNotHaveMadeACall();
         }
 
