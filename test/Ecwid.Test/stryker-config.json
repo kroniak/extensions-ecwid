@@ -8,6 +8,6 @@
     "threshold-high": 80,
     "threshold-low": 70,
     "threshold-break": 60,
-    "excluded-mutations": []
+    "excluded-mutations": ["strings"]
   }
 }

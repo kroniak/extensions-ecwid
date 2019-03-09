@@ -148,6 +148,7 @@ namespace Ecwid.Test.Services.Legacy
             var exception = Assert.Throws<EcwidConfigException>(() => _defaultLegacyClient.Orders.Statuses(paid, full));
 
             Assert.Equal("Can not add or update statuses. Look inner exception.", exception.Message);
+            Assert.Contains("Can not add or update statuses. Look inner exception.", exception.Message);
             Assert.Contains("Statuses string is invalid.", exception.InnerException.Message);
         }
 
@@ -174,6 +175,7 @@ namespace Ecwid.Test.Services.Legacy
             var exception =
                 Assert.Throws<EcwidConfigException>(() => _defaultLegacyClient.Orders.PaymentStatuses(paid));
             Assert.Equal("Can not add or update statuses. Look inner exception.", exception.Message);
+            Assert.Contains("Can not add or update statuses. Look inner exception.", exception.Message);
             Assert.Contains("Statuses string is invalid.", exception.InnerException.Message);
         }
 
@@ -211,6 +213,7 @@ namespace Ecwid.Test.Services.Legacy
                 Assert.Throws<EcwidConfigException>(() => _defaultLegacyClient.Orders.FulfillmentStatuses(paid));
 
             Assert.Equal("Can not add or update statuses. Look inner exception.", exception.Message);
+            Assert.Contains("Can not add or update statuses. Look inner exception.", exception.Message);
             Assert.Contains("Statuses string is invalid.", exception.InnerException.Message);
         }
 

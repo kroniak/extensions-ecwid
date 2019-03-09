@@ -34,9 +34,8 @@ namespace Ecwid.Test.Tools
         [Fact]
         public void TrimReplaceSplitFail()
         {
-            string str = null;
-            var exception = Assert.Throws<ArgumentException>(() => str.TrimUpperReplaceSplit());
-            Assert.Contains("Value cannot be null.", exception.InnerException.Message);
+            var exception = Assert.Throws<ArgumentException>(() => ((string) null).TrimUpperReplaceSplit());
+            Assert.Contains("Unable replace chars and split string", exception.Message);
         }
     }
 }

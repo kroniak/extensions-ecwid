@@ -12,10 +12,36 @@ namespace Ecwid.Test.Services
     {
         private readonly IEcwidClient _defaultClient = new EcwidClient();
 
-        [Fact]
-        public void AddOrUpdateStatuses_Exception()
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        public void AddOrUpdateStatuses_Exception(string value)
         {
-            var exception = Assert.Throws<ArgumentException>(() => _defaultClient.Orders.AddOrUpdateStatuses("", null));
+            var exception = Assert.Throws<ArgumentException>(() => _defaultClient.Orders.AddOrUpdateStatuses(value, new[]
+            {
+                "PROCESSING"
+            }));
+            Assert.Contains("Can not add or update statuses. Look inner exception.", exception.Message);
+            Assert.Contains("Can not add value to query.", exception.InnerException.Message);
+        }
+
+        [Fact]
+        public void AddOrUpdateStatuses_Null_Exception()
+        {
+            var exception = Assert.Throws<ArgumentException>(() => _defaultClient.Orders.AddOrUpdateStatuses(null, new[]
+            {
+                "PROCESSING"
+            }));
+            Assert.Contains("Can not add or update statuses. Look inner exception.", exception.Message);
+            Assert.Contains("Value cannot be null.", exception.InnerException.Message);
+        }
+        
+        [Fact]
+        public void AddOrUpdateStatuses_Second_Exception()
+        {
+            var exception =
+                Assert.Throws<ArgumentException>(() => _defaultClient.Orders.AddOrUpdateStatuses("statuses", null));
+            Assert.Contains("Can not add or update statuses. Look inner exception.", exception.Message);
             Assert.Contains("Value cannot be null.", exception.InnerException.Message);
         }
 
@@ -274,6 +300,7 @@ namespace Ecwid.Test.Services
         public void FulfillmentStatuses_Exception(string paid)
         {
             var exception = Assert.Throws<EcwidConfigException>(() => _defaultClient.Orders.FulfillmentStatuses(paid));
+            Assert.Contains("Can not add or update statuses. Look inner exception.", exception.Message);
             Assert.Contains("Statuses string is invalid.", exception.InnerException.Message);
         }
 
@@ -398,6 +425,7 @@ namespace Ecwid.Test.Services
         public void PaymentStatuses_Exception(string paid)
         {
             var exception = Assert.Throws<EcwidConfigException>(() => _defaultClient.Orders.PaymentStatuses(paid));
+            Assert.Contains("Can not add or update statuses. Look inner exception.", exception.Message);
             Assert.Contains("Statuses string is invalid.", exception.InnerException.Message);
         }
 

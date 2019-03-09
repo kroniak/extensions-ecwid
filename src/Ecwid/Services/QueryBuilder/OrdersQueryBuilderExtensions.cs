@@ -178,11 +178,7 @@ namespace Ecwid
             {
                 query.AddOrUpdate("createdFrom", dateFrom.ToString("yyyy-MM-dd HH:mm:ss"));
             }
-            catch (FormatException exception)
-            {
-                throw new ArgumentException("Date is invalid.", nameof(dateFrom), exception);
-            }
-            catch (ArgumentException exception)
+            catch (Exception exception)
             {
                 throw new ArgumentException("Date is invalid.", nameof(dateFrom), exception);
             }
@@ -248,11 +244,7 @@ namespace Ecwid
             {
                 query.AddOrUpdate("createdTo", dateTo.ToString("yyyy-MM-dd HH:mm:ss"));
             }
-            catch (FormatException exception)
-            {
-                throw new ArgumentException("Date is invalid", nameof(dateTo), exception);
-            }
-            catch (ArgumentException exception)
+            catch (Exception exception)
             {
                 throw new ArgumentException("Date is invalid", nameof(dateTo), exception);
             }
@@ -328,11 +320,7 @@ namespace Ecwid
                 query.AddOrUpdate("createdFrom", dateFrom.ToString("yyyy-MM-dd HH:mm:ss"));
                 query.AddOrUpdate("createdTo", dateTo.ToString("yyyy-MM-dd HH:mm:ss"));
             }
-            catch (FormatException exception)
-            {
-                throw new ArgumentException("Date is invalid.", exception);
-            }
-            catch (ArgumentException exception)
+            catch (Exception exception)
             {
                 throw new ArgumentException("Date is invalid.", exception);
             }
@@ -402,11 +390,7 @@ namespace Ecwid
             {
                 query.AddOrUpdate("updatedFrom", dateFrom.ToString("yyyy-MM-dd HH:mm:ss"));
             }
-            catch (FormatException exception)
-            {
-                throw new ArgumentException("Date is invalid.", nameof(dateFrom), exception);
-            }
-            catch (ArgumentException exception)
+            catch (Exception exception)
             {
                 throw new ArgumentException("Date is invalid.", nameof(dateFrom), exception);
             }
@@ -472,11 +456,7 @@ namespace Ecwid
             {
                 query.AddOrUpdate("updatedTo", dateTo.ToString("yyyy-MM-dd HH:mm:ss"));
             }
-            catch (FormatException exception)
-            {
-                throw new ArgumentException("Date is invalid.", nameof(dateTo), exception);
-            }
-            catch (ArgumentException exception)
+            catch (Exception exception)
             {
                 throw new ArgumentException("Date is invalid.", nameof(dateTo), exception);
             }
@@ -549,11 +529,7 @@ namespace Ecwid
                 query.AddOrUpdate("updatedFrom", dateFrom.ToString("yyyy-MM-dd HH:mm:ss"));
                 query.AddOrUpdate("updatedTo", dateTo.ToString("yyyy-MM-dd HH:mm:ss"));
             }
-            catch (FormatException exception)
-            {
-                throw new ArgumentException("Date is invalid.", exception);
-            }
-            catch (ArgumentException exception)
+            catch (Exception exception)
             {
                 throw new ArgumentException("Date is invalid.", exception);
             }

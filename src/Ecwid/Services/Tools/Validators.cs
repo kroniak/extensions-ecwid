@@ -95,21 +95,8 @@ namespace Ecwid.Tools
             if (string.IsNullOrWhiteSpace(statuses))
                 throw new ArgumentException("Statuses string is invalid.", nameof(statuses));
 
-            if (statusesAvailable == null)
-                throw new ArgumentException("Statuses collection is invalid.", nameof(statusesAvailable));
-
-            if (!statusesAvailable.Any())
-                throw new ArgumentException("Statuses collection is invalid.", nameof(statusesAvailable));
-
-            try
-            {
-                if (!CheckContainsString(statuses, statusesAvailable))
-                    throw new ArgumentException("Statuses string is invalid.", nameof(statuses));
-            }
-            catch (ArgumentException)
-            {
+            if (!CheckContainsString(statuses, statusesAvailable))
                 throw new ArgumentException("Statuses string is invalid.", nameof(statuses));
-            }
         }
 
         /// <summary>
@@ -120,9 +107,15 @@ namespace Ecwid.Tools
         /// <exception cref="ArgumentException">Unable replace and split string</exception>
         private static bool CheckContainsString(string str, IEnumerable<string> list)
         {
-            var result = str.TrimUpperReplaceSplit();
-
-            return result.Aggregate(true, (current, s) => current && list.Contains(s));
+            try
+            {
+                var result = str.TrimUpperReplaceSplit();
+                return result.Aggregate(true, (current, s) => current && list.Contains(s));
+            }
+            catch (Exception exception)
+            {
+                throw new ArgumentException("Statuses string is invalid.", nameof(str), exception);
+            }
         }
 
         /// <summary>

@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+// ReSharper disable NotAccessedField.Local
 
 // ReSharper disable once CheckNamespace
 namespace Ecwid.Legacy
@@ -12,7 +13,7 @@ namespace Ecwid.Legacy
         /// <summary>
         /// Info about current value of limit value. Key is time in seconds, Value is value (int)
         /// </summary>
-        private IDictionary<int, int> CurrentLimitValues;
+        private IDictionary<int, int> _currentLimitValues;
 
         /// <inheritdoc />
         public EcwidLimitException(string message) : base(message)
@@ -27,7 +28,7 @@ namespace Ecwid.Legacy
         /// <inheritdoc />
         internal EcwidLimitException(string message, IDictionary<int, int> values) : base(message)
         {
-            CurrentLimitValues = values;
+            _currentLimitValues = values;
         }
     }
 }
