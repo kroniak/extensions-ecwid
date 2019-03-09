@@ -31,8 +31,8 @@ namespace Ecwid
             where TOrder : BaseOrder
             where TUpdateResponse : class
         {
-            if (value == null) throw new ArgumentException(nameof(value));
-            if (Validators.IsNullOrEmpty(name)) throw new ArgumentException("Name is null or empty.", nameof(name));
+            if (value == null) throw new ArgumentException("Value is null.", nameof(value));
+            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Name is null or empty.", nameof(name));
 
             query.AddOrUpdate(name, value);
             return query;
@@ -47,7 +47,7 @@ namespace Ecwid
         public static OrdersQueryBuilder<OrderEntry, UpdateStatus> Customer(
             this OrdersQueryBuilder<OrderEntry, UpdateStatus> query, string customer)
         {
-            if (string.IsNullOrEmpty(customer))
+            if (string.IsNullOrWhiteSpace(customer))
                 throw new ArgumentException("Customer is null or empty.", nameof(customer));
 
             query.AddOrUpdate("customer", customer);
@@ -78,7 +78,7 @@ namespace Ecwid
         public static OrdersQueryBuilder<OrderEntry, UpdateStatus> Order(
             this OrdersQueryBuilder<OrderEntry, UpdateStatus> query, string vendorNumber)
         {
-            if (string.IsNullOrEmpty(vendorNumber))
+            if (string.IsNullOrWhiteSpace(vendorNumber))
                 throw new ArgumentException("VendorNumber is null or empty.", nameof(vendorNumber));
 
             query.AddOrUpdate("vendorOrderNumber", vendorNumber);
@@ -109,7 +109,7 @@ namespace Ecwid
         public static OrdersQueryBuilder<OrderEntry, UpdateStatus> Keywords(
             this OrdersQueryBuilder<OrderEntry, UpdateStatus> query, string keywords)
         {
-            if (string.IsNullOrEmpty(keywords))
+            if (string.IsNullOrWhiteSpace(keywords))
                 throw new ArgumentException("Keywords is null or empty.", nameof(keywords));
 
             query.AddOrUpdate("keywords", keywords);
@@ -178,14 +178,11 @@ namespace Ecwid
             {
                 query.AddOrUpdate("createdFrom", dateFrom.ToString("yyyy-MM-dd HH:mm:ss"));
             }
-            catch (FormatException exception)
+            catch (Exception exception)
             {
                 throw new ArgumentException("Date is invalid.", nameof(dateFrom), exception);
             }
-            catch (ArgumentOutOfRangeException exception)
-            {
-                throw new ArgumentException("Date is invalid.", nameof(dateFrom), exception);
-            }
+
             return query;
         }
 
@@ -247,14 +244,11 @@ namespace Ecwid
             {
                 query.AddOrUpdate("createdTo", dateTo.ToString("yyyy-MM-dd HH:mm:ss"));
             }
-            catch (FormatException exception)
+            catch (Exception exception)
             {
                 throw new ArgumentException("Date is invalid", nameof(dateTo), exception);
             }
-            catch (ArgumentOutOfRangeException exception)
-            {
-                throw new ArgumentException("Date is invalid", nameof(dateTo), exception);
-            }
+
             return query;
         }
 
@@ -326,11 +320,7 @@ namespace Ecwid
                 query.AddOrUpdate("createdFrom", dateFrom.ToString("yyyy-MM-dd HH:mm:ss"));
                 query.AddOrUpdate("createdTo", dateTo.ToString("yyyy-MM-dd HH:mm:ss"));
             }
-            catch (FormatException exception)
-            {
-                throw new ArgumentException("Date is invalid.", exception);
-            }
-            catch (ArgumentOutOfRangeException exception)
+            catch (Exception exception)
             {
                 throw new ArgumentException("Date is invalid.", exception);
             }
@@ -400,14 +390,11 @@ namespace Ecwid
             {
                 query.AddOrUpdate("updatedFrom", dateFrom.ToString("yyyy-MM-dd HH:mm:ss"));
             }
-            catch (FormatException exception)
+            catch (Exception exception)
             {
                 throw new ArgumentException("Date is invalid.", nameof(dateFrom), exception);
             }
-            catch (ArgumentOutOfRangeException exception)
-            {
-                throw new ArgumentException("Date is invalid.", nameof(dateFrom), exception);
-            }
+
             return query;
         }
 
@@ -469,14 +456,11 @@ namespace Ecwid
             {
                 query.AddOrUpdate("updatedTo", dateTo.ToString("yyyy-MM-dd HH:mm:ss"));
             }
-            catch (FormatException exception)
+            catch (Exception exception)
             {
                 throw new ArgumentException("Date is invalid.", nameof(dateTo), exception);
             }
-            catch (ArgumentOutOfRangeException exception)
-            {
-                throw new ArgumentException("Date is invalid.", nameof(dateTo), exception);
-            }
+
             return query;
         }
 
@@ -545,11 +529,7 @@ namespace Ecwid
                 query.AddOrUpdate("updatedFrom", dateFrom.ToString("yyyy-MM-dd HH:mm:ss"));
                 query.AddOrUpdate("updatedTo", dateTo.ToString("yyyy-MM-dd HH:mm:ss"));
             }
-            catch (FormatException exception)
-            {
-                throw new ArgumentException("Date is invalid.", exception);
-            }
-            catch (ArgumentOutOfRangeException exception)
+            catch (Exception exception)
             {
                 throw new ArgumentException("Date is invalid.", exception);
             }
@@ -666,7 +646,7 @@ namespace Ecwid
         public static OrdersQueryBuilder<OrderEntry, UpdateStatus> PaymentMethod(
             this OrdersQueryBuilder<OrderEntry, UpdateStatus> query, string paymentMethod)
         {
-            if (string.IsNullOrEmpty(paymentMethod))
+            if (string.IsNullOrWhiteSpace(paymentMethod))
                 throw new ArgumentException("PaymentMethod is null or empty.", nameof(paymentMethod));
 
             query.AddOrUpdate("paymentMethod", paymentMethod);
@@ -682,7 +662,7 @@ namespace Ecwid
         public static OrdersQueryBuilder<OrderEntry, UpdateStatus> ShippingMethod(
             this OrdersQueryBuilder<OrderEntry, UpdateStatus> query, string shippingMethod)
         {
-            if (string.IsNullOrEmpty(shippingMethod))
+            if (string.IsNullOrWhiteSpace(shippingMethod))
                 throw new ArgumentException("ShippingMethod is null or empty.", nameof(shippingMethod));
 
             query.AddOrUpdate("shippingMethod", shippingMethod);
@@ -710,6 +690,7 @@ namespace Ecwid
             {
                 throw new EcwidConfigException("Can not add or update statuses. Look inner exception.", exception);
             }
+
             return query;
         }
 
@@ -734,6 +715,7 @@ namespace Ecwid
             {
                 throw new EcwidConfigException("Can not add or update statuses. Look inner exception.", exception);
             }
+
             return query;
         }
 
@@ -747,11 +729,11 @@ namespace Ecwid
         /// <typeparam name="TOrder">The type of the order.</typeparam>
         /// <typeparam name="TUpdateResponse">The type of the update response.</typeparam>
         /// <param name="query">The query.</param>
-        public static async Task<List<TOrder>> GetAsync<TOrder, TUpdateResponse>(
+        public static Task<IEnumerable<TOrder>> GetAsync<TOrder, TUpdateResponse>(
             this OrdersQueryBuilder<TOrder, TUpdateResponse> query)
             where TOrder : BaseOrder
             where TUpdateResponse : class
-            => await query.GetAsync(CancellationToken.None);
+            => query.GetAsync(CancellationToken.None);
 
         /// <summary>
         /// Gets the orders asynchronous.
@@ -760,12 +742,12 @@ namespace Ecwid
         /// <typeparam name="TUpdateResponse">The type of the update response.</typeparam>
         /// <param name="query">The query.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        public static async Task<List<TOrder>> GetAsync<TOrder, TUpdateResponse>(
+        public static Task<IEnumerable<TOrder>> GetAsync<TOrder, TUpdateResponse>(
             this OrdersQueryBuilder<TOrder, TUpdateResponse> query,
             CancellationToken cancellationToken)
             where TOrder : BaseOrder
             where TUpdateResponse : class
-            => await query.Client.GetOrdersAsync(query.Query, cancellationToken);
+            => query.Client.GetOrdersAsync(query.Query, cancellationToken);
 
         #endregion
     }

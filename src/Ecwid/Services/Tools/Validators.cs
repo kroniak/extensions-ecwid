@@ -5,17 +5,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
+// ReSharper disable PossibleMultipleEnumeration
+
 namespace Ecwid.Tools
 {
     /// <summary>
     /// Some validators for classes.
     /// </summary>
-    internal abstract class Validators
+    public abstract class Validators
     {
         /// <summary>
         /// The available legacy fulfillment statuses.
         /// </summary>
-        public static readonly IList<string> AvailableLegacyFulfillmentStatuses = new List<string>
+        public static readonly IEnumerable<string> AvailableLegacyFulfillmentStatuses = new[]
         {
             "AWAITING_PROCESSING",
             "NEW",
@@ -29,7 +31,7 @@ namespace Ecwid.Tools
         /// <summary>
         /// The available fulfillment statuses.
         /// </summary>
-        public static readonly IList<string> AvailableFulfillmentStatuses = new List<string>
+        public static readonly IEnumerable<string> AvailableFulfillmentStatuses = new[]
         {
             "AWAITING_PROCESSING",
             "PROCESSING",
@@ -42,7 +44,7 @@ namespace Ecwid.Tools
         /// <summary>
         /// The available legacy payment statuses.
         /// </summary>
-        public static readonly IList<string> AvailableLegacyPaymentStatuses = new List<string>
+        public static readonly IEnumerable<string> AvailableLegacyPaymentStatuses = new[]
         {
             "PAID",
             "ACCEPTED",
@@ -57,7 +59,7 @@ namespace Ecwid.Tools
         /// <summary>
         /// The available payment statuses.
         /// </summary>
-        public static readonly IList<string> AvailablePaymentStatuses = new List<string>
+        public static readonly IEnumerable<string> AvailablePaymentStatuses = new[]
         {
             "PAID",
             "CANCELLED",
@@ -66,70 +68,35 @@ namespace Ecwid.Tools
             "INCOMPLETE"
         };
 
+        private static readonly IEnumerable<string> ExceptionQueryList = new[] {"limit", "offset"};
+
         /// <summary>
         /// Check strings for <see langword="null" /> or <see langword="empty" />.
         /// </summary>
         /// <param name="strings">The strings.</param>
         /// <returns>True if the all of the strings are <see langword="null" /> or <see langword="empty" /></returns>
-        public static bool AreNullOrEmpty(params string[] strings)
-        {
-            return strings.All(IsNullOrEmpty);
-        }
+        private static bool AreNullOrEmpty(params string[] strings) => strings.All(string.IsNullOrWhiteSpace);
 
         /// <summary>
-        /// Determines whether [is null or empty] [the specified value].
+        /// Check strings for <see langword="null" /> or <see langword="empty" />.
         /// </summary>
-        /// <param name="value">The value.</param>
-        public static bool IsNullOrEmpty(string value)
-        {
-            return string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value);
-        }
+        /// <param name="strings">The strings.</param>
+        /// <returns>True if the one of the strings are <see langword="null" /> or <see langword="empty" /></returns>
+        public static bool AreAnyNullOrEmpty(params string[] strings) => strings.Any(string.IsNullOrWhiteSpace);
 
         /// <summary>
-        /// Statuseses validate.
+        /// Statuses validate.
         /// </summary>
         /// <param name="statuses">The statuses.</param>
         /// <param name="statusesAvailable">The statuses available.</param>
         /// <exception cref="ArgumentException">Statuses string is invalid.</exception>
-        public static void StatusesValidate(string statuses, ICollection<string> statusesAvailable)
+        public static void StatusesValidate(string statuses, IEnumerable<string> statusesAvailable)
         {
-            if (IsNullOrEmpty(statuses))
+            if (string.IsNullOrWhiteSpace(statuses))
                 throw new ArgumentException("Statuses string is invalid.", nameof(statuses));
 
-            if (statusesAvailable == null)
-                throw new ArgumentException("Statuses collection is invalid.", nameof(statusesAvailable));
-
-            if (statusesAvailable.Count == 0)
-                throw new ArgumentException("Statuses collection is invalid.", nameof(statusesAvailable));
-
-            try
-            {
-                if (!CheckContainsString(statuses, statusesAvailable))
-                    throw new ArgumentException("Statuses string is invalid.", nameof(statuses));
-            }
-            catch (ArgumentException argumentException)
-            {
-                throw new ArgumentException("Statuses string is invalid.", argumentException);
-            }
-        }
-
-        /// <summary>
-        /// Validate the status.
-        /// </summary>
-        /// <param name="status">The status.</param>
-        /// <param name="statusesAvailable">The statuses available.</param>
-        /// <exception cref="ArgumentException">Status string is invalid.</exception>
-        /// <exception cref="ArgumentException">Status string is invalid. Support only one status. </exception>
-        public static string StatusValidate(string status, ICollection<string> statusesAvailable)
-        {
-            StatusesValidate(status, statusesAvailable);
-
-            var result = status.TrimUpperReplaceSplit();
-
-            if (result.Count > 1)
-                throw new ArgumentException("Status string is invalid. Support only one status.", nameof(status));
-
-            return result.First();
+            if (!CheckContainsString(statuses, statusesAvailable))
+                throw new ArgumentException("Statuses string is invalid.", nameof(statuses));
         }
 
         /// <summary>
@@ -138,11 +105,17 @@ namespace Ecwid.Tools
         /// <param name="str">The string.</param>
         /// <param name="list">The list.</param>
         /// <exception cref="ArgumentException">Unable replace and split string</exception>
-        private static bool CheckContainsString(string str, ICollection<string> list)
+        private static bool CheckContainsString(string str, IEnumerable<string> list)
         {
-            var result = str.TrimUpperReplaceSplit();
-
-            return result.Aggregate(true, (current, s) => current && list.Contains(s));
+            try
+            {
+                var result = str.TrimUpperReplaceSplit();
+                return result.Aggregate(true, (current, s) => current && list.Contains(s));
+            }
+            catch (Exception exception)
+            {
+                throw new ArgumentException("Statuses string is invalid.", nameof(str), exception);
+            }
         }
 
         /// <summary>
@@ -156,8 +129,7 @@ namespace Ecwid.Tools
             Dictionary<string, object> query, params string[] strings)
         {
             //check query builder query params count
-            var exceptionList = new List<string> {"limit", "offset"};
-            var count = query.Keys.Count(s => !exceptionList.Contains(s));
+            var count = query.Keys.Count(s => !ExceptionQueryList.Contains(s));
             if (count == 0)
                 throw new ArgumentException("Query is empty. Prevent change all orders.", nameof(query));
 
@@ -175,12 +147,12 @@ namespace Ecwid.Tools
         /// <exception cref="ArgumentException"><paramref name="date" /> string is invalid.</exception>
         public static bool ValidateDateTime(string date)
         {
-            if (string.IsNullOrEmpty(date))
+            if (string.IsNullOrWhiteSpace(date))
                 throw new ArgumentException("Date string is null or empty.", nameof(date));
 
             if (new Regex(@"^\d{4}-\d{2}-\d{2}").IsMatch(date))
             {
-                if (!DateTime.TryParse(date, out var dt))
+                if (!DateTime.TryParse(date, out _))
                     throw new ArgumentException("Date string is invalid.", nameof(date));
             }
             else

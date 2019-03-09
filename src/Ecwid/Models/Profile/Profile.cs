@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 namespace Ecwid.Models
 {
     /// <summary>
-    /// Store settings and informations.
+    /// Store settings and information.
     /// </summary>
     public class Profile
     {
@@ -99,7 +99,7 @@ namespace Ecwid.Models
         /// The taxes.
         /// </value>
         [JsonProperty("taxes")]
-        public IList<Tax> Taxes { get; set; }
+        public List<Tax> Taxes { get; set; }
 
         /// <summary>
         /// Gets or sets the destination zones.
@@ -108,6 +108,6 @@ namespace Ecwid.Models
         /// The destination zones.
         /// </value>
         [JsonProperty("zones")]
-        public IList<Zone> Zones { get; set; }
+        public List<Zone> Zones { get; set; }
     }
 }

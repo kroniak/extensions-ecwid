@@ -1,4 +1,4 @@
-﻿namespace Ecwid
+﻿namespace Ecwid.Models
 {
     /// <summary>
     ///     The object returned from the Discount Coupon API when creating new Discount Coupons
@@ -9,7 +9,7 @@
         /// Internal unique coupon Id
         /// </summary>
         public long Id { get; set; }
-        
+
         /// <summary>
         /// Code of the created coupon
         /// </summary>

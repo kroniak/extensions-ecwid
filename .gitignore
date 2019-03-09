@@ -37,5 +37,9 @@ publish/
 
 # Misc files
 *.log
-/build/1
-/.idea
+.idea
+.vscode
+*.DotSettings
+coverage.json
+lcov.info
+.sonarqube

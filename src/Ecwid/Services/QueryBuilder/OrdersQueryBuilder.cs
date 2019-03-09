@@ -7,11 +7,7 @@ using Ecwid.Models;
 
 namespace Ecwid
 {
-    /// <summary>
-    /// Orders query builder for Ecwid client.
-    /// </summary>
-    /// <typeparam name="TOrder">The type of the order.</typeparam>
-    /// <typeparam name="TUpdateResponse">The type of the update response.</typeparam>
+    /// <inheritdoc />
     public class OrdersQueryBuilder<TOrder, TUpdateResponse> : BaseQueryBuilder
         where TOrder : BaseOrder
         where TUpdateResponse : class
@@ -20,7 +16,7 @@ namespace Ecwid
         /// Initializes a new instance of the <see cref="OrdersQueryBuilder{TOrder,TUpdateResponse}" /> class.
         /// </summary>
         /// <param name="client">The client.</param>
-        internal OrdersQueryBuilder(IEcwidOrdersClient<TOrder, TUpdateResponse> client)
+        public OrdersQueryBuilder(IEcwidOrdersClient<TOrder, TUpdateResponse> client)
         {
             Client = client;
         }
@@ -28,7 +24,7 @@ namespace Ecwid
         /// <value>
         /// The client.
         /// </value>
-        internal IEcwidOrdersClient<TOrder, TUpdateResponse> Client { get; }
+        public IEcwidOrdersClient<TOrder, TUpdateResponse> Client { get; }
 
         /// <summary>
         /// Add or update.
@@ -55,7 +51,7 @@ namespace Ecwid
 
                 AddOrUpdate(name, result);
             }
-                // ReSharper disable once CatchAllClause
+            // ReSharper disable once CatchAllClause
             catch (Exception exception)
             {
                 throw new ArgumentException("Can not add or update statuses. Look inner exception.", exception);

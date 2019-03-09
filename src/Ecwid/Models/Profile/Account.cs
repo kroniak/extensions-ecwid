@@ -44,7 +44,7 @@ namespace Ecwid.Models
         /// The available features.
         /// </value>
         [JsonProperty("availableFeatures")]
-        public IList<string> AvailableFeatures { get; set; }
+        public List<string> AvailableFeatures { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="Account" /> is suspended.

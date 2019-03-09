@@ -1,7 +1,6 @@
 ﻿// Licensed under the MIT License. See LICENSE in the git repository root for license information.
 
 using System.Diagnostics.CodeAnalysis;
-using Ecwid.Legacy;
 using Xunit;
 
 namespace Ecwid.Test.Services
@@ -15,40 +14,28 @@ namespace Ecwid.Test.Services
         private const string Token = "nmGjgfnmGjgfnmGjgfnmGjgfnmGjgfsd";
 
         [Fact]
-        public void Credentials()
+        public void Credentials_ReturnNotNull()
         {
             var result = new EcwidCredentials(ShopId, Token);
-            var result2 = new EcwidLegacyCredentials(ShopId, Token, Token);
 
             Assert.NotNull(result);
-            Assert.NotNull(result2);
         }
 
         [Fact]
-        public void CredentialsFail()
+        public void Credentials_InvalidShopId_Exception()
         {
-            Assert.Throws<EcwidConfigException>(() => new EcwidCredentials(0, Token));
-            Assert.Throws<EcwidConfigException>(() => new EcwidCredentials(ShopId, null));
-            Assert.Throws<EcwidConfigException>(() => new EcwidCredentials(ShopId, ""));
-            Assert.Throws<EcwidConfigException>(() => new EcwidCredentials(ShopId, " "));
+            var ecwidConfigException = Assert.Throws<EcwidConfigException>(() => new EcwidCredentials(0, Token));
+            Assert.Equal("The shop identifier is invalid.", ecwidConfigException.Message);
+        }
 
-            // https://github.com/kroniak/extensions-ecwid/issues/34
-            //Assert.Throws<EcwidConfigException>(() => new EcwidCredentials(ShopId, "test"));
-            Assert.Throws<EcwidConfigException>(() => new EcwidLegacyCredentials(0, Token, Token));
-            Assert.Throws<EcwidConfigException>(() => new EcwidLegacyCredentials(ShopId));
-            Assert.Throws<EcwidConfigException>(() => new EcwidLegacyCredentials(ShopId, " ", " "));
-            Assert.Throws<EcwidConfigException>(() => new EcwidLegacyCredentials(ShopId, "", ""));
-            Assert.Throws<EcwidConfigException>(() => new EcwidLegacyCredentials(ShopId, Token, Token).OrderToken = " ");
-
-            // https://github.com/kroniak/extensions-ecwid/issues/34
-            //Assert.Throws<EcwidConfigException>(
-            //    () => new EcwidLegacyCredentials(ShopId, Token, Token).OrderToken = "test");
-            Assert.Throws<EcwidConfigException>(
-                () => new EcwidLegacyCredentials(ShopId, Token, Token).ProductToken = " ");
-
-            // https://github.com/kroniak/extensions-ecwid/issues/34
-            //Assert.Throws<EcwidConfigException>(
-            //    () => new EcwidLegacyCredentials(ShopId, Token, Token).ProductToken = "test");
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        public void EcwidCredentials_TokenInvalid_Exception(string token)
+        {
+            var exception = Assert.Throws<EcwidConfigException>(() => new EcwidCredentials(ShopId, token));
+            Assert.Equal("The authorization token is invalid.", exception.Message);
         }
     }
 }

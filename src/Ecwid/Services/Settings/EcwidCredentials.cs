@@ -1,12 +1,8 @@
 ﻿// Licensed under the MIT License. See LICENSE in the git repository root for license information.
 
-using Ecwid.Tools;
-
 namespace Ecwid
 {
-    /// <summary>
-    /// Shop credentials for Ecwid Client v3.
-    /// </summary>
+    /// <inheritdoc />
     public class EcwidCredentials : BaseCredentials
     {
         private string _token;
@@ -24,14 +20,7 @@ namespace Ecwid
             Token = token;
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="EcwidCredentials" /> class.
-        /// </summary>
-        /// <param name="shopId">The shop identifier.</param>
-        /// <param name="token">The authorization token.</param>
-        /// <param name="scope">List of permissions (API access scopes) given to the app, separated by space.</param>
-        /// <exception cref="EcwidConfigException">The shop identifier is invalid.</exception>
-        /// <exception cref="EcwidConfigException">The authorization token is invalid.</exception>
+        /// <inheritdoc />
         public EcwidCredentials(int shopId, string token, string scope) : this(shopId, token)
         {
             Scope = scope;
@@ -49,7 +38,7 @@ namespace Ecwid
             get => _token;
             set
             {
-                if (Validators.IsNullOrEmpty(value))
+                if (string.IsNullOrWhiteSpace(value))
                     throw new EcwidConfigException("The authorization token is invalid.");
 
                 // https://github.com/kroniak/extensions-ecwid/issues/34

@@ -5,9 +5,7 @@ using Newtonsoft.Json;
 
 namespace Ecwid.Models
 {
-    /// <summary>
-    /// This object represents order item.
-    /// </summary>
+    /// <inheritdoc />
     public class OrderItem : BaseEntity
     {
         /// <summary>
@@ -22,7 +20,7 @@ namespace Ecwid.Models
         /// <summary>
         /// Gets or sets the ID of the category this product belongs to. If the product belongs to many categories, categoryID will
         /// return the ID
-        /// of the default product category. If the product doesn’t belong to any category, 0 is returned.
+        /// of the default product category. If the product doesn't belong to any category, 0 is returned.
         /// </summary>
         /// <value>
         /// The category identifier.
@@ -91,7 +89,7 @@ namespace Ecwid.Models
         /// The taxes.
         /// </value>
         [JsonProperty("taxes")]
-        public IList<OrderItemTax> Taxes { get; set; }
+        public List<OrderItemTax> Taxes { get; set; }
 
         /// <summary>
         /// Gets or sets the order item shipping cost.
@@ -217,7 +215,7 @@ namespace Ecwid.Models
         /// The selected options.
         /// </value>
         [JsonProperty("selectedOptions")]
-        public IList<OrderItemOption> SelectedOptions { get; set; }
+        public List<OrderItemOption> SelectedOptions { get; set; }
 
         /// <summary>
         /// Gets or sets the files attached to the order item.
@@ -226,6 +224,6 @@ namespace Ecwid.Models
         /// The files.
         /// </value>
         [JsonProperty("files")]
-        public IList<OrderItemProductFile> Files { get; set; }
+        public List<OrderItemProductFile> Files { get; set; }
     }
 }

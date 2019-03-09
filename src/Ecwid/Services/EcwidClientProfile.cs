@@ -11,46 +11,26 @@ namespace Ecwid
     {
         #region Implementation of IEcwidProfileClient
 
-        /// <summary>
-        /// Gets the store profile asynchronous.
-        /// </summary>
-        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
-        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
-        public async Task<Profile> GetProfileAsync()
-            => await GetProfileAsync(CancellationToken.None);
+        /// <inheritdoc />
+        public Task<Profile> GetProfileAsync()
+            => GetProfileAsync(CancellationToken.None);
 
-        /// <summary>
-        /// Gets the store profile asynchronous.
-        /// </summary>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
-        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
-        public async Task<Profile> GetProfileAsync(CancellationToken cancellationToken)
-            => await GetApiAsync<Profile>(GetUrl("profile"), cancellationToken);
+        /// <inheritdoc />
+        public Task<Profile> GetProfileAsync(CancellationToken cancellationToken)
+            => GetApiAsync<Profile>(GetUrl("profile"), cancellationToken);
 
-        /// <summary>
-        /// Update the store profile asynchronous.
-        /// </summary>
-        /// <param name="profile">The store profile.</param>
-        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
-        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
-        public async Task<UpdateStatus> UpdateProfileAsync(Profile profile)
-            => await UpdateProfileAsync(profile, CancellationToken.None);
+        /// <inheritdoc />
+        public Task<UpdateStatus> UpdateProfileAsync(Profile profile)
+            => UpdateProfileAsync(profile, CancellationToken.None);
 
-        /// <summary>
-        /// Update the store profile asynchronous.
-        /// </summary>
-        /// <param name="profile">The store profile.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
-        /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
-        public async Task<UpdateStatus> UpdateProfileAsync(Profile profile, CancellationToken cancellationToken)
+        /// <inheritdoc />
+        public Task<UpdateStatus> UpdateProfileAsync(Profile profile, CancellationToken cancellationToken)
         {
             if (profile == null)
                 throw new EcwidHttpException("Something happened to the HTTP call.", null,
                     new ArgumentNullException(nameof(profile)));
 
-            return await PutApiAsync<UpdateStatus>(GetUrl("profile"), profile, cancellationToken);
+            return PutApiAsync<UpdateStatus>(GetUrl("profile"), profile, cancellationToken);
         }
 
         #endregion
