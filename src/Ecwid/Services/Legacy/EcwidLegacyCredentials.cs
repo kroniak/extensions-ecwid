@@ -18,15 +18,15 @@ namespace Ecwid.Legacy
         /// <param name="orderToken">The shop order authorization token.</param>
         /// <param name="productToken">The shop product authorization token.</param>
         /// <exception cref="EcwidConfigException">The shop identifier is invalid.</exception>
-        /// <exception cref="EcwidConfigException">The authorization tokens are null.</exception>
+        /// <exception cref="EcwidConfigException">The authorization token is invalid.</exception>
         /// <exception cref="EcwidConfigException">The order authorization token is invalid.</exception>
         /// <exception cref="EcwidConfigException">The product authorization token is invalid.</exception>
         public EcwidLegacyCredentials(int shopId, string orderToken = null, string productToken = null)
         {
             ShopId = shopId;
 
-            if (Validators.AreNullOrEmpty(orderToken, productToken))
-                throw new EcwidConfigException("The authorization tokens are null.");
+            if (Validators.AreAnyNullOrEmpty(orderToken, productToken))
+                throw new EcwidConfigException("The authorization token is invalid.");
 
             if (!string.IsNullOrWhiteSpace(orderToken))
                 OrderToken = orderToken;

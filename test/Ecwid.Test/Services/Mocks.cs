@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Ecwid.Models;
 
 namespace Ecwid.Test.Services
@@ -14,14 +15,14 @@ namespace Ecwid.Test.Services
         /// </summary>
         public static SearchResult MockSearchResultWithLimit1
             => new SearchResult
-                {Count = 1, Total = 100, Limit = 1, Offset = 0, Orders = new List<OrderEntry>(MockOrders(1))};
+                {Count = 1, Total = 100, Limit = 1, Offset = 0, Orders = MockOrders(1)};
 
         /// <summary>
         /// Mocks the response with one order.
         /// </summary>
         public static SearchResult MockSearchResultWithOneOrder
             => new SearchResult
-                {Count = 1, Total = 1, Limit = 100, Offset = 0, Orders = new List<OrderEntry>(MockOrders(1))};
+                {Count = 1, Total = 1, Limit = 100, Offset = 0, Orders = MockOrders(1)};
 
         /// <summary>
         /// Gets the mock search result zero result.
@@ -30,7 +31,7 @@ namespace Ecwid.Test.Services
         /// The mock search result zero result.
         /// </value>
         public static SearchResult MockSearchResultZeroResult
-            => new SearchResult {Count = 0, Total = 0, Limit = 100, Offset = 0, Orders = new List<OrderEntry>()};
+            => new SearchResult {Count = 0, Total = 0, Limit = 100, Offset = 0, Orders = new OrderEntry[] { }};
 
         /// <summary>
         /// Mocks the orders.
@@ -40,10 +41,6 @@ namespace Ecwid.Test.Services
         [SuppressMessage("ReSharper", "ExceptionNotDocumented")]
         private static IEnumerable<OrderEntry> MockOrders(int count)
         {
-            var orders = new List<OrderEntry>();
-
-            if (count == 0) return orders;
-
             var order = new OrderEntry
             {
                 OrderNumber = 111111,
@@ -55,16 +52,13 @@ namespace Ecwid.Test.Services
                 PaymentMethod = "PayPal",
                 Email = "test@test.test"
             };
-            count.Times(() => orders.Add(order));
-
-            return orders;
+            
+            return Enumerable.Range(0, count).Select(_ => order);
         }
 
         private static IEnumerable<DiscountCouponInfo> MockDiscountCoupons(int count)
         {
-            var discountCoupons = new List<DiscountCouponInfo>();
-
-            if (count == 0) return discountCoupons;
+            var rand = new Random();
 
             var coupon = new DiscountCouponInfo
             {
@@ -78,14 +72,12 @@ namespace Ecwid.Test.Services
                 RepeatCustomerOnly = false,
                 UsesLimit = "UNLIMITED",
                 Status = "ACTIVE",
-                Id = 111111,
+                Id = 100000 + rand.Next(101),
                 OrderCount = 0,
                 TotalLimit = 18
             };
 
-            count.Times(() => discountCoupons.Add(coupon));
-
-            return discountCoupons;
+            return Enumerable.Range(0, count).Select(_ => coupon);
         }
 
         /// <summary>
@@ -95,7 +87,7 @@ namespace Ecwid.Test.Services
             => new SearchResult
             {
                 Count = count, Total = count, Limit = limit, Offset = 0,
-                Orders = new List<OrderEntry>(MockOrders(count))
+                Orders = MockOrders(count)
             };
 
         /// <summary>
@@ -108,7 +100,7 @@ namespace Ecwid.Test.Services
             => new SearchResult
             {
                 Count = count, Total = 300, Limit = limit, Offset = offset,
-                Orders = new List<OrderEntry>(MockOrders(count))
+                Orders = MockOrders(count)
             };
 
         public static DiscountCouponSearchResults MockSearchResultWithManyDiscountCouponsAndPages(int limit, int offset,
@@ -119,7 +111,7 @@ namespace Ecwid.Test.Services
                 Total = 300,
                 Limit = limit,
                 Offset = offset,
-                DiscountCoupons = new List<DiscountCouponInfo>(MockDiscountCoupons(count))
+                DiscountCoupons = MockDiscountCoupons(count)
             };
     }
 }

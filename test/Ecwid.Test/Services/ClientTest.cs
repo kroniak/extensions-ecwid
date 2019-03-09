@@ -285,7 +285,7 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void OrdersGetOrdersAsyncQueryMultiPagesResult_ReturnNotEmpty()
+        public async void Orders_GetOrdersAsync_QueryMultiPagesResult_ReturnNotEmpty()
         {
             const int count = 100;
             const string query = "paymentStatus=paid";
@@ -302,15 +302,19 @@ namespace Ecwid.Test.Services
                 .WithVerb(HttpMethod.Get)
                 .Times(1);
 
-            _httpTest.ShouldHaveCalled($"{CheckOrdersUrl}&offset=*&{query}")
-                .WithVerb(HttpMethod.Get)
-                .Times(3);
+            for (var i = 1; i < 4; i++)
+            {
+                _httpTest.ShouldHaveCalled($"{CheckOrdersUrl}&offset={count * i}&{query}")
+                    .WithVerb(HttpMethod.Get)
+                    .Times(1);
+            }
+
 
             Assert.Equal(count * 3, result.Count());
         }
 
         [Fact]
-        public async void OrdersGetOrdersAsyncQueryOnePagesResult_ReturnNotEmpty()
+        public async void Orders_GetOrdersAsync_QueryOnePagesResult_ReturnNotEmpty()
         {
             const int count = 100;
             const string query = "limit=100&paymentStatus=paid";
@@ -646,7 +650,7 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void LegacyOrdersGetOrdersAsyncQueryMultiPages_ReturnCorrectResult()
+        public async void Legacy_Orders_GetOrdersAsync_QueryMultiPages_ReturnCorrectResult()
         {
             const int count = 200;
             const string query = "statuses=paid";
@@ -671,7 +675,7 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public async void LegacyOrdersGetOrdersAsyncQueryMultiPagesResultOnePage_ReturnCorrectResult()
+        public async void Legacy_Orders_GetOrdersAsync_QueryMultiPagesResultOnePage_ReturnCorrectResult()
         {
             _httpTest
                 .RespondWithJson(
@@ -783,7 +787,6 @@ namespace Ecwid.Test.Services
             Assert.ThrowsAsync<ArgumentNullException>(
                 async () => await _client.GetDiscountCouponAsync(null));
 
-
         [Fact]
         public async void GetDiscountCouponsAsync_ReturnNull()
         {
@@ -801,6 +804,27 @@ namespace Ecwid.Test.Services
                 .Times(1);
         }
 
+        [Fact]
+        public async void DiscountCoupons_GetDiscountCouponsAsync_QueryOnePages_ReturnCorrectOneResult()
+        {
+            var mock = Mocks.MockSearchResultWithManyDiscountCouponsAndPages(100, 0, 2);
+            var expected = mock.DiscountCoupons.FirstOrDefault().Id;
+
+            _httpTest
+                .RespondWithJson(mock)
+                .RespondWithJson(Mocks.MockSearchResultWithManyDiscountCouponsAndPages(100, 0, 0));
+
+            const string couponIdentifier = "abc123";
+
+            var result = await _client.GetDiscountCouponAsync(couponIdentifier);
+
+            _httpTest.ShouldHaveCalled($"{CheckDiscountCouponsUrl}&couponIdentifier={couponIdentifier}")
+                .WithVerb(HttpMethod.Get)
+                .Times(1);
+
+            Assert.Equal(expected, result.Id);
+        }
+
 
         [Fact]
         public async void DiscountCouponsGetDiscountCouponsAsyncQueryMultiPages_ReturnCorrectResult()
@@ -816,13 +840,17 @@ namespace Ecwid.Test.Services
 
             var result = await _client.GetDiscountCouponsAsync(new {discount_type = "ABS_AND_SHIPPING"});
 
+
             _httpTest.ShouldHaveCalled($"{CheckDiscountCouponsUrl}&{query}")
                 .WithVerb(HttpMethod.Get)
                 .Times(1);
 
-            _httpTest.ShouldHaveCalled($"{CheckDiscountCouponsUrl}&offset=*&{query}")
-                .WithVerb(HttpMethod.Get)
-                .Times(3);
+            for (var i = 1; i < 4; i++)
+            {
+                _httpTest.ShouldHaveCalled($"{CheckDiscountCouponsUrl}&offset={count * i}&{query}")
+                    .WithVerb(HttpMethod.Get)
+                    .Times(1);
+            }
 
             Assert.Equal(count * 3, result.Count());
         }

@@ -47,6 +47,6 @@ namespace Ecwid.Models.Legacy
         /// The orders.
         /// </value>
         [JsonProperty("orders")]
-        public List<TOrder> Orders { get; set; }
+        public IEnumerable<TOrder> Orders { get; set; }
     }
 }

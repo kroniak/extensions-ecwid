@@ -160,14 +160,23 @@ namespace Ecwid.Test.Services.Legacy
             Assert.Equal("PAID,DECLINED,NEW,PROCESSING", result);
         }
 
-        [Fact]
-        public void Limit_ReturnCorrectResult()
+        [Theory]
+        [InlineData(200)]
+        [InlineData(201)]
+        public void Limit_201_ReturnCorrectResult(int limit)
         {
-            var result = _defaultLegacyClient.Orders.Limit(120).GetParam("limit");
-            var result2 = _defaultLegacyClient.Orders.Limit(201).GetParam("limit");
+            var result = _defaultLegacyClient.Orders.Limit(limit).GetParam("limit");
+
+            Assert.Equal(200, result);
+        }
+        
+        [Theory]
+        [InlineData(120)]
+        public void Limit_120_ReturnCorrectResult(int limit)
+        {
+            var result = _defaultLegacyClient.Orders.Limit(limit).GetParam("limit");
 
             Assert.Equal(120, result);
-            Assert.Equal(200, result2);
         }
     }
 }

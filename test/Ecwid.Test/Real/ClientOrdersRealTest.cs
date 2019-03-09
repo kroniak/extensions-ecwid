@@ -61,7 +61,9 @@ namespace Ecwid.Test.Real
             {
                 Settings =
                 {
-                    ApiUrl = "http://www.mocky.io/v2/57209e580f0000f20838724a" //response with one order.
+//                    Mute by mutation testing FirstOrDefault
+//                    ApiUrl = "http://www.mocky.io/v2/57209e580f0000f20838724a" //response with one order.
+                    ApiUrl = "http://www.mocky.io/v2/5c83049d3000002b006b0bf3" //response with one order.
                 }
             };
 

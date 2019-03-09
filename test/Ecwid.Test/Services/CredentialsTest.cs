@@ -25,33 +25,76 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public void Credentials_Exception()
+        public void Credentials_InvalidShopId_Exception()
         {
-            Assert.Throws<EcwidConfigException>(() => new EcwidCredentials(0, Token));
-            Assert.Throws<EcwidConfigException>(() => new EcwidCredentials(ShopId, null));
-            Assert.Throws<EcwidConfigException>(() => new EcwidCredentials(ShopId, ""));
-            Assert.Throws<EcwidConfigException>(() => new EcwidCredentials(ShopId, " "));
+            var ecwidConfigException = Assert.Throws<EcwidConfigException>(() => new EcwidCredentials(0, Token));
+            Assert.Equal("The shop identifier is invalid.", ecwidConfigException.Message);
 
-            // https://github.com/kroniak/extensions-ecwid/issues/34
-            //Assert.Throws<EcwidConfigException>(() => new EcwidCredentials(ShopId, "test"));
+            ecwidConfigException =
+                Assert.Throws<EcwidConfigException>(() => new EcwidLegacyCredentials(0, Token, Token));
+            Assert.Equal("The shop identifier is invalid.", ecwidConfigException.Message);
+        }
 
-            Assert.Throws<EcwidConfigException>(() => new EcwidLegacyCredentials(0, Token, Token));
-            Assert.Throws<EcwidConfigException>(() => new EcwidLegacyCredentials(ShopId));
-            Assert.Throws<EcwidConfigException>(() => new EcwidLegacyCredentials(ShopId, " ", " "));
-            Assert.Throws<EcwidConfigException>(() => new EcwidLegacyCredentials(ShopId, "", ""));
-            Assert.Throws<EcwidConfigException>(() =>
-                new EcwidLegacyCredentials(ShopId, Token, Token).OrderToken = " ");
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        public void EcwidCredentials_TokenInvalid_Exception(string token)
+        {
+            var exception = Assert.Throws<EcwidConfigException>(() => new EcwidCredentials(ShopId, token));
+            Assert.Equal("The authorization token is invalid.", exception.Message);
+        }
 
-            // https://github.com/kroniak/extensions-ecwid/issues/34
-//            Assert.Throws<EcwidConfigException>(
-//                () => new EcwidLegacyCredentials(ShopId, Token, Token).OrderToken = "test");
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        public void EcwidLegacyCredentials_TokenInvalid_Exception1(string token)
+        {
+            var exception = Assert.Throws<EcwidConfigException>(() => new EcwidLegacyCredentials(ShopId));
+            Assert.Equal("The authorization token is invalid.", exception.Message);
+        }
 
-            Assert.Throws<EcwidConfigException>(
-                () => new EcwidLegacyCredentials(ShopId, Token, Token).ProductToken = " ");
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        public void EcwidLegacyCredentials_TokenInvalid_Exception2(string token)
+        {
+            var exception = Assert.Throws<EcwidConfigException>(() => new EcwidLegacyCredentials(ShopId, token, " "));
+            Assert.Equal("The authorization token is invalid.", exception.Message);
+        }
 
-            // https://github.com/kroniak/extensions-ecwid/issues/34
-            Assert.Throws<EcwidConfigException>(
-                () => new EcwidLegacyCredentials(ShopId, Token, Token).ProductToken = "test");
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        public void EcwidLegacyCredentials_ProductTokenInvalid_Exception2(string token)
+        {
+            var exception = Assert.Throws<EcwidConfigException>(() => new EcwidLegacyCredentials(ShopId, Token, token));
+            Assert.Equal("The authorization token is invalid.", exception.Message);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        public void EcwidLegacyCredentials_TokenInvalid_Exception3(string token)
+        {
+            var exception = Assert.Throws<EcwidConfigException>(() =>
+                new EcwidLegacyCredentials(ShopId, Token, Token).OrderToken = token);
+            Assert.Equal("The order authorization token is invalid.", exception.Message);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        public void EcwidLegacyCredentials_ProductTokenInvalid_Exception4(string token)
+        {
+            var exception = Assert.Throws<EcwidConfigException>(
+                () => new EcwidLegacyCredentials(ShopId, Token, Token).ProductToken = token);
+            Assert.Equal("The product authorization token is invalid.", exception.Message);
         }
     }
 }

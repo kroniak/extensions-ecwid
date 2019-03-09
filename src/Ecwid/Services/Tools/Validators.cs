@@ -76,6 +76,13 @@ namespace Ecwid.Tools
         public static bool AreNullOrEmpty(params string[] strings) => strings.All(string.IsNullOrWhiteSpace);
 
         /// <summary>
+        /// Check strings for <see langword="null" /> or <see langword="empty" />.
+        /// </summary>
+        /// <param name="strings">The strings.</param>
+        /// <returns>True if the one of the strings are <see langword="null" /> or <see langword="empty" /></returns>
+        public static bool AreAnyNullOrEmpty(params string[] strings) => strings.Any(string.IsNullOrWhiteSpace);
+
+        /// <summary>
         /// Statuses validate.
         /// </summary>
         /// <param name="statuses">The statuses.</param>

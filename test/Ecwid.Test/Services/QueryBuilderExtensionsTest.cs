@@ -209,15 +209,29 @@ namespace Ecwid.Test.Services
         }
 
         [Fact]
-        public void LimitAndOffset_ReturnCorrectResult()
+        public void Limit_12_ReturnCorrectResult()
         {
             var result = _defaultClient.Orders.Limit(12).GetParam("limit");
-            var result2 = _defaultClient.Orders.Limit(120).GetParam("limit");
-            var result3 = _defaultClient.Orders.Offset(100).GetParam("offset");
 
             Assert.Equal(12, result);
-            Assert.Equal(100, result2);
-            Assert.Equal(100, result3);
+        }
+        
+        [Theory]
+        [InlineData(100)]
+        [InlineData(101)]
+        public void Limit_101_ReturnCorrectResult(int limit)
+        {
+            var result = _defaultClient.Orders.Limit(limit).GetParam("limit");
+
+            Assert.Equal(100, result);
+        }
+        
+        [Fact]
+        public void Offset_ReturnCorrectResult()
+        {
+            var result = _defaultClient.Orders.Offset(100).GetParam("offset");
+
+            Assert.Equal(100, result);
         }
 
         [Theory]
