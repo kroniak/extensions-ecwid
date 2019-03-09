@@ -17,7 +17,7 @@ namespace Ecwid.Tools
         /// <summary>
         /// The available legacy fulfillment statuses.
         /// </summary>
-        public static readonly IEnumerable<string> AvailableLegacyFulfillmentStatuses = new []
+        public static readonly IEnumerable<string> AvailableLegacyFulfillmentStatuses = new[]
         {
             "AWAITING_PROCESSING",
             "NEW",
@@ -31,7 +31,7 @@ namespace Ecwid.Tools
         /// <summary>
         /// The available fulfillment statuses.
         /// </summary>
-        public static readonly IEnumerable<string> AvailableFulfillmentStatuses = new []
+        public static readonly IEnumerable<string> AvailableFulfillmentStatuses = new[]
         {
             "AWAITING_PROCESSING",
             "PROCESSING",
@@ -44,7 +44,7 @@ namespace Ecwid.Tools
         /// <summary>
         /// The available legacy payment statuses.
         /// </summary>
-        public static readonly IEnumerable<string> AvailableLegacyPaymentStatuses = new []
+        public static readonly IEnumerable<string> AvailableLegacyPaymentStatuses = new[]
         {
             "PAID",
             "ACCEPTED",
@@ -59,7 +59,7 @@ namespace Ecwid.Tools
         /// <summary>
         /// The available payment statuses.
         /// </summary>
-        public static readonly IEnumerable<string> AvailablePaymentStatuses = new []
+        public static readonly IEnumerable<string> AvailablePaymentStatuses = new[]
         {
             "PAID",
             "CANCELLED",
@@ -127,7 +127,7 @@ namespace Ecwid.Tools
             Dictionary<string, object> query, params string[] strings)
         {
             //check query builder query params count
-            var exceptionList = new [] {"limit", "offset"};
+            var exceptionList = new[] {"limit", "offset"};
             var count = query.Keys.Count(s => !exceptionList.Contains(s));
             if (count == 0)
                 throw new ArgumentException("Query is empty. Prevent change all orders.", nameof(query));

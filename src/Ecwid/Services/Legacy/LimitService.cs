@@ -10,7 +10,7 @@ namespace Ecwid.Legacy
     /// <summary>
     /// Represent limitation functionality of Ecwid Legacy API
     /// </summary>
-    internal class LimitsService
+    public class LimitsService
     {
         // All limits
         private readonly BlockingCollection<Limit> _limits = new BlockingCollection<Limit>();

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Ecwid.Models;
 using Flurl;
 using Flurl.Util;
+
 // ReSharper disable PossibleMultipleEnumeration
 
 namespace Ecwid
@@ -17,16 +18,16 @@ namespace Ecwid
         #region Implementation of IEcwidDiscountCouponsClient
 
         /// <inheritdoc />
-        public async Task<bool> CheckDiscountCouponsTokenAsync()
-            => await CheckDiscountCouponsTokenAsync(CancellationToken.None);
+        public Task<bool> CheckDiscountCouponsTokenAsync()
+            => CheckDiscountCouponsTokenAsync(CancellationToken.None);
 
         /// <inheritdoc />
-        public async Task<bool> CheckDiscountCouponsTokenAsync(CancellationToken cancellationToken)
-            => await CheckTokenAsync<DiscountCouponSearchResults>(GetUrl(DiscountCouponsUrl), cancellationToken);
+        public Task<bool> CheckDiscountCouponsTokenAsync(CancellationToken cancellationToken)
+            => CheckTokenAsync<DiscountCouponSearchResults>(GetUrl(DiscountCouponsUrl), cancellationToken);
 
         /// <inheritdoc />
-        public async Task<DiscountCouponInfo> GetDiscountCouponAsync(string couponIdentifier) =>
-            await GetDiscountCouponAsync(couponIdentifier, CancellationToken.None);
+        public Task<DiscountCouponInfo> GetDiscountCouponAsync(string couponIdentifier) =>
+            GetDiscountCouponAsync(couponIdentifier, CancellationToken.None);
 
         /// <inheritdoc />
         public async Task<DiscountCouponInfo> GetDiscountCouponAsync(string couponIdentifier,
@@ -35,16 +36,15 @@ namespace Ecwid
             if (string.IsNullOrWhiteSpace(couponIdentifier))
                 throw new ArgumentNullException(nameof(couponIdentifier));
 
-            // ReSharper disable once RedundantAnonymousTypePropertyName
             var discountCoupons =
-                await GetDiscountCouponsAsync(new {couponIdentifier = couponIdentifier}, cancellationToken);
+                await GetDiscountCouponsAsync(new {couponIdentifier}, cancellationToken);
 
             return discountCoupons.FirstOrDefault();
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<DiscountCouponInfo>> GetDiscountCouponsAsync(object query) =>
-            await GetDiscountCouponsAsync(query, CancellationToken.None);
+        public Task<IEnumerable<DiscountCouponInfo>> GetDiscountCouponsAsync(object query) =>
+            GetDiscountCouponsAsync(query, CancellationToken.None);
 
         /// <inheritdoc />
         public async Task<IEnumerable<DiscountCouponInfo>> GetDiscountCouponsAsync(object query,
@@ -90,23 +90,23 @@ namespace Ecwid
         }
 
         /// <inheritdoc />
-        public async Task<DiscountCouponCreateStatus> CreateDiscountCouponAsync(DiscountCouponInfo coupon)
-            => await CreateDiscountCouponAsync(coupon, CancellationToken.None);
+        public Task<DiscountCouponCreateStatus> CreateDiscountCouponAsync(DiscountCouponInfo coupon)
+            => CreateDiscountCouponAsync(coupon, CancellationToken.None);
 
         /// <inheritdoc />
-        public async Task<DiscountCouponCreateStatus> CreateDiscountCouponAsync(DiscountCouponInfo coupon,
+        public Task<DiscountCouponCreateStatus> CreateDiscountCouponAsync(DiscountCouponInfo coupon,
             CancellationToken cancellationToken)
         {
-            return await PostJsonApiAsync<DiscountCouponCreateStatus>(GetUrl(DiscountCouponsUrl), coupon,
+            return PostJsonApiAsync<DiscountCouponCreateStatus>(GetUrl(DiscountCouponsUrl), coupon,
                 cancellationToken);
         }
 
         /// <inheritdoc />
-        public async Task<UpdateStatus> UpdateDiscountCouponAsync(DiscountCouponInfo coupon)
-            => await UpdateDiscountCouponAsync(coupon, CancellationToken.None);
+        public Task<UpdateStatus> UpdateDiscountCouponAsync(DiscountCouponInfo coupon)
+            => UpdateDiscountCouponAsync(coupon, CancellationToken.None);
 
         /// <inheritdoc />
-        public async Task<UpdateStatus> UpdateDiscountCouponAsync(DiscountCouponInfo coupon,
+        public Task<UpdateStatus> UpdateDiscountCouponAsync(DiscountCouponInfo coupon,
             CancellationToken cancellationToken)
         {
             if (coupon == null)
@@ -119,25 +119,23 @@ namespace Ecwid
                 throw new ArgumentException("Coupon code must have a value", nameof(coupon.Code));
             }
 
-            return await PutApiAsync<UpdateStatus>(GetUrl($"{DiscountCouponsUrl}/{coupon.Code}"), coupon,
+            return PutApiAsync<UpdateStatus>(GetUrl($"{DiscountCouponsUrl}/{coupon.Code}"), coupon,
                 cancellationToken);
         }
 
         /// <inheritdoc />
-        public async Task<DeleteStatus> DeleteDiscountCouponAsync(DiscountCouponInfo coupon)
-            => await DeleteDiscountCouponAsync(coupon.Code);
+        public Task<DeleteStatus> DeleteDiscountCouponAsync(DiscountCouponInfo coupon)
+            => DeleteDiscountCouponAsync(coupon.Code);
 
         /// <inheritdoc />
-        public async Task<DeleteStatus> DeleteDiscountCouponAsync(string couponIdentifier,
-            CancellationToken cancellationToken)
-        {
-            return await DeleteApiAsync<DeleteStatus>(GetUrl($"{DiscountCouponsUrl}/{couponIdentifier}"),
+        public Task<DeleteStatus> DeleteDiscountCouponAsync(string couponIdentifier,
+            CancellationToken cancellationToken) =>
+            DeleteApiAsync<DeleteStatus>(GetUrl($"{DiscountCouponsUrl}/{couponIdentifier}"),
                 cancellationToken);
-        }
 
         /// <inheritdoc />
-        public async Task<DeleteStatus> DeleteDiscountCouponAsync(string couponIdentifier)
-            => await DeleteDiscountCouponAsync(couponIdentifier, CancellationToken.None);
+        public Task<DeleteStatus> DeleteDiscountCouponAsync(string couponIdentifier)
+            => DeleteDiscountCouponAsync(couponIdentifier, CancellationToken.None);
 
         #endregion
     }

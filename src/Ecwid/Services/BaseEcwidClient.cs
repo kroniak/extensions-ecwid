@@ -75,10 +75,10 @@ namespace Ecwid
         /// <param name="query">The query.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
-        protected static async Task<T> GetApiAsync<T>(Url baseUrl, object query,
+        protected static Task<T> GetApiAsync<T>(Url baseUrl, object query,
             CancellationToken cancellationToken)
             where T : class
-            => await GetApiAsync<T>(baseUrl.SetQueryParams(query), cancellationToken);
+            => GetApiAsync<T>(baseUrl.SetQueryParams(query), cancellationToken);
 
         /// <summary>
         /// POST the API asynchronous and return response.

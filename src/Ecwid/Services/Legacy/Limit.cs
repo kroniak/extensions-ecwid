@@ -9,7 +9,7 @@ namespace Ecwid.Legacy
     /// <summary>
     /// Represent one limit by time interval and value limit
     /// </summary>
-    internal class Limit
+    public class Limit
     {
         private readonly int _limitValue;
 

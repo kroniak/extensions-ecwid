@@ -13,17 +13,17 @@ namespace Ecwid.Legacy
         #region Implementation of IEcwidProductsLegacyClient
 
         /// <inheritdoc />
-        public async Task<IEnumerable<LegacyCategoryEntry>> GetCategoriesAsync(int? parentCategoryId = null)
-            => await GetCategoriesAsync(CancellationToken.None, parentCategoryId);
+        public Task<IEnumerable<LegacyCategoryEntry>> GetCategoriesAsync(int? parentCategoryId = null)
+            => GetCategoriesAsync(CancellationToken.None, parentCategoryId);
 
         /// <inheritdoc />
-        public async Task<IEnumerable<LegacyCategoryEntry>> GetCategoriesAsync(CancellationToken cancellationToken,
+        public Task<IEnumerable<LegacyCategoryEntry>> GetCategoriesAsync(CancellationToken cancellationToken,
             int? parentCategoryId = null)
         {
             switch (parentCategoryId)
             {
                 case null:
-                    return await GetApiAsync<IEnumerable<LegacyCategoryEntry>>(GetUrl("categories", true),
+                    return GetApiAsync<IEnumerable<LegacyCategoryEntry>>(GetUrl("categories", true),
                         cancellationToken);
 
                 default:
@@ -31,74 +31,73 @@ namespace Ecwid.Legacy
                         throw new ArgumentException(nameof(parentCategoryId));
 
                     return
-                        await
-                            GetApiAsync<IEnumerable<LegacyCategoryEntry>>(GetUrl("categories", true),
-                                new {parent = parentCategoryId},
-                                cancellationToken);
+                        GetApiAsync<IEnumerable<LegacyCategoryEntry>>(GetUrl("categories", true),
+                            new {parent = parentCategoryId},
+                            cancellationToken);
             }
         }
 
         /// <inheritdoc />
-        public async Task<LegacyCategory> GetCategoryAsync(int categoryId) =>
-            await GetCategoryAsync(categoryId, CancellationToken.None);
+        public Task<LegacyCategory> GetCategoryAsync(int categoryId) =>
+            GetCategoryAsync(categoryId, CancellationToken.None);
 
         /// <inheritdoc />
-        public async Task<LegacyCategory> GetCategoryAsync(int categoryId, CancellationToken cancellationToken)
+        public Task<LegacyCategory> GetCategoryAsync(int categoryId, CancellationToken cancellationToken)
         {
             if (categoryId <= 0)
                 throw new ArgumentException(nameof(categoryId));
 
-            return await
+            return
                 GetApiAsync<LegacyCategory>(GetUrl("category", true), new {id = categoryId}, cancellationToken);
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<LegacyProductEntry>> GetProductsAsync(int? categoryId = null,
+        public Task<IEnumerable<LegacyProductEntry>> GetProductsAsync(int? categoryId = null,
             bool hiddenProducts = false) =>
-            await GetProductsAsync(CancellationToken.None, categoryId, hiddenProducts);
+            GetProductsAsync(CancellationToken.None, categoryId, hiddenProducts);
 
         /// <inheritdoc />
-        public async Task<IEnumerable<LegacyProductEntry>> GetProductsAsync(CancellationToken cancellationToken,
+        public Task<IEnumerable<LegacyProductEntry>> GetProductsAsync(CancellationToken cancellationToken,
             int? categoryId = null, bool hiddenProducts = false)
         {
             switch (categoryId)
             {
                 case null:
-                    return await GetApiAsync<IEnumerable<LegacyProductEntry>>(GetUrl("products", !hiddenProducts),
+                    return GetApiAsync<IEnumerable<LegacyProductEntry>>(GetUrl("products", !hiddenProducts),
                         new {hidden_products = hiddenProducts}, cancellationToken);
 
                 default:
                     if (categoryId < 0)
                         throw new ArgumentException(nameof(categoryId));
 
-                    return await GetApiAsync<IEnumerable<LegacyProductEntry>>(GetUrl("products", !hiddenProducts),
+                    return GetApiAsync<IEnumerable<LegacyProductEntry>>(GetUrl("products", !hiddenProducts),
                         new {category = categoryId, hidden_products = hiddenProducts},
                         cancellationToken);
             }
         }
 
         /// <inheritdoc />
-        public async Task<LegacyProduct> GetProductAsync(int productId, bool hiddenProducts = false)
-            => await GetProductAsync(productId, CancellationToken.None, hiddenProducts);
+        public Task<LegacyProduct> GetProductAsync(int productId, bool hiddenProducts = false)
+            => GetProductAsync(productId, CancellationToken.None, hiddenProducts);
 
         /// <inheritdoc />
-        public async Task<LegacyProduct> GetProductAsync(int productId, CancellationToken cancellationToken,
+        public Task<LegacyProduct> GetProductAsync(int productId, CancellationToken cancellationToken,
             bool hiddenProducts = false)
         {
             if (productId <= 0)
                 throw new ArgumentException(nameof(productId));
 
-            return await GetApiAsync<LegacyProduct>(GetUrl("product", !hiddenProducts),
+            return GetApiAsync<LegacyProduct>(GetUrl("product", !hiddenProducts),
                 new {id = productId, hidden_products = hiddenProducts},
                 cancellationToken);
         }
 
         /// <inheritdoc />
-        public async Task<bool> UpdateProductAsync(int productId, object updatedFields)
-            => await UpdateProductAsync(productId, updatedFields, CancellationToken.None);
+        public Task<bool> UpdateProductAsync(int productId, object updatedFields)
+            => UpdateProductAsync(productId, updatedFields, CancellationToken.None);
 
         /// <inheritdoc />
-        public async Task<bool> UpdateProductAsync(int productId, object updatedFields,
+        public Task<bool> UpdateProductAsync(int productId, object updatedFields,
             CancellationToken cancellationToken)
         {
             if (updatedFields == null) throw new ArgumentNullException(nameof(updatedFields));
@@ -106,7 +105,7 @@ namespace Ecwid.Legacy
             if (productId <= 0)
                 throw new ArgumentException(nameof(productId));
 
-            return await PutApiAsync(GetUrl("product"), new {id = productId}, updatedFields,
+            return PutApiAsync(GetUrl("product"), new {id = productId}, updatedFields,
                 cancellationToken);
         }
 

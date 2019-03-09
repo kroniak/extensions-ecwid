@@ -12,25 +12,25 @@ namespace Ecwid
         #region Implementation of IEcwidProfileClient
 
         /// <inheritdoc />
-        public async Task<Profile> GetProfileAsync()
-            => await GetProfileAsync(CancellationToken.None);
+        public Task<Profile> GetProfileAsync()
+            => GetProfileAsync(CancellationToken.None);
 
         /// <inheritdoc />
-        public async Task<Profile> GetProfileAsync(CancellationToken cancellationToken)
-            => await GetApiAsync<Profile>(GetUrl("profile"), cancellationToken);
+        public Task<Profile> GetProfileAsync(CancellationToken cancellationToken)
+            => GetApiAsync<Profile>(GetUrl("profile"), cancellationToken);
 
         /// <inheritdoc />
-        public async Task<UpdateStatus> UpdateProfileAsync(Profile profile)
-            => await UpdateProfileAsync(profile, CancellationToken.None);
+        public Task<UpdateStatus> UpdateProfileAsync(Profile profile)
+            => UpdateProfileAsync(profile, CancellationToken.None);
 
         /// <inheritdoc />
-        public async Task<UpdateStatus> UpdateProfileAsync(Profile profile, CancellationToken cancellationToken)
+        public Task<UpdateStatus> UpdateProfileAsync(Profile profile, CancellationToken cancellationToken)
         {
             if (profile == null)
                 throw new EcwidHttpException("Something happened to the HTTP call.", null,
                     new ArgumentNullException(nameof(profile)));
 
-            return await PutApiAsync<UpdateStatus>(GetUrl("profile"), profile, cancellationToken);
+            return PutApiAsync<UpdateStatus>(GetUrl("profile"), profile, cancellationToken);
         }
 
         #endregion

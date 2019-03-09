@@ -313,11 +313,11 @@ namespace Ecwid.Legacy
         /// <exception cref="EcwidConfigException">Can not add or update statuses. Look inner exception.</exception>
         /// <exception cref="EcwidLimitException">Limit overheat exception.</exception>
         /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
-        public static async Task<LegacyUpdatedOrders> UpdateAsync(
+        public static Task<LegacyUpdatedOrders> UpdateAsync(
             this OrdersQueryBuilder<LegacyOrder, LegacyUpdatedOrders> query, string newPaymentStatus,
             string newFulfillmentStatus, string newShippingTrackingCode)
             =>
-                await query.UpdateAsync(newPaymentStatus, newFulfillmentStatus, newShippingTrackingCode,
+                query.UpdateAsync(newPaymentStatus, newFulfillmentStatus, newShippingTrackingCode,
                     CancellationToken.None);
 
         /// <summary>
@@ -340,7 +340,7 @@ namespace Ecwid.Legacy
         /// <exception cref="EcwidConfigException">Can not add or update statuses. Look inner exception.</exception>
         /// <exception cref="EcwidLimitException">Limit overheat exception.</exception>
         /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
-        public static async Task<LegacyUpdatedOrders> UpdateAsync(
+        public static Task<LegacyUpdatedOrders> UpdateAsync(
             this OrdersQueryBuilder<LegacyOrder, LegacyUpdatedOrders> query, string newPaymentStatus,
             string newFulfillmentStatus, string newShippingTrackingCode, CancellationToken cancellationToken)
         {
@@ -365,7 +365,7 @@ namespace Ecwid.Legacy
 
             var client = (EcwidLegacyClient) query.Client;
 
-            return await client.UpdateOrdersAsync(query, cancellationToken);
+            return client.UpdateOrdersAsync(query, cancellationToken);
         }
     }
 }

@@ -753,11 +753,11 @@ namespace Ecwid
         /// <typeparam name="TOrder">The type of the order.</typeparam>
         /// <typeparam name="TUpdateResponse">The type of the update response.</typeparam>
         /// <param name="query">The query.</param>
-        public static async Task<IEnumerable<TOrder>> GetAsync<TOrder, TUpdateResponse>(
+        public static Task<IEnumerable<TOrder>> GetAsync<TOrder, TUpdateResponse>(
             this OrdersQueryBuilder<TOrder, TUpdateResponse> query)
             where TOrder : BaseOrder
             where TUpdateResponse : class
-            => await query.GetAsync(CancellationToken.None);
+            => query.GetAsync(CancellationToken.None);
 
         /// <summary>
         /// Gets the orders asynchronous.
@@ -766,12 +766,12 @@ namespace Ecwid
         /// <typeparam name="TUpdateResponse">The type of the update response.</typeparam>
         /// <param name="query">The query.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        public static async Task<IEnumerable<TOrder>> GetAsync<TOrder, TUpdateResponse>(
+        public static Task<IEnumerable<TOrder>> GetAsync<TOrder, TUpdateResponse>(
             this OrdersQueryBuilder<TOrder, TUpdateResponse> query,
             CancellationToken cancellationToken)
             where TOrder : BaseOrder
             where TUpdateResponse : class
-            => await query.Client.GetOrdersAsync(query.Query, cancellationToken);
+            => query.Client.GetOrdersAsync(query.Query, cancellationToken);
 
         #endregion
     }
