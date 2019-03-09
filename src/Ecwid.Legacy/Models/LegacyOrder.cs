@@ -205,7 +205,7 @@ namespace Ecwid.Legacy.Models
         /// The items.
         /// </value>
         [JsonProperty("items")]
-        public List<LegacyOrderItem> Items { get; set; }
+        public IEnumerable<LegacyOrderItem> Items { get; set; }
 
         /// <summary>
         /// Gets or sets the last change date.
@@ -241,6 +241,6 @@ namespace Ecwid.Legacy.Models
         /// The discounts
         /// </value>
         [JsonProperty("discounts")]
-        public List<LegacyOrderDiscount> Discounts { get; set; }
+        public IEnumerable<LegacyOrderDiscount> Discounts { get; set; }
     }
 }

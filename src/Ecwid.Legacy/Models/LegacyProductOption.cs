@@ -35,7 +35,7 @@ namespace Ecwid.Legacy.Models
         /// The choices.
         /// </value>
         [JsonProperty("choices")]
-        public List<LegacyProductOptionChoice> Choices { get; set; }
+        public IEnumerable<LegacyProductOptionChoice> Choices { get; set; }
 
         /// <summary>
         /// Gets or sets the value indicating whether this <see cref="LegacyProductOption" /> is required.

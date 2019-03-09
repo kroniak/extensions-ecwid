@@ -38,7 +38,7 @@ namespace Ecwid.Models
         /// The values array.
         /// </value>
         [JsonProperty("valuesArray")]
-        public List<string> ValuesArray { get; set; }
+        public IEnumerable<string> ValuesArray { get; set; }
 
         /// <summary>
         /// Gets or sets the option type. One of:
@@ -61,6 +61,6 @@ namespace Ecwid.Models
         /// The files.
         /// </value>
         [JsonProperty("files")]
-        public List<OrderItemOptionFile> Files { get; set; }
+        public IEnumerable<OrderItemOptionFile> Files { get; set; }
     }
 }
