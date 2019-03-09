@@ -12,7 +12,7 @@ namespace Ecwid.Tools
     /// <summary>
     /// Some validators for classes.
     /// </summary>
-    internal abstract class Validators
+    public abstract class Validators
     {
         /// <summary>
         /// The available legacy fulfillment statuses.
@@ -104,9 +104,9 @@ namespace Ecwid.Tools
                 if (!CheckContainsString(statuses, statusesAvailable))
                     throw new ArgumentException("Statuses string is invalid.", nameof(statuses));
             }
-            catch (ArgumentException argumentException)
+            catch (ArgumentException)
             {
-                throw new ArgumentException("Statuses string is invalid.", argumentException);
+                throw new ArgumentException("Statuses string is invalid.", nameof(statuses));
             }
         }
 

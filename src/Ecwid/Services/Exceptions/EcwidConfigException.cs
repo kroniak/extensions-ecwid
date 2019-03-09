@@ -8,12 +8,12 @@ namespace Ecwid
     public class EcwidConfigException : EcwidException
     {
         /// <inheritdoc />
-        internal EcwidConfigException(string message) : base(message)
+        public EcwidConfigException(string message) : base(message)
         {
         }
 
         /// <inheritdoc />
-        internal EcwidConfigException(string message, Exception innerException) : base(message, innerException)
+        public EcwidConfigException(string message, Exception innerException) : base(message, innerException)
         {
         }
     }

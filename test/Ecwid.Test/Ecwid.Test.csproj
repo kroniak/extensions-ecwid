@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Ecwid.Legacy\Ecwid.Legacy.csproj" />
     <ProjectReference Include="..\..\src\Ecwid\Ecwid.csproj" />
   </ItemGroup>
 </Project>

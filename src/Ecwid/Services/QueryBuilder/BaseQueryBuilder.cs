@@ -13,7 +13,7 @@ namespace Ecwid
         /// <summary>
         /// The query params
         /// </summary>
-        internal readonly Dictionary<string, object> Query = new Dictionary<string, object>();
+        public readonly Dictionary<string, object> Query = new Dictionary<string, object>();
 
         /// <summary>
         /// Gets the parameter.
@@ -42,7 +42,7 @@ namespace Ecwid
         /// <exception cref="ArgumentException">Can not add value to query. Look inner exception.</exception>
         /// <exception cref="ArgumentException"><paramref name="name" /> is <see langword="null" />.</exception>
         /// <exception cref="ArgumentException"><paramref name="value" /> is <see langword="null" />.</exception>
-        internal void AddOrUpdate(string name, object value)
+        public void AddOrUpdate(string name, object value)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("Can not add value to query.", nameof(name));

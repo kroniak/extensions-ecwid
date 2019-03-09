@@ -1,11 +1,11 @@
 // Licensed under the GPL License, Version 3.0. See LICENSE in the git repository root for license information.
 
-namespace Ecwid
+namespace Ecwid.Legacy
 {
     /// <summary>
-    /// Public client API.
+    /// Public client for Legacy EcwidAPI.
     /// </summary>
-    public interface IEcwidClient : IEcwidOrdersClient, IEcwidProfileClient, IEcwidDiscountCouponsClient
+    public interface IEcwidLegacyClient : IEcwidOrdersLegacyClient, IEcwidProductsLegacyClient
     {
         /// <summary>
         /// Gets and sets the credentials. Default value is <see langword="null" />.
@@ -13,7 +13,7 @@ namespace Ecwid
         /// <value>
         /// The credentials.
         /// </value>
-        EcwidCredentials Credentials { get; set; }
+        EcwidLegacyCredentials Credentials { get; set; }
 
         /// <summary>
         /// Gets and sets the settings. Created by default.
@@ -21,7 +21,7 @@ namespace Ecwid
         /// <value>
         /// The settings.
         /// </value>
-        EcwidSettings Settings { get; set; }
+        EcwidLegacySettings Settings { get; set; }
 
         /// <summary>
         /// Configures with specified settings.
@@ -29,26 +29,19 @@ namespace Ecwid
         /// <param name="settings">The settings.</param>
         /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
         /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
-        IEcwidClient Configure(EcwidSettings settings);
+        IEcwidLegacyClient Configure(EcwidLegacySettings settings);
 
         /// <summary>
         /// Configures the shop credentials.
         /// </summary>
         /// <param name="shopId">The shop identifier.</param>
-        /// <param name="token">The authorization token.</param>
+        /// <param name="orderToken">The shop order authorization token.</param>
+        /// <param name="productToken">The shop product authorization token.</param>
         /// <exception cref="EcwidConfigException">The shop identifier is invalid.</exception>
-        /// <exception cref="EcwidConfigException">The authorization token is invalid.</exception>
-        IEcwidClient Configure(int shopId, string token);
-
-        /// <summary>
-        /// Configures the shop credentials.
-        /// </summary>
-        /// <param name="shopId">The shop identifier.</param>
-        /// <param name="token">The authorization token.</param>
-        /// <param name="scope">List of permissions (API access scopes) given to the app, separated by space.</param>
-        /// <exception cref="EcwidConfigException">The shop identifier is invalid.</exception>
-        /// <exception cref="EcwidConfigException">The authorization token is invalid.</exception>
-        IEcwidClient Configure(int shopId, string token, string scope);
+        /// <exception cref="EcwidConfigException">The authorization tokens are null.</exception>
+        /// <exception cref="EcwidConfigException">The order authorization token is invalid.</exception>
+        /// <exception cref="EcwidConfigException">The product authorization token is invalid.</exception>
+        IEcwidLegacyClient Configure(int shopId, string orderToken = null, string productToken = null);
 
         /// <summary>
         /// Configures with specified credentials.
@@ -56,6 +49,6 @@ namespace Ecwid
         /// <param name="credentials">The credentials.</param>
         /// <exception cref="EcwidHttpException">Something happened to the HTTP call.</exception>
         /// <exception cref="EcwidConfigException">Credentials are invalid.</exception>
-        IEcwidClient Configure(EcwidCredentials credentials);
+        IEcwidLegacyClient Configure(EcwidLegacyCredentials credentials);
     }
 }

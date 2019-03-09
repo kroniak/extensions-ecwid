@@ -215,7 +215,7 @@ namespace Ecwid.Test.Services
 
             Assert.Equal(12, result);
         }
-        
+
         [Theory]
         [InlineData(100)]
         [InlineData(101)]
@@ -225,7 +225,7 @@ namespace Ecwid.Test.Services
 
             Assert.Equal(100, result);
         }
-        
+
         [Fact]
         public void Offset_ReturnCorrectResult()
         {

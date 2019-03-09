@@ -37,10 +37,10 @@ namespace Ecwid.Models
         public double ShippingRate { get; set; }
 
         /// <summary>
-        /// Gets or sets the estimated transit time. Formats accepted: number “5”, several days estimate “4-9”.
+        /// Gets or sets the estimated transit time. Formats accepted: number ï¿½5ï¿½, several days estimate ï¿½4-9ï¿½.
         /// </summary>
         /// <value>
-        /// The estimated transit time. Formats accepted: number “5”, several days estimate “4-9”.
+        /// The estimated transit time. Formats accepted: number ï¿½5ï¿½, several days estimate ï¿½4-9ï¿½.
         /// </value>
         [JsonProperty("estimatedTransitTime")]
         public string EstimatedTransitTime { get; set; }

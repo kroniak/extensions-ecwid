@@ -52,7 +52,7 @@ namespace Ecwid.Test.Services
                 PaymentMethod = "PayPal",
                 Email = "test@test.test"
             };
-            
+
             return Enumerable.Range(0, count).Select(_ => order);
         }
 
@@ -91,7 +91,7 @@ namespace Ecwid.Test.Services
             };
 
         /// <summary>
-        /// Mocks the legacy order response with many order and pages.
+        /// Mocks the order response with many order and pages.
         /// </summary>
         /// <param name="limit">The limit.</param>
         /// <param name="offset">The offset.</param>

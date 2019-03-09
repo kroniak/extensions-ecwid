@@ -16,7 +16,7 @@ namespace Ecwid
         /// Initializes a new instance of the <see cref="OrdersQueryBuilder{TOrder,TUpdateResponse}" /> class.
         /// </summary>
         /// <param name="client">The client.</param>
-        internal OrdersQueryBuilder(IEcwidOrdersClient<TOrder, TUpdateResponse> client)
+        public OrdersQueryBuilder(IEcwidOrdersClient<TOrder, TUpdateResponse> client)
         {
             Client = client;
         }
@@ -24,7 +24,7 @@ namespace Ecwid
         /// <value>
         /// The client.
         /// </value>
-        internal IEcwidOrdersClient<TOrder, TUpdateResponse> Client { get; }
+        public IEcwidOrdersClient<TOrder, TUpdateResponse> Client { get; }
 
         /// <summary>
         /// Add or update.

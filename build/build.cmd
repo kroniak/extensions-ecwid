@@ -16,6 +16,15 @@ echo Error! Build Ecwid failed.
 exit /b 1
 )
 
+@set project=..\src\Ecwid.Legacy\
+
+@call dotnet build -c Release %project%
+
+@if ERRORLEVEL 1 (
+echo Error! Build Ecwid.Legacy failed.
+exit /b 1
+)
+
 @set project=..\src\Ecwid.OAuth\
 
 @call dotnet build -c Release %project%

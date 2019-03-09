@@ -13,12 +13,12 @@
     <PackageTags>ecwid api client rest async</PackageTags>
     <Company>kroniak</Company>
     <Copyright>Copyright ©2019 by me@kroniak.net</Copyright>
-    <Title>Ecwid</Title>
+    <Title>Ecwid.Legacy</Title>
     <PackageVersion>1.0.0-pre</PackageVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\netstandard1.4\Ecwid.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\netstandard1.4\Ecwid.Legacy.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -26,7 +26,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Flurl.Http" Version="2.4.1" />
+    <ProjectReference Include="..\Ecwid\Ecwid.csproj" />
   </ItemGroup>
 
 </Project>

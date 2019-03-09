@@ -16,4 +16,5 @@ echo "!!WARNING!! Do not publish nupkgs generated from this script"
 dotnet restore -v m "${NETSTANDARD_SLN}"
 
 dotnet build -c Release "${SCRIPT_ROOT}/../src/Ecwid/"
+dotnet build -c Release "${SCRIPT_ROOT}/../src/Ecwid.Legacy/"
 dotnet build -c Release "${SCRIPT_ROOT}/../src/Ecwid.OAuth/"
