@@ -1,19 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Authors>me@kroniak.net</Authors>
     <Company>Kroniak</Company>
     <Description>ASP.NET Core OAuth2 middleware for Ecwid API v3</Description>
     <Copyright>Copyright ©2019 by me@kroniak.net</Copyright>
     <PackageProjectUrl>https://github.com/kroniak/extensions-ecwid</PackageProjectUrl>
-    <PackageIconUrl>https://dj925myfyz5v.cloudfront.net/favicon_v2.ico</PackageIconUrl>
     <RepositoryUrl>https://github.com/kroniak/extensions-ecwid.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>ecwid oauth2 middleware</PackageTags>
     <Title>Ecwid.OAuth</Title>
     <PackageVersion>1.0.0-pre</PackageVersion>
+    <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
